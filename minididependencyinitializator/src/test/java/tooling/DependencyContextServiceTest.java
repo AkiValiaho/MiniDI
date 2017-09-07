@@ -24,9 +24,14 @@ public class DependencyContextServiceTest {
         when(reflectionInitializerMock.initialize(DummyTestClass.class)).thenReturn(initializedDummyTestClass);
         dependencyContextService = new DependencyContextService(reflectionInitializerMock,dependencyContextMock);
         final Dependency dependency = dependencyContextService.createDependency(DummyTestClass.class);
+        assertMocksCalled(dependencyContextMock, initializedDummyTestClass, dependency);
+    }
+
+    private void assertMocksCalled(DependencyContext dependencyContextMock, DummyTestClass initializedDummyTestClass, Dependency dependency) {
         verify(dependencyContextMock, times(1)).addDependencyToMap(dependency);
         assertEquals(dependency.getDependencyInstance(), initializedDummyTestClass);
     }
+
     @Test(expected = ClassNotFoundException.class)
     @Ignore
     public void createDependency_invalidClass_shouldThrowClassNotFoundException() throws ClassNotFoundException {
