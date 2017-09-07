@@ -17,7 +17,7 @@ public class DependencyContextService {
         this.dependencyContext = dependencyContext;
     }
 
-    private Dependency createDependency(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    Dependency createDependency(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         Dependency dependency = new Dependency(dependencyClass);
         dependency.initializeDependencyObject(reflectioninitializer);
         dependencyContext.addDependencyToMap(dependency);

@@ -1,5 +1,6 @@
 package model;
 
+import lombok.Getter;
 import tooling.ReflectionInitializerTool;
 
 import java.lang.reflect.InvocationTargetException;
@@ -9,6 +10,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class Dependency {
     private final Class<?> dependencyClass;
+    @Getter
     private Object dependencyInstance;
 
     public Dependency(Class<?> dependencyClass) {
