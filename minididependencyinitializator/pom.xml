@@ -12,6 +12,8 @@
     <artifactId>minididependencyinitializator</artifactId>
     <properties>
         <reflection.version>0.9.10</reflection.version>
+        <guava.version>23.0</guava.version>
+        <slf4j.version>1.7.25</slf4j.version>
     </properties>
     <dependencies>
         <dependency>
@@ -37,6 +39,12 @@
             <artifactId>lombok</artifactId>
             <version>1.16.18</version>
             <scope>provided</scope>
+        </dependency>
+        <!-- https://mvnrepository.com/artifact/com.google.guava/guava -->
+        <dependency>
+            <groupId>com.google.guava</groupId>
+            <artifactId>guava</artifactId>
+            <version>${guava.version}</version>
         </dependency>
     </dependencies>
     <build>

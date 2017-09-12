@@ -8,8 +8,8 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>minidiclientcode</module>
         <module>minididependencyinitializator</module>
+        <module>minidiclientcode</module>
     </modules>
     <properties>
         <reflection.version>0.9.10</reflection.version>

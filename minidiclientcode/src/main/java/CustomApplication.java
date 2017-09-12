@@ -3,6 +3,5 @@
  */
 public class CustomApplication {
     public static void main(String[] args) {
-        new MiniDiRunner().startApplication(CustomApplication.class);
     }
 }
