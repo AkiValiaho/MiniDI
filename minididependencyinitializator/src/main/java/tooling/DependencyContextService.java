@@ -2,7 +2,7 @@ package tooling;
 
 import model.Dependency;
 import model.DependencyContext;
-import model.ReflectionInitializerTool;
+import model.ReflectionTool;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -15,15 +15,15 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by akivv on 5.9.2017.
  */
 public class DependencyContextService {
-    private final ReflectionInitializerTool reflectioninitializer;
+    private final ReflectionTool reflectioninitializer;
     private DependencyContext dependencyContext;
 
-    public DependencyContextService(ReflectionInitializerTool reflectionInitializerTool, DependencyContext dependencyContext) {
+    DependencyContextService(ReflectionTool reflectionTool, DependencyContext dependencyContext) {
         this.dependencyContext = dependencyContext;
-        this.reflectioninitializer = reflectionInitializerTool;
+        this.reflectioninitializer = reflectionTool;
     }
 
-    Dependency createDependency(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public Dependency createDependenciesFromResource(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         checkNotNull(dependencyClass);
         Dependency dependency = new Dependency(dependencyClass, this);
         dependency.initializeDependencyObject(reflectioninitializer);
@@ -32,15 +32,15 @@ public class DependencyContextService {
     }
 
     public List<Object> instantiateListOfDependencies(Class<?>[] dependentParams) {
-return         Arrays.stream(dependentParams)
+        return Arrays.stream(dependentParams)
                 .map(this::createDependencyWithExceptionSafety
-               )
+                )
                 .collect(Collectors.toList());
     }
 
     private Dependency createDependencyWithExceptionSafety(Class<?> param) {
         try {
-            return createDependency(param);
+            return createDependenciesFromResource(param);
         } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
             injectionError(e);
         }
@@ -51,4 +51,7 @@ return         Arrays.stream(dependentParams)
         System.out.println(e);
         System.exit(1);
     }
+
+
+
 }

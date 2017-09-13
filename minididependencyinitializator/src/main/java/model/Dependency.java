@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
  * Created by akivv on 5.9.2017.
  */
 public class Dependency {
-    private final DependencyContextService dependencyContextService;
+    private DependencyContextService dependencyContextService;
+    private Class<?> dependencyClass;
     private Map<Class<?>, Object> dependentParameters;
-    private final Class<?> dependencyClass;
     @Getter
     private Object dependencyInstance;
     private Constructor<?> noArgsConstructor;
@@ -27,10 +27,11 @@ public class Dependency {
         this.dependencyContextService = dependencyContextService;
     }
 
+
     /**
      * Initializes an object from the given dependency class
      */
-    public void initializeDependencyObject(ReflectionInitializerTool reflectionInitializer) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    public void initializeDependencyObject(ReflectionTool reflectionInitializer) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         this.dependencyInstance = reflectionInitializer.initialize(this);
     }
 
@@ -63,11 +64,13 @@ public class Dependency {
             return true;
         }
         return false;
-    };
+    }
+
+    ;
 
     Object instantiateWithArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         findArgsConstructor();
- return       argsConstructor.newInstance(dependentParameters.values().toArray());
+        return argsConstructor.newInstance(dependentParameters.values().toArray());
     }
 
     private Constructor findArgsConstructor() {
@@ -88,8 +91,8 @@ public class Dependency {
     }
 
     private boolean hasAutowiredAnnotation(Constructor<?> constructor) {
-return         Arrays.stream(constructor.getAnnotations())
-            .anyMatch(annotation -> annotation instanceof Autowired);
+        return Arrays.stream(constructor.getAnnotations())
+                .anyMatch(annotation -> annotation instanceof Autowired);
     }
 
     Object instantiateWithNoArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -107,8 +110,8 @@ return         Arrays.stream(constructor.getAnnotations())
     }
 
     private void instantiateParameters(DependencyContextService dependencyContextService) {
-        Class<?>[] dependentParams =       getDependentParamsFromArgsConstructor();
- List<Object> listOfInstantiatedObjects =        dependencyContextService.instantiateListOfDependencies(dependentParams);
+        Class<?>[] dependentParams = getDependentParamsFromArgsConstructor();
+        List<Object> listOfInstantiatedObjects = dependencyContextService.instantiateListOfDependencies(dependentParams);
         addToMap(dependentParams, listOfInstantiatedObjects);
     }
 
