@@ -27,7 +27,11 @@ public class ReflectionTool {
     private List<Class<?>> getClassesFromClassPathWithAnnotation(Class<?> startClass) {
         // Scan classpath to find all @Interest annotated methods
         final Package aPackage = startClass.getPackage();
-        return scanClassPathForInterests(aPackage.getName());
+        return scanClassPathForInterests(getPackageName(aPackage));
+    }
+
+    private String getPackageName(Package aPackage) {
+        return aPackage == null ? "" : aPackage.getName();
     }
 
 
@@ -73,7 +77,7 @@ return getClassesFromClassPathWithAnnotation(startClass).stream()
             //TODO Simplify this logic a bit (move noargs constructor search into the dependency model object
             return instantiateWithNoArgsConstructor(dependency);
         }
-        //Not a leaf parameter
+        //It's not a leaf parameter
         if (dependency.instantiateDependentParameters()) {
             //We can now instantiate from the constructor
             return instantiateFromArgsConstructor(dependency);

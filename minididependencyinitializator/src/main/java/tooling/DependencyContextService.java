@@ -31,7 +31,7 @@ public class DependencyContextService {
         return dependency;
     }
 
-    public List<Object> instantiateListOfDependencies(Class<?>[] dependentParams) {
+    public List<Dependency> instantiateListOfDependencies(Class<?>[] dependentParams) {
         return Arrays.stream(dependentParams)
                 .map(this::createDependencyWithExceptionSafety
                 )

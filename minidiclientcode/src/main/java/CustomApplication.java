@@ -1,3 +1,5 @@
+import tooling.MiniDi;
+
 import java.lang.reflect.InvocationTargetException;
 
 /**
@@ -5,5 +7,6 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class CustomApplication {
     public static void main(String[] args) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        MiniDi.startApplication(CustomApplication.class);
     }
 }

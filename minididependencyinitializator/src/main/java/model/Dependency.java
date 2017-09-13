@@ -2,6 +2,7 @@ package model;
 
 import annotations.Autowired;
 import lombok.Getter;
+import lombok.Setter;
 import tooling.DependencyContextService;
 import tooling.MultipleAnnotatedConstructorsException;
 
@@ -16,8 +17,8 @@ import java.util.stream.Collectors;
 public class Dependency {
     private DependencyContextService dependencyContextService;
     private Class<?> dependencyClass;
-    private Map<Class<?>, Object> dependentParameters;
-    @Getter
+    private Map<Class<?>, Dependency> dependentParameters;
+    @Getter @Setter
     private Object dependencyInstance;
     private Constructor<?> noArgsConstructor;
     private Constructor<?> argsConstructor;
@@ -70,7 +71,10 @@ public class Dependency {
 
     Object instantiateWithArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         findArgsConstructor();
-        return argsConstructor.newInstance(dependentParameters.values().toArray());
+        final Object[] objects = dependentParameters.values().stream()
+                .map(Dependency::getDependencyInstance)
+                .toArray();
+        return argsConstructor.newInstance(objects);
     }
 
     private Constructor findArgsConstructor() {
@@ -111,16 +115,16 @@ public class Dependency {
 
     private void instantiateParameters(DependencyContextService dependencyContextService) {
         Class<?>[] dependentParams = getDependentParamsFromArgsConstructor();
-        List<Object> listOfInstantiatedObjects = dependencyContextService.instantiateListOfDependencies(dependentParams);
+        List<Dependency> listOfInstantiatedObjects = dependencyContextService.instantiateListOfDependencies(dependentParams);
         addToMap(dependentParams, listOfInstantiatedObjects);
     }
 
-    private void addToMap(Class<?>[] dependentParams, List<Object> listOfInstantiatedObjects) {
+    private void addToMap(Class<?>[] dependentParams, List<Dependency> listOfInstantiatedObjects) {
         final Iterator<Class<?>> dependentParamsIterator = Arrays.asList(dependentParams).iterator();
-        final Iterator<Object> instantiatedObjectsIterator = listOfInstantiatedObjects.iterator();
+        final Iterator<Dependency> instantiatedObjectsIterator = listOfInstantiatedObjects.iterator();
         while (dependentParamsIterator.hasNext()) {
             final Class<?> nextdependentParam = dependentParamsIterator.next();
-            final Object nextInstantiatedObject = instantiatedObjectsIterator.next();
+            final Dependency nextInstantiatedObject = instantiatedObjectsIterator.next();
             dependentParameters.put(nextdependentParam, nextInstantiatedObject);
         }
     }
