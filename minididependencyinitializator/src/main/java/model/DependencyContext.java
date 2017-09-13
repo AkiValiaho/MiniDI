@@ -2,6 +2,7 @@ package model;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Holds a map that contains all the resolved dependencies
@@ -23,4 +24,7 @@ public class DependencyContext {
         dependencyHashMap.put(classToRegister, instance);
     }
 
+    public Optional<Object> getDependency(Class<?> dependencyToGet) {
+        return Optional.of(dependencyHashMap.get(dependencyToGet));
+    }
 }
