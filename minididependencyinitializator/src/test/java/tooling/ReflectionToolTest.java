@@ -36,6 +36,12 @@ public class ReflectionToolTest {
     }
 
     @Test
+    public void initialize_classWithFieldInjection_shouldInitiateClassWithfieldInjection() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService);
+        reflectionInitializertool.initialize(dependency);
+    }
+
+    @Test
     public void initialize_recursiveNonLeafClass_shouldInitiateRecursiveNonLeafClass() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         final Dependency dependency = new Dependency(RecursiveDummyTestClass.class, dependencyContextService);
         DummyTestClassWithDependency dummyTestClassWithDependency = new DummyTestClassWithDependency(new DummyTestClass());

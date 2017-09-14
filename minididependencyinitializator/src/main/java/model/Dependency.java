@@ -6,10 +6,13 @@ import lombok.Setter;
 import tooling.DependencyContextService;
 import tooling.MultipleAnnotatedConstructorsException;
 
+import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
 import java.util.stream.Collectors;
+
+import static com.google.common.collect.Iterables.isEmpty;
 
 /**
  * Created by akivv on 5.9.2017.
@@ -18,7 +21,8 @@ public class Dependency {
     private DependencyContextService dependencyContextService;
     private Class<?> dependencyClass;
     private Map<Class<?>, Dependency> dependentParameters;
-    @Getter @Setter
+    @Getter
+    @Setter
     private Object dependencyInstance;
     private Constructor<?> noArgsConstructor;
     private Constructor<?> argsConstructor;
@@ -48,11 +52,26 @@ public class Dependency {
     boolean isLeafParameter() {
         //should have a no args constructor
         final Constructor<?>[] declaredConstructors = getDeclaredConstructors();
-        return hasNoArgsConstructor(declaredConstructors);
+        return fullfillsLeafParameterCriteria(declaredConstructors);
     }
 
     private Constructor<?>[] getDeclaredConstructors() {
         return dependencyClass.getDeclaredConstructors();
+    }
+
+    private boolean fullfillsLeafParameterCriteria(Constructor<?>[] declaredConstructors) {
+        return hasNoArgsConstructor(declaredConstructors) &&
+                hasNoFieldInjections();
+
+    }
+
+    private boolean hasNoFieldInjections() {
+        return !hasFieldInjection();
+    }
+
+    private boolean hasFieldInjection() {
+        return Arrays.stream(dependencyClass.getDeclaredFields())
+                       .anyMatch(this::hasAutowiredAnnotation);
     }
 
     private boolean hasNoArgsConstructor(Constructor<?>[] declaredConstructors) {
@@ -87,16 +106,19 @@ public class Dependency {
         final List<Constructor<?>> collect = Arrays.stream(declaredConstructors)
                 .filter(this::hasAutowiredAnnotation)
                 .collect(Collectors.toList());
-        if (collect.size() > 1) {
-            throw new MultipleAnnotatedConstructorsException(dependencyClass);
-        }
+        multipleConstructorsExceptionCheck(collect);
         this.argsConstructor = collect.get(0);
         return collect.get(0);
     }
 
-    private boolean hasAutowiredAnnotation(Constructor<?> constructor) {
-        return Arrays.stream(constructor.getAnnotations())
-                .anyMatch(annotation -> annotation instanceof Autowired);
+    private void multipleConstructorsExceptionCheck(List<Constructor<?>> collect) {
+        if (collect.size() > 1) {
+            throw new MultipleAnnotatedConstructorsException(dependencyClass);
+        }
+    }
+
+    private boolean hasAutowiredAnnotation(AnnotatedElement reflectionMember) {
+        return reflectionMember.isAnnotationPresent(Autowired.class);
     }
 
     Object instantiateWithNoArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -114,9 +136,22 @@ public class Dependency {
     }
 
     private void instantiateParameters(DependencyContextService dependencyContextService) {
-        Class<?>[] dependentParams = getDependentParamsFromArgsConstructor();
+        //TODO We are missing a concept here, refactor HierarchichalDependency model from this class to represent dependencies with other dependencies!
+        Class<?>[] dependentParams = getDependentParamsFromFieldsOrConstructor();
         List<Dependency> listOfInstantiatedObjects = dependencyContextService.instantiateListOfDependencies(dependentParams);
         addToMap(dependentParams, listOfInstantiatedObjects);
+    }
+
+    private Class<?>[] getDependentParamsFromFieldsOrConstructor() {
+        Class<?>[] dependentParamsFromArgsConstructor = getDependentParamsFromArgsConstructor();
+        if (dependentParamsFromArgsConstructor !=null) {
+            return dependentParamsFromArgsConstructor;
+        } else {
+            return dependentParamsFromFields();
+        }
+    }
+
+    private Class<?>[] dependentParamsFromFields() {
     }
 
     private void addToMap(Class<?>[] dependentParams, List<Dependency> listOfInstantiatedObjects) {
@@ -138,9 +173,7 @@ public class Dependency {
         final List<Constructor<?>> collect = Arrays.stream(dependencyClass.getDeclaredConstructors())
                 .filter(this::hasAutowiredAnnotation)
                 .collect(Collectors.toList());
-        if (collect.size() > 1) {
-            throw new MultipleAnnotatedConstructorsException(dependencyClass);
-        }
-        return Optional.of(collect.get(0));
+        multipleConstructorsExceptionCheck(collect);
+        return isEmpty(collect) ? Optional.empty() : Optional.of(collect.get(0));
     }
 }
