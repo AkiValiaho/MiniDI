@@ -38,7 +38,7 @@ class ReflectionRepresentation {
 
     private Optional<Constructor> filterNoArgsConstructor(Constructor[] noArgsConstructor) {
         return Arrays.stream(noArgsConstructor)
-                .filter(constructor -> isNoArgsConstructor(constructor))
+                .filter(this::isNoArgsConstructor)
                 .findFirst();
     }
 
