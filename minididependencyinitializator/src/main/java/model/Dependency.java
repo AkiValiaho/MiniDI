@@ -98,6 +98,11 @@ public class Dependency {
 
     }
 
+    private boolean hasNoArgsConstructor(Constructor<?>[] declaredConstructors) {
+        return reflectionRepresentation.getNoArgsConstructor().isPresent();
+
+    }
+
     private Object instantiateWithNoArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Optional<Constructor> noArgsConstructor = reflectionRepresentation.getNoArgsConstructor();
         if (noArgsConstructor.isPresent()) {
@@ -123,11 +128,9 @@ public class Dependency {
 
     private Class<?>[] getDependentParamsFromFieldsOrConstructor() {
         Class<?>[] dependentParamsFromArgsConstructor = getDependentParamsFromArgsConstructor();
-        if (dependentParamsFromArgsConstructor != null) {
-            return dependentParamsFromArgsConstructor;
-        } else {
-            return dependentParamsFromFields();
-        }
+        return dependentParamsFromArgsConstructor != null
+                ? dependentParamsFromArgsConstructor
+                : dependentParamsFromFields();
     }
 
     private Class<?>[] dependentParamsFromFields() {
@@ -146,11 +149,6 @@ public class Dependency {
             final Dependency nextInstantiatedObject = instantiatedObjectsIterator.next();
             dependentParameters.put(nextdependentParam, nextInstantiatedObject);
         }
-    }
-
-    private boolean hasNoArgsConstructor(Constructor<?>[] declaredConstructors) {
-        return reflectionRepresentation.getNoArgsConstructor().isPresent();
-
     }
 
 }
