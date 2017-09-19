@@ -41,8 +41,36 @@ public class Dependency {
      *
      * @param dependencyContext
      */
-    public void addDependencyToMap(DependencyContext dependencyContext) {
+    void addDependencyToMap(DependencyContext dependencyContext) {
         dependencyContext.registerDependencyAttributes(dependencyClass, dependencyInstance);
+    }
+
+    Object instantiate() throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        if (isLeafParameter()) {
+            //TODO Simplify this logic a bit (move noargs constructor search into the dependency model object
+            return instantiateWithNoArgsConstructor();
+        }
+        //It's not a leaf parameter
+        if (instantiateDependentParameters()) {
+            //We can now instantiate from the constructor
+            return instantiateFromArgsConstructor();
+        }
+        return null;
+    }
+
+    private Object instantiateFromArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        return instantiateWithArgsConstructor();
+    }
+
+    private Object instantiateWithArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        Optional<Constructor> argsConstructor = reflectionRepresentation.getArgsConstructor();
+        final Object[] objects = dependentParameters.values().stream()
+                .map(Dependency::getDependencyInstance)
+                .toArray();
+        if (argsConstructor.isPresent()) {
+            return argsConstructor.get().newInstance(objects);
+        }
+        return null;
     }
 
     boolean isLeafParameter() {
@@ -70,25 +98,7 @@ public class Dependency {
 
     }
 
-    private boolean hasNoArgsConstructor(Constructor<?>[] declaredConstructors) {
-        return reflectionRepresentation.getNoArgsConstructor() != null;
-
-    }
-
-
-    Object instantiateWithArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        Optional<Constructor> argsConstructor = reflectionRepresentation.getArgsConstructor();
-        final Object[] objects = dependentParameters.values().stream()
-                .map(Dependency::getDependencyInstance)
-                .toArray();
-        if (argsConstructor.isPresent()) {
-            return argsConstructor.get().newInstance(objects);
-        }
-        return null;
-    }
-
-
-    Object instantiateWithNoArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    private Object instantiateWithNoArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Optional<Constructor> noArgsConstructor = reflectionRepresentation.getNoArgsConstructor();
         if (noArgsConstructor.isPresent()) {
             this.dependencyInstance = noArgsConstructor.get().newInstance(null);
@@ -138,4 +148,10 @@ public class Dependency {
             dependentParameters.put(nextdependentParam, nextInstantiatedObject);
         }
     }
+
+    private boolean hasNoArgsConstructor(Constructor<?>[] declaredConstructors) {
+        return reflectionRepresentation.getNoArgsConstructor().isPresent();
+
+    }
+
 }

@@ -5,7 +5,9 @@ import tooling.MultipleAnnotatedConstructorsException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 class ReflectionRepresentation {
     private final Class<?> dependencyClass;
@@ -23,7 +25,7 @@ class ReflectionRepresentation {
     }
 
     private boolean isArgsConstructor(Constructor<?> constructor) {
-        return constructor.getParameterCount() == 0;
+        return constructor.getParameterCount() != 0;
     }
 
     Optional<Constructor> getNoArgsConstructor() {
@@ -36,8 +38,12 @@ class ReflectionRepresentation {
 
     private Optional<Constructor> filterNoArgsConstructor(Constructor[] noArgsConstructor) {
         return Arrays.stream(noArgsConstructor)
-                .filter(constructor -> constructor.getParameterCount() == 0)
+                .filter(constructor -> isNoArgsConstructor(constructor))
                 .findFirst();
+    }
+
+    private boolean isNoArgsConstructor(Constructor constructor) {
+        return constructor.getParameterCount() == 0;
     }
 
     Class<?>[] getDependentParamsFromFields() {
@@ -85,14 +91,21 @@ class ReflectionRepresentation {
     }
 
     private Constructor[] filterAnnotatedArgsConstructors(Constructor<?>[] argsConstructors) {
-        return (Constructor[]) Arrays.stream(argsConstructors)
+        List<Constructor<?>> collect = Arrays.stream(argsConstructors)
                 .filter(reflectionInitializer::hasAutowiredAnnotation)
-                .toArray();
+                .collect(Collectors.toList());
+        return toConstructorArray(collect);
+
+    }
+
+    private Constructor[] toConstructorArray(List<Constructor<?>> collect) {
+        return collect.toArray(new Constructor[collect.size()]);
     }
 
     private Constructor[] filterArgsConstructor(Constructor<?>[] listOfConstructors) {
-        return (Constructor[]) Arrays.stream(listOfConstructors)
+        List<Constructor<?>> collect = Arrays.stream(listOfConstructors)
                 .filter(this::isArgsConstructor)
-                .toArray();
+                .collect(Collectors.toList());
+        return toConstructorArray(collect);
     }
 }

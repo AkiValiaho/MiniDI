@@ -42,7 +42,7 @@ public class ReflectionTool {
         return aPackage == null ? "" : aPackage.getName();
     }
 
-    public List<Class<?>> scanClassPathForInterests(String rootPackage) {
+    private List<Class<?>> scanClassPathForInterests(String rootPackage) {
         List<URL> collect = new ArrayList<>(getURLsForPackage(rootPackage));
         Configuration configuration = new ConfigurationBuilder().addUrls(collect)
                 .setScanners(new SubTypesScanner(), new TypeAnnotationsScanner(), new MethodAnnotationsScanner(),
@@ -74,31 +74,14 @@ public class ReflectionTool {
     }
 
     public Object initialize(Dependency dependency) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        if (dependency.isLeafParameter()) {
-            //TODO Simplify this logic a bit (move noargs constructor search into the dependency model object
-            return instantiateWithNoArgsConstructor(dependency);
-        }
-        //It's not a leaf parameter
-        if (dependency.instantiateDependentParameters()) {
-            //We can now instantiate from the constructor
-            return instantiateFromArgsConstructor(dependency);
-        }
-        return null;
-    }
-
-    private Object instantiateFromArgsConstructor(Dependency dependencyClass) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        return dependencyClass.instantiateWithArgsConstructor();
-    }
-
-    private Object instantiateWithNoArgsConstructor(Dependency dependencyClass) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        return dependencyClass.instantiateWithNoArgsConstructor();
+        return dependency.instantiate();
     }
 
     boolean hasAutowiredAnnotation(AnnotatedElement reflectionMember) {
         return reflectionMember.isAnnotationPresent(Autowired.class);
     }
 
-    public ReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
+    ReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
         return new ReflectionRepresentation(dependencyClass, this).represent();
     }
 }
