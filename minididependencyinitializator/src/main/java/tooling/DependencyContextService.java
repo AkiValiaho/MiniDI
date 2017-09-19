@@ -23,14 +23,6 @@ public class DependencyContextService {
         this.reflectioninitializer = reflectionTool;
     }
 
-    public Dependency createDependenciesFromResource(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        checkNotNull(dependencyClass);
-        Dependency dependency = new Dependency(dependencyClass, this);
-        dependency.initializeDependencyObject(reflectioninitializer);
-        dependencyContext.addDependencyToMap(dependency);
-        return dependency;
-    }
-
     public List<Dependency> instantiateListOfDependencies(Class<?>[] dependentParams) {
         return Arrays.stream(dependentParams)
                 .map(this::createDependencyWithExceptionSafety
@@ -47,11 +39,18 @@ public class DependencyContextService {
         return null;
     }
 
+    public Dependency createDependenciesFromResource(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        checkNotNull(dependencyClass);
+        Dependency dependency = new Dependency(dependencyClass, this, reflectioninitializer);
+        dependency.initializeDependencyObject();
+        dependencyContext.addDependencyToMap(dependency);
+        return dependency;
+    }
+
     private void injectionError(ReflectiveOperationException e) {
         System.out.println(e);
         System.exit(1);
     }
-
 
 
 }

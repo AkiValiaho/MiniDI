@@ -37,24 +37,24 @@ public class ReflectionToolTest {
 
     @Test
     public void initialize_classWithFieldInjection_shouldInitiateClassWithfieldInjection() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService);
+        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, reflectionInitializertool);
         reflectionInitializertool.initialize(dependency);
     }
 
     @Test
     public void initialize_recursiveNonLeafClass_shouldInitiateRecursiveNonLeafClass() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        final Dependency dependency = new Dependency(RecursiveDummyTestClass.class, dependencyContextService);
+        final Dependency dependency = new Dependency(RecursiveDummyTestClass.class, dependencyContextService, reflectionInitializertool);
         DummyTestClassWithDependency dummyTestClassWithDependency = new DummyTestClassWithDependency(new DummyTestClass());
-        when(dependencyContextService.instantiateListOfDependencies(any())).thenReturn(Collections.singletonList(new Dependency(DummyTestClassWithDependency.class, dependencyContextService)));
+        when(dependencyContextService.instantiateListOfDependencies(any())).thenReturn(Collections.singletonList(new Dependency(DummyTestClassWithDependency.class, dependencyContextService, reflectionInitializertool)));
         final Object initialize = reflectionInitializertool.initialize(dependency);
         assertNotNull(initialize);
     }
 
     @Test
     public void initialize_nonLeafClass_shouldInitializeNonLeafClass() throws Exception {
-        final Dependency dependency = new Dependency(DummyTestClassWithDependency.class, dependencyContextService);
+        final Dependency dependency = new Dependency(DummyTestClassWithDependency.class, dependencyContextService, reflectionInitializertool);
         final DummyTestClass dummyTestClass = new DummyTestClass();
-        final Dependency dummyDependency = new Dependency(DummyTestClass.class, dependencyContextService);
+        final Dependency dummyDependency = new Dependency(DummyTestClass.class, dependencyContextService, reflectionInitializertool);
         dummyDependency.setDependencyInstance(dummyTestClass);
         when(dependencyContextService.instantiateListOfDependencies(any())).thenReturn(Collections.singletonList(dummyDependency));
         final Object initialize = reflectionInitializertool.initialize(dependency);
@@ -63,22 +63,22 @@ public class ReflectionToolTest {
 
     @Test
     public void initialize_dummyLeafClass_shouldInitializeDummyTestClass() throws Exception {
-        final Dependency dependency = new Dependency(DummyTestClass.class, dependencyContextService);
+        final Dependency dependency = new Dependency(DummyTestClass.class, dependencyContextService, reflectionInitializertool);
         final Object initialize = reflectionInitializertool.initialize(dependency);
         assertTrue(initialize != null);
     }
 
     @Test(expected = MultipleAnnotatedConstructorsException.class)
     public void initialize_nonLeafClassMultipleAutowiredConstructors_shouldThrowAnException() throws MultipleAnnotatedConstructorsException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        Dependency dependency = new Dependency(DummyTestClassMultipleAnnotations.class, dependencyContextService);
+        Dependency dependency = new Dependency(DummyTestClassMultipleAnnotations.class, dependencyContextService, reflectionInitializertool);
         reflectionInitializertool.initialize(dependency);
     }
 
     @Test
     public void initialize_nonLeafClass_shouldFindConstructorWithAutowiredAnnotation() throws Exception {
-        final Dependency dependency = new Dependency(DummyTestClassWithDependency.class, dependencyContextService);
+        final Dependency dependency = new Dependency(DummyTestClassWithDependency.class, dependencyContextService, reflectionInitializertool);
         final DummyTestClass dummyInstance = new DummyTestClass();
-        final Dependency dummyDependency = new Dependency(DummyTestClass.class, dependencyContextService);
+        final Dependency dummyDependency = new Dependency(DummyTestClass.class, dependencyContextService, reflectionInitializertool);
         dummyDependency.setDependencyInstance(dummyInstance);
         List<Dependency> mockListOfObjects = Collections.singletonList(dummyDependency);
         when(dependencyContextService.instantiateListOfDependencies(any())).thenReturn(mockListOfObjects);

@@ -33,16 +33,16 @@ public class DependencyContextServiceTest {
         ReflectionTool reflectionInitializerMock = dependencyContextAndReflectionTool.getReflectionInitializerMock();
         DependencyContext dependencyContextMock = dependencyContextAndReflectionTool.getDependencyContextMock();
         final DummyTestClass initializedDummyTestClass = new DummyTestClass();
-        final Dependency dependency1 = new Dependency(DummyTestClass.class, dependencyContextService);
+        final Dependency dependency1 = new Dependency(DummyTestClass.class, dependencyContextService, reflectionInitializerMock);
         when(reflectionInitializerMock.initialize(any())).thenReturn(initializedDummyTestClass);
-        dependencyContextService = new DependencyContextService(reflectionInitializerMock,dependencyContextMock);
+        dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextMock);
         final Dependency dependency = dependencyContextService.createDependenciesFromResource(DummyTestClass.class);
         assertMocksCalled(dependencyContextMock, initializedDummyTestClass, dependency);
     }
 
     private void assertMocksCalled(DependencyContext dependencyContextMock, DummyTestClass initializedDummyTestClass, Dependency dependency) {
         verify(dependencyContextMock, times(1)).addDependencyToMap(any());
-        assertEquals(dependency.getDependencyInstance().getClass(),initializedDummyTestClass.getClass());
+        assertEquals(dependency.getDependencyInstance().getClass(), initializedDummyTestClass.getClass());
     }
 
     @Test(expected = NullPointerException.class)
@@ -68,7 +68,9 @@ public class DependencyContextServiceTest {
             return reflectionInitializerMock;
         }
 
-        public DependencyContextAndReflectionTool invoke() { dependencyContextMock = mock(DependencyContext.class); reflectionInitializerMock = mock(ReflectionTool.class);
+        public DependencyContextAndReflectionTool invoke() {
+            dependencyContextMock = mock(DependencyContext.class);
+            reflectionInitializerMock = mock(ReflectionTool.class);
             return this;
         }
     }

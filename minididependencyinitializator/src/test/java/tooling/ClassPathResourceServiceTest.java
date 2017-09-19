@@ -23,13 +23,13 @@ public class ClassPathResourceServiceTest {
     public void setUp() throws Exception {
         dependencyContextService = mock(DependencyContextService.class);
         reflectionTool = mock(ReflectionTool.class);
-        this.classPathResourceService = new ClassPathResourceService(dependencyContextService,reflectionTool);
+        this.classPathResourceService = new ClassPathResourceService(dependencyContextService, reflectionTool);
     }
 
     @Test
     public void createDependenciesFromClassPath() throws Exception {
         when(reflectionTool.findClassPathResources(DummyTestClassWithDependency.class)).thenReturn(Collections.singletonList(new ClassPathResource(ClassPathResource.class)));
-        when(dependencyContextService.createDependenciesFromResource(ClassPathResource.class)).thenReturn(new Dependency(Dependency.class, dependencyContextService));
+        when(dependencyContextService.createDependenciesFromResource(ClassPathResource.class)).thenReturn(new Dependency(Dependency.class, dependencyContextService, reflectionTool));
         classPathResourceService.createDependenciesFromClassPath(DummyTestClassWithDependency.class);
         verify(reflectionTool, times(1)).findClassPathResources(any());
         verify(dependencyContextService, times(1)).createDependenciesFromResource(ClassPathResource.class);
