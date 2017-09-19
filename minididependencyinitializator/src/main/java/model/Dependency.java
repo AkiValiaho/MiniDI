@@ -47,13 +47,16 @@ public class Dependency {
 
     Object instantiate() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         if (isLeafParameter()) {
-            //TODO Simplify this logic a bit (move noargs constructor search into the dependency model object
             return instantiateWithNoArgsConstructor();
         }
         //It's not a leaf parameter
         if (instantiateDependentParameters()) {
             //We can now instantiate from the constructor
-            return instantiateFromArgsConstructor();
+            Object o = instantiateFromArgsConstructor();
+            if (o == null) {
+                //Contains only field injections
+                return instantiateWithNoArgsConstructor();
+            }
         }
         return null;
     }
@@ -74,7 +77,7 @@ public class Dependency {
     }
 
     boolean isLeafParameter() {
-        //should have a no args constructor
+        //should have a no args constructor and no autowired fields
         final Constructor<?>[] declaredConstructors = getDeclaredConstructors();
         return fullfillsLeafParameterCriteria(declaredConstructors);
     }
@@ -116,11 +119,11 @@ public class Dependency {
             return true;
         }
         dependentParameters = new HashMap<>();
-        instantiateParameters(dependencyContextService);
+        instantiateParameters();
         return true;
     }
 
-    private void instantiateParameters(DependencyContextService dependencyContextService) {
+    private void instantiateParameters() {
         Class<?>[] dependentParams = getDependentParamsFromFieldsOrConstructor();
         List<Dependency> listOfInstantiatedObjects = dependencyContextService.instantiateListOfDependencies(dependentParams);
         addToMap(dependentParams, listOfInstantiatedObjects);

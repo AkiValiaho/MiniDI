@@ -47,17 +47,28 @@ class ReflectionRepresentation {
     }
 
     Class<?>[] getDependentParamsFromFields() {
-        return filterAutowiredFields(getFields());
+        Field[] fields = filterAutowiredFields(getFields());
+        return mapFieldsToClasses(fields);
     }
 
-    private Class<?>[] filterAutowiredFields(Field[] fields) {
-        return (Class<?>[]) Arrays.stream(fields)
+    private Class<?>[] mapFieldsToClasses(Field[] fields) {
+        return Arrays.stream(fields)
+                .map(this::mapFieldToClass)
+                .toArray(Class<?>[]::new);
+    }
+
+    private Field[] filterAutowiredFields(Field[] fields) {
+        return Arrays.stream(fields)
                 .filter(reflectionInitializer::hasAutowiredAnnotation)
-                .toArray();
+                .toArray(Field[]::new);
     }
 
     private Field[] getFields() {
-        return dependencyClass.getFields();
+        return dependencyClass.getDeclaredFields();
+    }
+
+    private Class<?> mapFieldToClass(Field field) {
+        return field.getType();
     }
 
     ReflectionRepresentation represent() {
