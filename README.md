@@ -15,7 +15,24 @@ Constructor-annotation:
     @Autowired: Marks a constructor as injectable, MiniDI searches for
     all the recursive dependencies marked with @Component-annotation and injects them through
     this annotated constructor.
+    eg.
+    @Component
+    public class Dependency {
+        @Autowired
+        public Dependency(MagicDependency magicDependency) {
+        }
+    }
     
+Field-annotation
+    
+    You can also inject fields without the constructor annotation using the @Autowired-annotation on the field
+    of your choice.
+    eg.
+    @Component
+    public class Dependency {
+        @Autowired
+        private MagicDependency magicDependency;
+     }
     
 Application startup:
 
