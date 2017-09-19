@@ -77,11 +77,9 @@ class ReflectionRepresentation {
     }
 
     private Optional<Constructor> optionalFromConstructorArray(Constructor[] annotatedArgsConstructors) {
-        if (annotatedArgsConstructors.length == 0) {
-            return Optional.empty();
-        } else {
-            return Optional.of(annotatedArgsConstructors[0]);
-        }
+        return annotatedArgsConstructors.length == 0
+                ? Optional.empty()
+                : Optional.of(annotatedArgsConstructors[0]);
     }
 
     private void throwExceptionIfMoreThanOneAnnotatedConstructor(Constructor[] annotatedArgsConstructors) {
@@ -98,14 +96,14 @@ class ReflectionRepresentation {
 
     }
 
-    private Constructor[] toConstructorArray(List<Constructor<?>> collect) {
-        return collect.toArray(new Constructor[collect.size()]);
-    }
-
     private Constructor[] filterArgsConstructor(Constructor<?>[] listOfConstructors) {
         List<Constructor<?>> collect = Arrays.stream(listOfConstructors)
                 .filter(this::isArgsConstructor)
                 .collect(Collectors.toList());
         return toConstructorArray(collect);
+    }
+
+    private Constructor[] toConstructorArray(List<Constructor<?>> collect) {
+        return collect.toArray(new Constructor[collect.size()]);
     }
 }

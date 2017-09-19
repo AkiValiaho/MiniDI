@@ -116,7 +116,6 @@ public class Dependency {
     }
 
     private void instantiateParameters(DependencyContextService dependencyContextService) {
-        //TODO We are missing a concept here, refactor HierarchichalDependency model from this class to represent dependencies with other dependencies!
         Class<?>[] dependentParams = getDependentParamsFromFieldsOrConstructor();
         List<Dependency> listOfInstantiatedObjects = dependencyContextService.instantiateListOfDependencies(dependentParams);
         addToMap(dependentParams, listOfInstantiatedObjects);

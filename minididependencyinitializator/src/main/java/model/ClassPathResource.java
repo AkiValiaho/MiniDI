@@ -15,14 +15,6 @@ public class ClassPathResource {
         this.startClass = startClass;
     }
 
-    private void convertResourceToDependency(DependencyContextService dependencyContextService, ClassPathResource classPathResource) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        dependencyContextService.createDependenciesFromResource(classPathResource.getDependencyClass());
-    }
-
-    private List<ClassPathResource> scanClassPath(ReflectionTool reflectionTool) {
-        return reflectionTool.findClassPathResources(startClass);
-    }
-
     public void convertResourcesToDependencies(ReflectionTool reflectionTool, DependencyContextService dependencyContextService) {
         final List<ClassPathResource> classPathResources = scanClassPath(reflectionTool);
         classPathResources.forEach(resource -> {
@@ -34,7 +26,15 @@ public class ClassPathResource {
         });
     }
 
+    private void convertResourceToDependency(DependencyContextService dependencyContextService, ClassPathResource classPathResource) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        dependencyContextService.createDependenciesFromResource(classPathResource.getDependencyClass());
+    }
+
     public Class<?> getDependencyClass() {
         return startClass;
+    }
+
+    private List<ClassPathResource> scanClassPath(ReflectionTool reflectionTool) {
+        return reflectionTool.findClassPathResources(startClass);
     }
 }
