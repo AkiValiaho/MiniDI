@@ -12,22 +12,19 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
-import java.util.stream.DoubleStream;
-
-import static com.google.common.collect.Iterables.isEmpty;
 
 /**
  * Created by akivv on 5.9.2017.
  */
 public class ReflectionTool {
-
-    private DoubleStream argsConstructor;
 
     public List<ClassPathResource> findClassPathResources(Class<?> startClass) {
         return getClassesFromClassPathWithAnnotation(startClass).stream()
@@ -97,14 +94,11 @@ public class ReflectionTool {
         return dependencyClass.instantiateWithNoArgsConstructor();
     }
 
-    Optional<Constructor<?>> getArgsConstructor(Class<?> dependencyClass) {
-        final List<Constructor<?>> collect = Arrays.stream(dependencyClass.getDeclaredConstructors())
-                .filter(this::hasAutowiredAnnotation)
-                .collect(Collectors.toList());
-        return isEmpty(collect) ? Optional.empty() : Optional.of(collect.get(0));
-    }
-
     boolean hasAutowiredAnnotation(AnnotatedElement reflectionMember) {
         return reflectionMember.isAnnotationPresent(Autowired.class);
+    }
+
+    public ReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
+        return new ReflectionRepresentation(dependencyClass, this).represent();
     }
 }

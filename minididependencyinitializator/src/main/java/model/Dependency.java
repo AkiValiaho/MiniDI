@@ -3,12 +3,10 @@ package model;
 import lombok.Getter;
 import lombok.Setter;
 import tooling.DependencyContextService;
-import tooling.MultipleAnnotatedConstructorsException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * Created by akivv on 5.9.2017.
@@ -21,8 +19,7 @@ public class Dependency {
     @Getter
     @Setter
     private Object dependencyInstance;
-    private Constructor<?> noArgsConstructor;
-    private Constructor<?> argsConstructor;
+    private ReflectionRepresentation reflectionRepresentation;
 
     public Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, ReflectionTool reflectionInitializer) {
         this.dependencyClass = dependencyClass;
@@ -35,6 +32,7 @@ public class Dependency {
      * Initializes an object from the given dependency class
      */
     public void initializeDependencyObject() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        this.reflectionRepresentation = reflectionInitializer.getReflectionRepresentation(dependencyClass);
         this.dependencyInstance = reflectionInitializer.initialize(this);
     }
 
@@ -68,55 +66,33 @@ public class Dependency {
     }
 
     private boolean hasFieldInjection() {
-        return Arrays.stream(dependencyClass.getDeclaredFields())
-                .anyMatch(reflectionInitializer::hasAutowiredAnnotation);
+        return reflectionRepresentation.hasInjectedFields();
+
     }
 
     private boolean hasNoArgsConstructor(Constructor<?>[] declaredConstructors) {
-        final List<Constructor<?>> collect = Arrays.stream(declaredConstructors)
-                .filter(constructor -> constructor.getParameterCount() == 0)
-                .collect(Collectors.toList());
-        if (collect.size() > 0) {
-            //Has no args constructor, save it
-            this.noArgsConstructor = collect.get(0);
-            return true;
-        }
-        return false;
+        return reflectionRepresentation.getNoArgsConstructor() != null;
+
     }
 
-    ;
 
     Object instantiateWithArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        findArgsConstructor();
+        Optional<Constructor> argsConstructor = reflectionRepresentation.getArgsConstructor();
         final Object[] objects = dependentParameters.values().stream()
                 .map(Dependency::getDependencyInstance)
                 .toArray();
-        return argsConstructor.newInstance(objects);
-    }
-
-    private Constructor findArgsConstructor() {
-        final Constructor<?>[] declaredConstructors = getDeclaredConstructors();
-        return saveArgsConstructor(declaredConstructors);
-    }
-
-    private Constructor saveArgsConstructor(Constructor<?>[] declaredConstructors) {
-        //Should have an autowired annotation present
-        final List<Constructor<?>> collect = Arrays.stream(declaredConstructors)
-                .filter(reflectionInitializer::hasAutowiredAnnotation)
-                .collect(Collectors.toList());
-        multipleConstructorsExceptionCheck(collect);
-        this.argsConstructor = collect.get(0);
-        return collect.get(0);
-    }
-
-    private void multipleConstructorsExceptionCheck(List<Constructor<?>> collect) {
-        if (collect.size() > 1) {
-            throw new MultipleAnnotatedConstructorsException(dependencyClass);
+        if (argsConstructor.isPresent()) {
+            return argsConstructor.get().newInstance(objects);
         }
+        return null;
     }
+
 
     Object instantiateWithNoArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        this.dependencyInstance = noArgsConstructor.newInstance(null);
+        Optional<Constructor> noArgsConstructor = reflectionRepresentation.getNoArgsConstructor();
+        if (noArgsConstructor.isPresent()) {
+            this.dependencyInstance = noArgsConstructor.get().newInstance(null);
+        }
         return dependencyInstance;
     }
 
@@ -146,11 +122,11 @@ public class Dependency {
     }
 
     private Class<?>[] dependentParamsFromFields() {
+        return reflectionRepresentation.getDependentParamsFromFields();
     }
 
     private Class<?>[] getDependentParamsFromArgsConstructor() {
-        return reflectionInitializer.getArgsConstructor(dependencyClass)
-                .map(Constructor::getParameterTypes).orElse(null);
+        return reflectionRepresentation.getParamTypesFromArgsConstructor();
     }
 
     private void addToMap(Class<?>[] dependentParams, List<Dependency> listOfInstantiatedObjects) {
