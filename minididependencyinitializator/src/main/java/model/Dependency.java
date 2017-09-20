@@ -57,6 +57,7 @@ public class Dependency {
                 //Contains only field injections
                 return instantiateWithNoArgsConstructor();
             }
+            return o;
         }
         return null;
     }
