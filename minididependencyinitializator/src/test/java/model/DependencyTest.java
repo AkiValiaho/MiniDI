@@ -44,7 +44,7 @@ public class DependencyTest {
     public void isLeafParameter_onlyFieldInjections_shouldReturnFalse() throws Exception {
         dependencyContextService = mock(DependencyContextService.class);
         ReflectionTool reflectionToolMock = returnRepresentation();
-        when(representation.getNoArgsConstructor()).thenReturn(null);
+        when(representation.getNoArgsConstructor()).thenReturn(Optional.empty());
         this.dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, reflectionToolMock);
         this.dependency.initializeDependencyObject();
         assertNotALeafParameter();

@@ -41,6 +41,7 @@ public class ReflectionRepresentationTest {
 
     @Test
     public void getDependentParamsFromFields() throws Exception {
+        //reflectionRepresentation.getDependentParamsFromFields();
     }
 
     @Test
