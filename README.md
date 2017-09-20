@@ -3,6 +3,18 @@ Small scale dependency injection framework
 
 Uses annotation-based injection dependency resolving.
 
+Maven dependency:
+
+    **To use MiniDI-framework add the following dependency to your pom.xml**
+      
+     <dependencies>
+        <dependency>
+            <groupId>com.akivaliaho</groupId>
+               <artifactId>minididependencyinitializator</artifactId>
+               <version>1.0-SNAPSHOT</version>
+        </dependency>
+    </dependencies>
+
 Annotations:
 
 Class-annotation:
@@ -15,6 +27,7 @@ Constructor-annotation:
     @Autowired: Marks a constructor as injectable, MiniDI searches for
     all the recursive dependencies marked with @Component-annotation and injects them through
     this annotated constructor.
+    
     eg.
     @Component
     public class Dependency {
@@ -28,6 +41,7 @@ Field-annotation
     You can also inject fields without the constructor annotation using the @Autowired-annotation on the field
     of your choice.
     eg.
+    
     @Component
     public class Dependency {
         @Autowired
