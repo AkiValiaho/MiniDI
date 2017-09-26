@@ -1,8 +1,4 @@
-package tooling;
-
-import model.Dependency;
-import model.DependencyContext;
-import model.ReflectionTool;
+package model;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -18,7 +14,7 @@ public class DependencyContextService {
     private final ReflectionTool reflectioninitializer;
     private DependencyContext dependencyContext;
 
-    DependencyContextService(ReflectionTool reflectionTool, DependencyContext dependencyContext) {
+    public DependencyContextService(ReflectionTool reflectionTool, DependencyContext dependencyContext) {
         this.dependencyContext = dependencyContext;
         this.reflectioninitializer = reflectionTool;
     }
@@ -41,9 +37,20 @@ public class DependencyContextService {
 
     public Dependency createDependenciesFromResource(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         checkNotNull(dependencyClass);
-        Dependency dependency = new Dependency(dependencyClass, this, reflectioninitializer);
-        dependency.initializeDependencyObject();
+        Dependency dependency = createDependencyObject(dependencyClass);
         dependencyContext.addDependencyToMap(dependency);
+        return dependency;
+    }
+
+    /**
+     * Creates a Dependency object and initializes it
+     *
+     * @param dependencyClass
+     */
+    private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        ReflectionRepresentation reflectionRepresentation = reflectioninitializer.getReflectionRepresentation(dependencyClass);
+        Dependency dependency = new Dependency(dependencyClass, this, reflectionRepresentation);
+        dependency.instantiate();
         return dependency;
     }
 

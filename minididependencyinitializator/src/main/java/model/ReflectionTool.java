@@ -81,7 +81,7 @@ public class ReflectionTool {
         return reflectionMember.isAnnotationPresent(Autowired.class);
     }
 
-    ReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
+    public ReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
         return new ReflectionRepresentation(dependencyClass, this).represent();
     }
 }

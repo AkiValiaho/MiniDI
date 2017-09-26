@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-class ReflectionRepresentation {
+public class ReflectionRepresentation {
     private final Class<?> dependencyClass;
     private final ReflectionTool reflectionInitializer;
 
-    ReflectionRepresentation(Class<?> dependencyClass, ReflectionTool reflectionInitializer) {
+    public ReflectionRepresentation(Class<?> dependencyClass, ReflectionTool reflectionInitializer) {
         this.dependencyClass = dependencyClass;
         this.reflectionInitializer = reflectionInitializer;
     }

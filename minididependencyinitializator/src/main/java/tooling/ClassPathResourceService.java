@@ -1,6 +1,7 @@
 package tooling;
 
 import model.ClassPathResource;
+import model.DependencyContextService;
 import model.ReflectionTool;
 
 import java.lang.reflect.InvocationTargetException;

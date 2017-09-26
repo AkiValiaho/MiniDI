@@ -2,7 +2,6 @@ package model;
 
 import lombok.Getter;
 import lombok.Setter;
-import tooling.DependencyContextService;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -12,7 +11,7 @@ import java.util.*;
  * Created by akivv on 5.9.2017.
  */
 public class Dependency {
-    private final ReflectionTool reflectionInitializer;
+    private ReflectionTool reflectionInitializer;
     private DependencyContextService dependencyContextService;
     private Class<?> dependencyClass;
     private Map<Class<?>, Dependency> dependentParameters;
@@ -27,11 +26,17 @@ public class Dependency {
         this.reflectionInitializer = reflectionInitializer;
     }
 
+    Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, ReflectionRepresentation reflectionRepresentation) {
+        this.dependencyClass = dependencyClass;
+        this.dependencyContextService = dependencyContextService;
+        this.reflectionRepresentation = reflectionRepresentation;
+    }
+
 
     /**
      * Initializes an object from the given dependency class
      */
-    public void initializeDependencyObject() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    void initializeDependencyObject() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         this.reflectionRepresentation = reflectionInitializer.getReflectionRepresentation(dependencyClass);
         this.dependencyInstance = reflectionInitializer.initialize(this);
     }
@@ -51,7 +56,7 @@ public class Dependency {
         }
         //It's not a leaf parameter
         if (instantiateDependentParameters()) {
-            //We can now instantiate from the constructor
+            //We can now instantiateDependency from the constructor
             Object o = instantiateFromArgsConstructor();
             if (o == null) {
                 //Contains only field injections
