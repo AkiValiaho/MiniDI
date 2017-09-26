@@ -2,6 +2,7 @@ package tooling;
 
 import model.ClassPathResource;
 import model.Dependency;
+import model.DependencyContextService;
 import model.ReflectionTool;
 import org.junit.Before;
 import org.junit.Test;

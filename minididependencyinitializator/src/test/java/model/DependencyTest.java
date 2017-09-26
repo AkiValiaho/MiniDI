@@ -2,7 +2,6 @@ package model;
 
 import org.junit.Test;
 import tooling.ClassWithInjectionField;
-import tooling.DependencyContextService;
 import tooling.DummyTestClass;
 
 import java.lang.reflect.Constructor;

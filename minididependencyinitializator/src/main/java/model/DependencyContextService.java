@@ -12,11 +12,13 @@ import static com.google.common.base.Preconditions.checkNotNull;
  */
 public class DependencyContextService {
     private final ReflectionTool reflectioninitializer;
+    private final DependencyFactory dependencyFactory;
     private DependencyContext dependencyContext;
 
-    public DependencyContextService(ReflectionTool reflectionTool, DependencyContext dependencyContext) {
+    public DependencyContextService(ReflectionTool reflectionTool, DependencyContext dependencyContext, DependencyFactory dependencyFactory) {
         this.dependencyContext = dependencyContext;
         this.reflectioninitializer = reflectionTool;
+        this.dependencyFactory = dependencyFactory;
     }
 
     public List<Dependency> instantiateListOfDependencies(Class<?>[] dependentParams) {
@@ -42,16 +44,9 @@ public class DependencyContextService {
         return dependency;
     }
 
-    /**
-     * Creates a Dependency object and initializes it
-     *
-     * @param dependencyClass
-     */
-    private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         ReflectionRepresentation reflectionRepresentation = reflectioninitializer.getReflectionRepresentation(dependencyClass);
-        Dependency dependency = new Dependency(dependencyClass, this, reflectionRepresentation);
-        dependency.instantiate();
-        return dependency;
+        return dependencyFactory.createDependency(dependencyClass, this, reflectionRepresentation);
     }
 
     private void injectionError(ReflectiveOperationException e) {

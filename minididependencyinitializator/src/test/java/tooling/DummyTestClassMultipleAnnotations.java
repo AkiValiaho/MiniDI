@@ -2,6 +2,7 @@ package tooling;
 
 import annotations.Autowired;
 import annotations.Component;
+import model.DependencyContextService;
 
 /**
  * Created by Aki on 8.9.2017.

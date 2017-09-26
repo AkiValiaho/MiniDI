@@ -1,13 +1,14 @@
 package tooling;
 
-import model.Dependency;
-import model.DependencyContext;
-import model.ReflectionTool;
+import lombok.Getter;
+import model.*;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 /**
@@ -21,24 +22,27 @@ public class DependencyContextServiceTest {
         final DependencyContextAndReflectionTool dependencyContextAndReflectionTool = new DependencyContextAndReflectionTool().invoke();
         final ReflectionTool reflectionInitializerMock = dependencyContextAndReflectionTool.getReflectionInitializerMock();
         final DependencyContext dependencyContextMock = dependencyContextAndReflectionTool.getDependencyContextMock();
-        this.dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextAndReflectionTool.getDependencyContextMock());
-        dependencyContextService.instantiateListOfDependencies(new Class[]{DummyTestClass.class, DummyTestClassWithDependency.class});
-        verify(reflectionInitializerMock, times(2)).initialize(any());
-        verify(dependencyContextMock, times(2)).addDependencyToMap(any());
+        final DependencyFactory dependencyFactory = dependencyContextAndReflectionTool.getDependencyFactory();
+        final Dependency dependency = mock(Dependency.class);
+        when(dependencyFactory.createDependency(any(), any(), any())).thenReturn(dependency);
+        this.dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextMock, dependencyFactory);
+        final List<Dependency> dependencies = dependencyContextService.instantiateListOfDependencies(new Class[]{DummyTestClass.class, DummyTestClassWithDependency.class});
+        assertTrue(dependencies.size() == 2);
     }
 
     @Test
     public void createDependency_validClass_shouldCreateDependencyObject() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         DependencyContextAndReflectionTool dependencyContextAndReflectionTool = new DependencyContextAndReflectionTool().invoke();
         ReflectionTool reflectionInitializerMock = dependencyContextAndReflectionTool.getReflectionInitializerMock();
-        DependencyContext dependencyContextMock = dependencyContextAndReflectionTool.getDependencyContextMock();
-        final DummyTestClass initializedDummyTestClass = new DummyTestClass();
-        final Dependency dependency1 = new Dependency(DummyTestClass.class, dependencyContextService, reflectionInitializerMock);
-        when(reflectionInitializerMock.initialize(any())).thenReturn(initializedDummyTestClass);
-        dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextMock);
-        final Dependency dependency = dependencyContextService.createDependenciesFromResource(DummyTestClass.class);
-        assertMocksCalled(dependencyContextMock, initializedDummyTestClass, dependency);
+        final DependencyContext dependencyContextMock = dependencyContextAndReflectionTool.getDependencyContextMock();
+        final DependencyFactory dependencyFactory = dependencyContextAndReflectionTool.getDependencyFactory();
+        final DependencyContextService dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextMock, dependencyFactory);
+        final Dependency dependency = mock(Dependency.class);
+        when(dependencyFactory.createDependency(any(), any(), any())).thenReturn(dependency);
+        final Dependency dependenciesFromResource = dependencyContextService.createDependenciesFromResource(DummyTestClass.class);
+        assertEquals(dependenciesFromResource, dependency);
     }
+
 
     private void assertMocksCalled(DependencyContext dependencyContextMock, DummyTestClass initializedDummyTestClass, Dependency dependency) {
         verify(dependencyContextMock, times(1)).addDependencyToMap(any());
@@ -50,7 +54,7 @@ public class DependencyContextServiceTest {
         final DependencyContextAndReflectionTool dependencyContextAndReflectionTool = new DependencyContextAndReflectionTool();
         final DependencyContext dependencyContextMock = dependencyContextAndReflectionTool.getDependencyContextMock();
         final ReflectionTool reflectionInitializerMock = dependencyContextAndReflectionTool.getReflectionInitializerMock();
-        final DependencyContextService dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextMock);
+        final DependencyContextService dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextMock, mock(DependencyFactory.class));
         final Dependency dependency = dependencyContextService.createDependenciesFromResource(null);
 
     }
@@ -59,6 +63,8 @@ public class DependencyContextServiceTest {
     private class DependencyContextAndReflectionTool {
         private DependencyContext dependencyContextMock;
         private ReflectionTool reflectionInitializerMock;
+        @Getter
+        private DependencyFactory dependencyFactory;
 
         public DependencyContext getDependencyContextMock() {
             return dependencyContextMock;
@@ -71,6 +77,7 @@ public class DependencyContextServiceTest {
         public DependencyContextAndReflectionTool invoke() {
             dependencyContextMock = mock(DependencyContext.class);
             reflectionInitializerMock = mock(ReflectionTool.class);
+            dependencyFactory = mock(DependencyFactory.class);
             return this;
         }
     }
