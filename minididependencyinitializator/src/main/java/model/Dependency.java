@@ -146,4 +146,7 @@ public class Dependency {
         }
     }
 
+    int numberOfDependentParameters() {
+        return dependentParameters.size();
+    }
 }

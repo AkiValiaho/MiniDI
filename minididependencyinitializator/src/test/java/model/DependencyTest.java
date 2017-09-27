@@ -1,49 +1,37 @@
 package model;
 
+import org.junit.Before;
 import org.junit.Test;
 import tooling.ClassWithInjectionField;
 import tooling.DummyTestClass;
 
-import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.Collections;
-import java.util.Optional;
 
 import static org.junit.Assert.assertTrue;
-import static org.mockito.Matchers.any;
-import static org.mockito.Mockito.mock;
-import static org.mockito.Mockito.when;
 
 public class DependencyTest {
 
     private DependencyContextService dependencyContextService;
     private Dependency dependency;
-    private ReflectionRepresentation representation;
+    private ReflectionTool reflectionTool;
+
+    @Before
+    public void before() {
+        reflectionTool = new ReflectionTool();
+        final DependencyContext dependencyContext = new DependencyContext();
+        final DependencyFactory dependencyFactory = new DependencyFactory();
+        this.dependencyContextService = new DependencyContextService(reflectionTool,dependencyContext,dependencyFactory);
+    }
 
     @Test
     public void isLeafParameter_onlyAutowiredConstructor_shouldReturnTrue() throws Exception {
-        dependencyContextService = mock(DependencyContextService.class);
-        returnRepresentation();
-        Constructor<?>[] declaredConstructors = DummyTestClass.class.getDeclaredConstructors();
-        when(representation.getNoArgsConstructor()).thenReturn(Optional.of(declaredConstructors[0]));
-        this.dependency = new Dependency(DummyTestClass.class, dependencyContextService, representation);
+        this.dependency = new Dependency(DummyTestClass.class, dependencyContextService, new ReflectionRepresentation(DummyTestClass.class, reflectionTool));
         assertTrue(dependency.isLeafParameter());
-    }
-
-
-    private ReflectionTool returnRepresentation() {
-        ReflectionTool reflectionToolMock = mock(ReflectionTool.class);
-        representation = mock(ReflectionRepresentation.class);
-        when(reflectionToolMock.getReflectionRepresentation(any())).thenReturn(representation);
-        return reflectionToolMock;
     }
 
     @Test
     public void isLeafParameter_onlyFieldInjections_shouldReturnFalse() throws Exception {
-        dependencyContextService = mock(DependencyContextService.class);
-        returnRepresentation();
-        when(representation.getNoArgsConstructor()).thenReturn(Optional.empty());
-        this.dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, representation);
+        this.dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService,new ReflectionRepresentation(ClassWithInjectionField.class, reflectionTool));
         assertNotALeafParameter();
     }
 
@@ -53,13 +41,9 @@ public class DependencyTest {
 
     @Test
     public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        dependencyContextService = mock(DependencyContextService.class);
-        returnRepresentation();
-        when(representation.getParamTypesFromArgsConstructor()).thenReturn(new Class[]{DummyTestClass.class});
-        Dependency dependencyMock = mock(Dependency.class);
-        when(dependencyContextService.instantiateListOfDependencies(any())).thenReturn(Collections.singletonList(dependencyMock));
-        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, representation);
+        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, new ReflectionRepresentation(ClassWithInjectionField.class, reflectionTool));
         assertTrue(dependency.instantiateDependentParameters());
+        assertTrue(dependency.numberOfDependentParameters() == 1);
     }
 
 }
