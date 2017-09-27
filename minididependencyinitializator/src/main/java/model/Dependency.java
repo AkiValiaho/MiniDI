@@ -11,7 +11,6 @@ import java.util.*;
  * Created by akivv on 5.9.2017.
  */
 public class Dependency {
-    private ReflectionTool reflectionInitializer;
     private DependencyContextService dependencyContextService;
     private Class<?> dependencyClass;
     private Map<Class<?>, Dependency> dependentParameters;
@@ -20,26 +19,13 @@ public class Dependency {
     private Object dependencyInstance;
     private ReflectionRepresentation reflectionRepresentation;
 
-    public Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, ReflectionTool reflectionInitializer) {
-        this.dependencyClass = dependencyClass;
-        this.dependencyContextService = dependencyContextService;
-        this.reflectionInitializer = reflectionInitializer;
-    }
-
-    Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, ReflectionRepresentation reflectionRepresentation) {
+    public Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, ReflectionRepresentation reflectionRepresentation) {
         this.dependencyClass = dependencyClass;
         this.dependencyContextService = dependencyContextService;
         this.reflectionRepresentation = reflectionRepresentation;
     }
 
 
-    /**
-     * Initializes an object from the given dependency class
-     */
-    void initializeDependencyObject() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        this.reflectionRepresentation = reflectionInitializer.getReflectionRepresentation(dependencyClass);
-        this.dependencyInstance = reflectionInitializer.initialize(this);
-    }
 
     /**
      * Adds properties of this Dependency to the dependency context map
@@ -50,21 +36,21 @@ public class Dependency {
         dependencyContext.registerDependencyAttributes(dependencyClass, dependencyInstance);
     }
 
-    Object instantiate() throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    void instantiate() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         if (isLeafParameter()) {
-            return instantiateWithNoArgsConstructor();
+            dependencyInstance = instantiateWithNoArgsConstructor();
+            return;
         }
         //It's not a leaf parameter
         if (instantiateDependentParameters()) {
             //We can now instantiateDependency from the constructor
             Object o = instantiateFromArgsConstructor();
+            dependencyInstance = o;
             if (o == null) {
                 //Contains only field injections
-                return instantiateWithNoArgsConstructor();
+                instantiateWithNoArgsConstructor();
             }
-            return o;
         }
-        return null;
     }
 
     private Object instantiateFromArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {

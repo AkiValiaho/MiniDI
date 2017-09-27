@@ -27,4 +27,8 @@ public class DependencyContext {
     public Optional<Object> getDependency(Class<?> dependencyToGet) {
         return Optional.of(dependencyHashMap.get(dependencyToGet));
     }
+
+    public Integer numberOfDependencies() {
+        return dependencyHashMap.size();
+    }
 }

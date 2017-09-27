@@ -23,11 +23,10 @@ public class DependencyTest {
     @Test
     public void isLeafParameter_onlyAutowiredConstructor_shouldReturnTrue() throws Exception {
         dependencyContextService = mock(DependencyContextService.class);
-        ReflectionTool reflectionTool = returnRepresentation();
+        returnRepresentation();
         Constructor<?>[] declaredConstructors = DummyTestClass.class.getDeclaredConstructors();
         when(representation.getNoArgsConstructor()).thenReturn(Optional.of(declaredConstructors[0]));
-        this.dependency = new Dependency(DummyTestClass.class, dependencyContextService, reflectionTool);
-        this.dependency.initializeDependencyObject();
+        this.dependency = new Dependency(DummyTestClass.class, dependencyContextService, representation);
         assertTrue(dependency.isLeafParameter());
     }
 
@@ -42,10 +41,9 @@ public class DependencyTest {
     @Test
     public void isLeafParameter_onlyFieldInjections_shouldReturnFalse() throws Exception {
         dependencyContextService = mock(DependencyContextService.class);
-        ReflectionTool reflectionToolMock = returnRepresentation();
+        returnRepresentation();
         when(representation.getNoArgsConstructor()).thenReturn(Optional.empty());
-        this.dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, reflectionToolMock);
-        this.dependency.initializeDependencyObject();
+        this.dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, representation);
         assertNotALeafParameter();
     }
 
@@ -56,12 +54,11 @@ public class DependencyTest {
     @Test
     public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         dependencyContextService = mock(DependencyContextService.class);
-        ReflectionTool reflectionTool = returnRepresentation();
+        returnRepresentation();
         when(representation.getParamTypesFromArgsConstructor()).thenReturn(new Class[]{DummyTestClass.class});
         Dependency dependencyMock = mock(Dependency.class);
         when(dependencyContextService.instantiateListOfDependencies(any())).thenReturn(Collections.singletonList(dependencyMock));
-        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, reflectionTool);
-        dependency.initializeDependencyObject();
+        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, representation);
         assertTrue(dependency.instantiateDependentParameters());
     }
 

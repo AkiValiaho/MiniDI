@@ -12,7 +12,6 @@ import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
 import java.lang.reflect.AnnotatedElement;
-import java.lang.reflect.InvocationTargetException;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -71,10 +70,6 @@ public class ReflectionTool {
         String changedPackageName = string.replaceAll("\\.", "/");
         String urlAsString = msg.toString();
         return new URL(urlAsString + changedPackageName);
-    }
-
-    public Object initialize(Dependency dependency) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        return dependency.instantiate();
     }
 
     boolean hasAutowiredAnnotation(AnnotatedElement reflectionMember) {
