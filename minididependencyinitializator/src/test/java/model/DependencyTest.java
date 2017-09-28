@@ -4,9 +4,10 @@ import org.junit.Before;
 import org.junit.Test;
 import tooling.ClassWithInjectionField;
 import tooling.DummyTestClass;
+import tooling.ReflectionTestHelper;
 
-import java.util.Map;
 import java.lang.reflect.InvocationTargetException;
+import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 

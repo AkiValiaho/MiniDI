@@ -29,6 +29,7 @@ public class ClassPathResourceServiceTest {
     public void createDependenciesFromClassPath() throws Exception {
         this.classPathResourceservice.createDependenciesFromClassPath(DummyTestClassWithDependency.class);
         //Dependency Context should contain five dependencies now
-        assertTrue(dependencyContext.numberOfDependencies() == 5);
+        assertTrue(dependencyContext.numberOfDependencies() == 6);
+        System.out.println("Hello");
     }
 }

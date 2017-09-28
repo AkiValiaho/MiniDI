@@ -115,13 +115,14 @@ public class Dependency {
     }
 
     private void instantiateParameters() {
-        Class<?>[] dependentParams = getDependentParamsFromFieldsOrConstructor();
+        Class<?>[] dependentParams = getDependentParamsFromFieldsAndConstructor();
         List<Dependency> listOfInstantiatedObjects = dependencyContextService.instantiateListOfDependencies(dependentParams);
         addToMap(dependentParams, listOfInstantiatedObjects);
     }
 
-    private Class<?>[] getDependentParamsFromFieldsOrConstructor() {
+    private Class<?>[] getDependentParamsFromFieldsAndConstructor() {
         Class<?>[] dependentParamsFromArgsConstructor = getDependentParamsFromArgsConstructor();
+        //TODO Add check for field injections here
         return dependentParamsFromArgsConstructor != null
                 ? dependentParamsFromArgsConstructor
                 : dependentParamsFromFields();
