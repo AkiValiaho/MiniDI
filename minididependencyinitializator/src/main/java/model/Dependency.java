@@ -19,12 +19,11 @@ public class Dependency {
     private Object dependencyInstance;
     private ReflectionRepresentation reflectionRepresentation;
 
-    public Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, ReflectionRepresentation reflectionRepresentation) {
+    Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, ReflectionRepresentation reflectionRepresentation) {
         this.dependencyClass = dependencyClass;
         this.dependencyContextService = dependencyContextService;
         this.reflectionRepresentation = reflectionRepresentation;
     }
-
 
 
     /**
@@ -144,9 +143,5 @@ public class Dependency {
             final Dependency nextInstantiatedObject = instantiatedObjectsIterator.next();
             dependentParameters.put(nextdependentParam, nextInstantiatedObject);
         }
-    }
-
-    int numberOfDependentParameters() {
-        return dependentParameters.size();
     }
 }

@@ -5,6 +5,7 @@ import org.junit.Test;
 import tooling.ClassWithInjectionField;
 import tooling.DummyTestClass;
 
+import java.util.Map;
 import java.lang.reflect.InvocationTargetException;
 
 import static org.junit.Assert.assertTrue;
@@ -40,10 +41,11 @@ public class DependencyTest {
     }
 
     @Test
-    public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchFieldException {
         Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, new ReflectionRepresentation(ClassWithInjectionField.class, reflectionTool));
         assertTrue(dependency.instantiateDependentParameters());
-        assertTrue(dependency.numberOfDependentParameters() == 1);
+        final Object dependentParameters = new ReflectionTestHelper().getField(dependency, "dependentParameters");
+        assertTrue(((Map) dependentParameters).size() == 1);
     }
 
 }

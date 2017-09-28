@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
  */
 public class ReflectionTool {
 
-    public List<ClassPathResource> findClassPathResources(Class<?> startClass) {
+    List<ClassPathResource> findClassPathResources(Class<?> startClass) {
         return getClassesFromClassPathWithAnnotation(startClass).stream()
                 .map(ClassPathResource::new)
                 .collect(Collectors.toList());
@@ -76,7 +76,7 @@ public class ReflectionTool {
         return reflectionMember.isAnnotationPresent(Autowired.class);
     }
 
-    public ReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
+    ReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
         return new ReflectionRepresentation(dependencyClass, this).represent();
     }
 }
