@@ -2,6 +2,7 @@ package tooling;
 
 import lombok.Getter;
 import model.*;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
@@ -17,30 +18,24 @@ import static org.mockito.Mockito.*;
 public class DependencyContextServiceTest {
     private DependencyContextService dependencyContextService;
 
+    @Before
+    public void before() {
+        final ReflectionTool reflectionTool = new ReflectionTool();
+        final DependencyContext dependencyContext = new DependencyContext();
+        final DependencyFactory dependencyFactory = new DependencyFactory();
+        this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyFactory);
+    }
+
     @Test
     public void createListOfDependencies_validClasses_shouldCreateListOfDependencies() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        final DependencyContextAndReflectionTool dependencyContextAndReflectionTool = new DependencyContextAndReflectionTool().invoke();
-        final ReflectionTool reflectionInitializerMock = dependencyContextAndReflectionTool.getReflectionInitializerMock();
-        final DependencyContext dependencyContextMock = dependencyContextAndReflectionTool.getDependencyContextMock();
-        final DependencyFactory dependencyFactory = dependencyContextAndReflectionTool.getDependencyFactory();
-        final Dependency dependency = mock(Dependency.class);
-        when(dependencyFactory.createDependency(any(), any(), any())).thenReturn(dependency);
-        this.dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextMock, dependencyFactory);
         final List<Dependency> dependencies = dependencyContextService.instantiateListOfDependencies(new Class[]{DummyTestClass.class, DummyTestClassWithDependency.class});
         assertTrue(dependencies.size() == 2);
     }
 
     @Test
     public void createDependency_validClass_shouldCreateDependencyObject() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        DependencyContextAndReflectionTool dependencyContextAndReflectionTool = new DependencyContextAndReflectionTool().invoke();
-        ReflectionTool reflectionInitializerMock = dependencyContextAndReflectionTool.getReflectionInitializerMock();
-        final DependencyContext dependencyContextMock = dependencyContextAndReflectionTool.getDependencyContextMock();
-        final DependencyFactory dependencyFactory = dependencyContextAndReflectionTool.getDependencyFactory();
-        final DependencyContextService dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextMock, dependencyFactory);
-        final Dependency dependency = mock(Dependency.class);
-        when(dependencyFactory.createDependency(any(), any(), any())).thenReturn(dependency);
         final Dependency dependenciesFromResource = dependencyContextService.createDependenciesFromResource(DummyTestClass.class);
-        assertEquals(dependenciesFromResource, dependency);
+        assertTrue(dependenciesFromResource.getDependencyInstance() instanceof DummyTestClass);
     }
 
 
@@ -51,12 +46,7 @@ public class DependencyContextServiceTest {
 
     @Test(expected = NullPointerException.class)
     public void createDependency_invalidNullClass_shouldThrowClassNotFoundException() throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
-        final DependencyContextAndReflectionTool dependencyContextAndReflectionTool = new DependencyContextAndReflectionTool();
-        final DependencyContext dependencyContextMock = dependencyContextAndReflectionTool.getDependencyContextMock();
-        final ReflectionTool reflectionInitializerMock = dependencyContextAndReflectionTool.getReflectionInitializerMock();
-        final DependencyContextService dependencyContextService = new DependencyContextService(reflectionInitializerMock, dependencyContextMock, mock(DependencyFactory.class));
         final Dependency dependency = dependencyContextService.createDependenciesFromResource(null);
-
     }
 
 
