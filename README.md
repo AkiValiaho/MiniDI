@@ -1,4 +1,6 @@
 # MiniDI
+https://travis-ci.org/AkiValiaho/MiniDI.svg?branch=master
+
 Small scale dependency injection framework
 
 Uses annotation-based injection dependency resolving.
