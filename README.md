@@ -48,6 +48,23 @@ Field-annotation
         private MagicDependency magicDependency;
      }
     
+Hybrid-approach
+    
+    You can also mix both constructor and field injections as shown below:
+    
+    @Component
+    public class Dependency {
+        @Autowired
+        private FieldDependency fieldDependency;
+        
+        private ConstructorDependency constructorDependency;
+        
+        @Autowired
+        public class Dependency(ConstructorDependency constructorDependency) {
+            this.constructorDependency = constructorDependency;
+        }
+    }
+ 
 Application startup:
 
     To bootstrap your application start it with the following template:
