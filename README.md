@@ -1,5 +1,6 @@
 # MiniDI
-https://travis-ci.org/AkiValiaho/MiniDI.svg?branch=master
+### Status
+[![Build Status](https://travis-ci.org/AkiValiaho/MiniDI.svg)](https://travis-ci.org/AkiValiaho/MiniDI)
 
 Small scale dependency injection framework
 
