@@ -2,12 +2,11 @@ package tooling;
 
 import model.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -27,12 +26,18 @@ public class DependencyContextServiceTest {
     }
 
     @Test
-    //TODO Finish this feature
-    @Ignore
     public void createDependencyFromResource_classHasBothFieldAndConstructorInjections_shouldCreateDependency() throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchFieldException {
         final Dependency dependenciesFromResource = dependencyContextService.createDependenciesFromResource(ClassWithFieldAndConstructor.class);
-        final Map dependentParameters = (Map) new ReflectionTestHelper().getField(dependenciesFromResource, "dependentParameters");
-        assertEquals(2, dependentParameters.size());
+        assertEquals(dependenciesFromResource.getFieldDependentInstances().length, 2);
+        verifyFieldAndConstructorInjectionsMatch(dependenciesFromResource);
+    }
+
+    private void verifyFieldAndConstructorInjectionsMatch(Dependency dependenciesFromResource) {
+        final List<Object> objects = Arrays.asList(dependenciesFromResource.getFieldDependentInstances());
+        final List<Class> classes = Arrays.asList(new Class[]{DummyTestClass.class, ClassWithInjectionField.class});
+        assertTrue(new ClassNameMatcher(objects, classes).classNamesMatch());
+        assertTrue(new ClassNameMatcher(Arrays.asList(dependenciesFromResource.getConstructorDependentInstances()),
+                Arrays.asList(new Class[]{DummyTestClassWithDependency.class})).classNamesMatch());
     }
 
     @Test

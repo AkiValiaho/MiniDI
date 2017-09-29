@@ -5,7 +5,7 @@ import lombok.Setter;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.*;
+import java.util.Optional;
 
 /**
  * Created by akivv on 5.9.2017.
@@ -13,7 +13,7 @@ import java.util.*;
 public class Dependency {
     private DependencyContextService dependencyContextService;
     private Class<?> dependencyClass;
-    private Map<Class<?>, Dependency> dependentParameters;
+    private DependentParams dependentParameters;
     @Getter
     @Setter
     private Object dependencyInstance;
@@ -42,14 +42,21 @@ public class Dependency {
         }
         //It's not a leaf parameter
         if (instantiateDependentParameters()) {
+            Object o = instantiateWithNoArgsIfOnlyFieldDependencies();
             //We can now instantiateDependency from the constructor
-            Object o = instantiateFromArgsConstructor();
-            dependencyInstance = o;
             if (o == null) {
-                //Contains only field injections
-                instantiateWithNoArgsConstructor();
+                o = instantiateFromArgsConstructor();
             }
+            injectFields(o);
+            dependencyInstance = o;
         }
+    }
+
+    private Object instantiateWithNoArgsIfOnlyFieldDependencies() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        if (reflectionRepresentation.getNoArgsConstructor().isPresent()) {
+            return reflectionRepresentation.getNoArgsConstructor().get().newInstance(null);
+        }
+        return null;
     }
 
     private Object instantiateFromArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -58,13 +65,18 @@ public class Dependency {
 
     private Object instantiateWithArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
         Optional<Constructor> argsConstructor = reflectionRepresentation.getArgsConstructor();
-        final Object[] objects = dependentParameters.values().stream()
-                .map(Dependency::getDependencyInstance)
-                .toArray();
+        final Object[] objects = dependentParameters.getConstructorInjectedInstances();
         if (argsConstructor.isPresent()) {
-            return argsConstructor.get().newInstance(objects);
+            final Object o = argsConstructor.get().newInstance(objects);
+            return o;
         }
         return null;
+    }
+
+    private void injectFields(Object o) {
+        if (dependentParameters.getFieldInjectedInstances().length != 0) {
+            reflectionRepresentation.injectFields(o, dependentParameters.getFieldInjectedInstances());
+        }
     }
 
     boolean isLeafParameter() {
@@ -109,40 +121,24 @@ public class Dependency {
         if (dependentParameters != null) {
             return true;
         }
-        dependentParameters = new HashMap<>();
         instantiateParameters();
         return true;
     }
 
     private void instantiateParameters() {
-        Class<?>[] dependentParams = getDependentParamsFromFieldsAndConstructor();
-        List<Dependency> listOfInstantiatedObjects = dependencyContextService.instantiateListOfDependencies(dependentParams);
-        addToMap(dependentParams, listOfInstantiatedObjects);
+        dependentParameters = getDependentParamsFromFieldsAndConstructor();
     }
 
-    private Class<?>[] getDependentParamsFromFieldsAndConstructor() {
-        Class<?>[] dependentParamsFromArgsConstructor = getDependentParamsFromArgsConstructor();
-        //TODO Add check for field injections here
-        return dependentParamsFromArgsConstructor != null
-                ? dependentParamsFromArgsConstructor
-                : dependentParamsFromFields();
+    private DependentParams getDependentParamsFromFieldsAndConstructor() {
+        return new DependentParams()
+                .getDependentParamsForClass(reflectionRepresentation, dependencyContextService);
     }
 
-    private Class<?>[] dependentParamsFromFields() {
-        return reflectionRepresentation.getDependentParamsFromFields();
+    public Object[] getFieldDependentInstances() {
+        return dependentParameters.getFieldInjectedInstances();
     }
 
-    private Class<?>[] getDependentParamsFromArgsConstructor() {
-        return reflectionRepresentation.getParamTypesFromArgsConstructor();
-    }
-
-    private void addToMap(Class<?>[] dependentParams, List<Dependency> listOfInstantiatedObjects) {
-        final Iterator<Class<?>> dependentParamsIterator = Arrays.asList(dependentParams).iterator();
-        final Iterator<Dependency> instantiatedObjectsIterator = listOfInstantiatedObjects.iterator();
-        while (dependentParamsIterator.hasNext()) {
-            final Class<?> nextdependentParam = dependentParamsIterator.next();
-            final Dependency nextInstantiatedObject = instantiatedObjectsIterator.next();
-            dependentParameters.put(nextdependentParam, nextInstantiatedObject);
-        }
+    public Object[] getConstructorDependentInstances() {
+        return dependentParameters.getConstructorInjectedInstances();
     }
 }

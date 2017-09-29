@@ -7,7 +7,6 @@ import tooling.DummyTestClass;
 import tooling.ReflectionTestHelper;
 
 import java.lang.reflect.InvocationTargetException;
-import java.util.Map;
 
 import static org.junit.Assert.assertTrue;
 
@@ -46,7 +45,7 @@ public class DependencyTest {
         Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, new ReflectionRepresentation(ClassWithInjectionField.class, reflectionTool));
         assertTrue(dependency.instantiateDependentParameters());
         final Object dependentParameters = new ReflectionTestHelper().getField(dependency, "dependentParameters");
-        assertTrue(((Map) dependentParameters).size() == 1);
+        assertTrue(((DependentParams) dependentParameters).getFieldInjectedInstances().length == 1);
     }
 
 }

@@ -12,6 +12,8 @@ public class ClassWithFieldAndConstructor {
     @Autowired
     private DummyTestClass dummyTestClass;
     @Autowired
+    private ClassWithInjectionField classWithInjectionField;
+    @Autowired
     public ClassWithFieldAndConstructor(DummyTestClassWithDependency dummyTestClassWithDependency) {
         this.dummyTestClassWithDependency = dummyTestClassWithDependency;
     }
