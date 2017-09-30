@@ -73,7 +73,7 @@ public class Dependency {
         return null;
     }
 
-    private void injectFields(Object o) {
+    private void injectFields(Object o) throws IllegalAccessException {
         if (dependentParameters.getFieldInjectedInstances().length != 0) {
             reflectionRepresentation.injectFields(o, dependentParameters.getFieldInjectedInstances());
         }

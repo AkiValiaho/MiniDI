@@ -4,7 +4,9 @@ import tooling.MultipleAnnotatedConstructorsException;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
-import java.util.*;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 class ReflectionRepresentation {
@@ -117,31 +119,12 @@ class ReflectionRepresentation {
         return collect.toArray(new Constructor[collect.size()]);
     }
 
-    void injectFields(Object o, Object[] fieldInjectedInstances) {
+    void injectFields(Object o, Object[] fieldInjectedInstances) throws IllegalAccessException {
         final Field[] declaredFields = o.getClass().getDeclaredFields();
         setFields(o, declaredFields, fieldInjectedInstances);
     }
 
-    private void setFields(Object o, Field[] declaredFields, Object[] fieldInjectedInstances) {
-        List<MatchedPair> matchedPairs = filterAndOrderInstances(declaredFields, fieldInjectedInstances);
-        matchedPairs.stream()
-                    .forEach(matchedPair -> {
-                        try {
-                            setField(o, matchedPair);
-                        } catch (IllegalAccessException e) {
-                            System.exit(1);
-                        }
-                    });
-
+    private void setFields(Object o, Field[] declaredFields, Object[] fieldInjectedInstances) throws IllegalAccessException {
+        new MatchedPair(declaredFields, fieldInjectedInstances).setFieldsToInstance(o);
     }
-
-    private void setField(Object o, MatchedPair matchedPair) throws IllegalAccessException {
-        matchedPair.setFieldToInstance(o);
-    }
-
-    private List<MatchedPair> filterAndOrderInstances(Field[] declaredFields, Object[] fieldInjectedInstances) {
-        return new MatchedPair(declaredFields, fieldInjectedInstances)
-                .matchPairs();
-    }
-
 }

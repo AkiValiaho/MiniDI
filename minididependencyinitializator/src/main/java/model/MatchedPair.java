@@ -1,7 +1,5 @@
 package model;
 
-import lombok.Getter;
-
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -9,9 +7,7 @@ import java.util.*;
  * Created by Aki on 29.9.2017.
  */
 class MatchedPair {
-    @Getter
     private Field matchedField;
-    @Getter
     private Object matchedInstance;
     private Field[] declaredFields;
     private Object[] fieldInjectedInstances;
@@ -26,7 +22,19 @@ class MatchedPair {
         this.matchedInstance = instance;
     }
 
-    List<MatchedPair> matchPairs() {
+    void setFieldsToInstance(Object o) throws IllegalAccessException {
+        List<MatchedPair> matchedPairs = matchPairs();
+        matchedPairs.stream()
+                .forEach(pair -> {
+                    try {
+                        pair.setMatchedFieldToInstance(o);
+                    } catch (IllegalAccessException e) {
+                        System.exit(1);
+                    }
+                });
+    }
+
+    private List<MatchedPair> matchPairs() {
         List<Field> orderedFields = sortFields(Arrays.asList(declaredFields));
         List<Object> orderedInstances = sortInstances(Arrays.asList(fieldInjectedInstances));
         return createList(orderedFields, orderedInstances);
@@ -61,7 +69,7 @@ class MatchedPair {
         return fields;
     }
 
-    void setFieldToInstance(Object o) throws IllegalAccessException {
+    private void setMatchedFieldToInstance(Object o) throws IllegalAccessException {
         matchedField.set(o, matchedInstance);
     }
 }
