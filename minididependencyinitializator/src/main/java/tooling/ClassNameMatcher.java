@@ -1,21 +1,14 @@
 package tooling;
 
+import java.lang.reflect.Field;
 import java.util.Iterator;
 import java.util.List;
 
 /**
  * Created by Aki on 29.9.2017.
  */
-class ClassNameMatcher {
-    private final List<Object> objects;
-    private final List<Class> classes;
-
-    ClassNameMatcher(List<Object> objects, List<Class> classes) {
-        this.objects = objects;
-        this.classes = classes;
-    }
-
-    boolean classNamesMatch() {
+public class ClassNameMatcher {
+    public boolean classNamesMatch(List<Object> objects, List<Class> classes) {
         if (objects.size() != classes.size()) {
             return false;
         }
@@ -29,5 +22,9 @@ class ClassNameMatcher {
             }
         }
         return true;
+    }
+
+    public boolean classNamesMatch(Field matchedField, Object matchedInstance) {
+        return matchedField.getType().equals(matchedInstance.getClass());
     }
 }

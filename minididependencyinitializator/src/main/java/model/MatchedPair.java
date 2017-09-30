@@ -1,5 +1,7 @@
 package model;
 
+import lombok.Getter;
+
 import java.lang.reflect.Field;
 import java.util.*;
 
@@ -7,7 +9,9 @@ import java.util.*;
  * Created by Aki on 29.9.2017.
  */
 class MatchedPair {
+    @Getter
     private Field matchedField;
+    @Getter
     private Object matchedInstance;
     private Field[] declaredFields;
     private Object[] fieldInjectedInstances;
