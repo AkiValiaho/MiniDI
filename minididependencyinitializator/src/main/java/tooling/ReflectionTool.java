@@ -1,6 +1,8 @@
-package model;
+package tooling;
 
 import annotations.Component;
+import model.ClassPathResource;
+import model.DependencyReflectionRepresentation;
 import org.reflections.Configuration;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
@@ -23,7 +25,7 @@ import java.util.stream.Collectors;
  */
 public class ReflectionTool extends ReflectionComponent {
 
-    List<ClassPathResource> findClassPathResources(Class<?> startClass) {
+    public List<ClassPathResource> findClassPathResources(Class<?> startClass) {
         return getClassesFromClassPathWithAnnotation(startClass).stream()
                 .map(ClassPathResource::new)
                 .collect(Collectors.toList());

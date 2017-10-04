@@ -2,6 +2,7 @@ package model;
 
 import lombok.Getter;
 import lombok.Setter;
+import tooling.DependencyContextComponent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
@@ -11,7 +12,7 @@ import java.util.Optional;
  * Created by akivv on 5.9.2017.
  */
 public class Dependency implements Reflectionable {
-    private DependencyContextService dependencyContextService;
+    private DependencyContextComponent dependencyContextService;
     private Class<?> dependencyClass;
     private DependentParams dependentParameters;
     @Getter
@@ -19,7 +20,7 @@ public class Dependency implements Reflectionable {
     private Object dependencyInstance;
     private DependencyReflectionRepresentation dependencyReflectionRepresentation;
 
-    Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation) {
+    public Dependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation) {
         this.dependencyClass = dependencyClass;
         this.dependencyContextService = dependencyContextService;
         this.dependencyReflectionRepresentation = dependencyReflectionRepresentation;
@@ -35,7 +36,7 @@ public class Dependency implements Reflectionable {
         dependencyContext.registerDependencyAttributes(dependencyClass, dependencyInstance);
     }
 
-    void instantiate() throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public void instantiate() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         if (isLeafParameter()) {
             dependencyInstance = instantiateWithNoArgsConstructor();
             return;

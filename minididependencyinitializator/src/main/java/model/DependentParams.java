@@ -1,5 +1,7 @@
 package model;
 
+import tooling.DependencyContextComponent;
+
 import java.util.List;
 
 /**
@@ -11,7 +13,7 @@ class DependentParams {
     private List<Dependency> constructorInstances;
     private List<Dependency> fieldInstances;
 
-    DependentParams getDependentParamsForClass(DependencyReflectionRepresentation dependencyReflectionRepresentation, DependencyContextService dependencyContextService) {
+    DependentParams getDependentParamsForClass(DependencyReflectionRepresentation dependencyReflectionRepresentation, DependencyContextComponent dependencyContextService) {
         this.fromFields = dependentParamsFromFields(dependencyReflectionRepresentation);
         this.fromArgsConstructor = getDependentParamsFromArgsConstructor(dependencyReflectionRepresentation);
         if (fromArgsConstructor != null) {

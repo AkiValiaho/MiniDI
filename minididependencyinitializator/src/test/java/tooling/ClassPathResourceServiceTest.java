@@ -1,9 +1,6 @@
 package tooling;
 
-import model.DependencyContext;
-import model.DependencyContextService;
-import model.DependencyFactory;
-import model.ReflectionTool;
+import model.*;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,8 +18,7 @@ public class ClassPathResourceServiceTest {
         final ReflectionTool reflectionTool = new ReflectionTool();
         dependencyContext = new DependencyContext();
         DependencyFactory dependencyFactory = new DependencyFactory();
-        final DependencyContextService dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyFactory);
-        this.classPathResourceservice = new ClassPathResourceService(dependencyContextService, reflectionTool);
+        this.classPathResourceservice = new ClassPathResourceService(dependencyFactory, reflectionTool, dependencyContext);
     }
 
     @Test

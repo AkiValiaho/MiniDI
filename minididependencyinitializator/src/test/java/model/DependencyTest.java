@@ -2,9 +2,7 @@ package model;
 
 import org.junit.Before;
 import org.junit.Test;
-import tooling.ClassWithInjectionField;
-import tooling.DummyTestClass;
-import tooling.ReflectionTestHelper;
+import tooling.*;
 
 import java.lang.reflect.InvocationTargetException;
 

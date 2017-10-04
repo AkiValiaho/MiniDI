@@ -1,5 +1,8 @@
 package model;
 
+import tooling.DependencyContextComponent;
+import tooling.ReflectionTool;
+
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -13,7 +16,7 @@ public class ClassPathResource {
         this.startClass = startClass;
     }
 
-    public void convertResourcesToDependencies(ReflectionTool reflectionTool, DependencyContextService dependencyContextService) {
+    public void convertResourcesToDependencies(ReflectionTool reflectionTool, DependencyContextComponent dependencyContextService) {
         final List<ClassPathResource> classPathResources = scanClassPath(reflectionTool);
         classPathResources.forEach(resource -> {
             try {
@@ -24,11 +27,11 @@ public class ClassPathResource {
         });
     }
 
-    private void convertResourceToDependency(DependencyContextService dependencyContextService, ClassPathResource classPathResource) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    private void convertResourceToDependency(DependencyContextComponent dependencyContextService, ClassPathResource classPathResource) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         dependencyContextService.createDependenciesFromResource(classPathResource.getDependencyClass());
     }
 
-    public Class<?> getDependencyClass() {
+    private Class<?> getDependencyClass() {
         return startClass;
     }
 

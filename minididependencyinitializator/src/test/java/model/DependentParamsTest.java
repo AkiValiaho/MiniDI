@@ -2,9 +2,7 @@ package model;
 
 import org.junit.Before;
 import org.junit.Test;
-import tooling.ClassWithFieldAndConstructor;
-import tooling.DummyTestClass;
-import tooling.DummyTestClassWithDependency;
+import tooling.*;
 
 import static org.junit.Assert.assertTrue;
 

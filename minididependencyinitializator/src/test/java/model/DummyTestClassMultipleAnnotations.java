@@ -2,7 +2,7 @@ package model;
 
 import annotations.Autowired;
 import annotations.Component;
-import model.DependencyContextService;
+import tooling.DependencyContextService;
 import tooling.DummyTestClass;
 
 /**

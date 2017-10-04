@@ -16,7 +16,7 @@ public class DependencyContext {
         this.dependencyHashMap = new HashMap<>();
     }
 
-    void addDependencyToMap(Dependency dependency) {
+    public void addDependencyToMap(Dependency dependency) {
         dependency.addDependencyToMap(this);
     }
 

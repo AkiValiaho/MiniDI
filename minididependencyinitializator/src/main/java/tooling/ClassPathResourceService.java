@@ -1,26 +1,21 @@
 package tooling;
 
-import model.ClassPathResource;
-import model.DependencyContextService;
-import model.ReflectionTool;
+import model.*;
 
 import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Aki on 12.9.2017.
  */
-class ClassPathResourceService {
-    private DependencyContextService dependencyContextService;
-    private ReflectionTool reflectionTool;
+class ClassPathResourceService extends DependencyContextComponent {
 
-    ClassPathResourceService(DependencyContextService dependencyContextService, ReflectionTool reflectionTool) {
-        this.dependencyContextService = dependencyContextService;
-        this.reflectionTool = reflectionTool;
+    ClassPathResourceService(DependencyFactoryComponent dependencyFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
+        super(dependencyFactory, reflectionTool, dependencyContext);
     }
 
     private void createDependencyContextClassPath(Class<?> startClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
         new ClassPathResource(startClass)
-                .convertResourcesToDependencies(reflectionTool, dependencyContextService);
+                .convertResourcesToDependencies(getReflectioninitializer(), this);
 
     }
 

@@ -1,6 +1,7 @@
 package model;
 
 import tooling.MultipleAnnotatedConstructorsException;
+import tooling.ReflectionComponent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
@@ -9,10 +10,10 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-class DependencyReflectionRepresentation extends ReflectionComponent {
+public class DependencyReflectionRepresentation extends ReflectionComponent {
     private final Class<?> dependencyClass;
 
-    DependencyReflectionRepresentation(Class<?> dependencyClass) {
+    public DependencyReflectionRepresentation(Class<?> dependencyClass) {
         this.dependencyClass = dependencyClass;
     }
 
@@ -70,7 +71,7 @@ class DependencyReflectionRepresentation extends ReflectionComponent {
         return field.getType();
     }
 
-    DependencyReflectionRepresentation represent() {
+    public DependencyReflectionRepresentation represent() {
         return this;
     }
 
