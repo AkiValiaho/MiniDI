@@ -7,9 +7,10 @@ import model.DependencyReflectionRepresentation;
 import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
+import tooling.graph.CycleChecker;
+import tooling.graph.CycleCheckingDependencyFactory;
 
 /**
- * TODO
  * Created by Aki on 4.10.2017.
  */
 public class CycleCheckingDependencyFactoryTest {

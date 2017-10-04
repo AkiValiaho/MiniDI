@@ -1,12 +1,15 @@
-package tooling;
+package tooling.graph;
 
 import model.DependencyReflectionRepresentation;
+import tooling.CyclicDependencyException;
 
 /**
  * Created by Aki on 4.10.2017.
  */
-class CycleChecker {
+public class CycleChecker {
     void checkForCycle(Class<?> dependencyClass, DependencyReflectionRepresentation dependencyReflectionRepresentation) throws CyclicDependencyException {
-        //TODO
+        new CustomGraph(dependencyClass, dependencyReflectionRepresentation)
+                .initGraph()
+                .checkForCycles();
     }
 }

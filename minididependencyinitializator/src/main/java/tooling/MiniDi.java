@@ -1,6 +1,8 @@
 package tooling;
 
 import model.*;
+import tooling.graph.CycleChecker;
+import tooling.graph.CycleCheckingDependencyFactory;
 
 import java.lang.reflect.InvocationTargetException;
 

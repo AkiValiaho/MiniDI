@@ -1,18 +1,22 @@
-package tooling;
+package tooling.graph;
 
 import model.Dependency;
 import model.DependencyReflectionRepresentation;
+import tooling.CyclicDependencyException;
+import tooling.DependencyContextComponent;
+import tooling.DependencyFactoryComponent;
+import tooling.DependencyFactoryDecorator;
 
 import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Aki on 4.10.2017.
  */
-class CycleCheckingDependencyFactory extends DependencyFactoryDecorator {
+public class CycleCheckingDependencyFactory extends DependencyFactoryDecorator {
 
     private final CycleChecker cycleChecker;
 
-    CycleCheckingDependencyFactory(DependencyFactoryComponent dependencyFactoryComponent, CycleChecker cycleChecker) {
+    public CycleCheckingDependencyFactory(DependencyFactoryComponent dependencyFactoryComponent, CycleChecker cycleChecker) {
         super(dependencyFactoryComponent);
         this.cycleChecker = cycleChecker;
     }
