@@ -16,7 +16,7 @@ abstract class DependencyFactoryDecorator implements DependencyFactoryComponent 
     }
 
     @Override
-    public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
         return dependencyFactoryComponent.createDependency(dependencyClass, dependencyContextService, dependencyReflectionRepresentation);
     }
 }

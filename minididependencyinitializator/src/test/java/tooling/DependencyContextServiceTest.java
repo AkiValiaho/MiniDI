@@ -26,7 +26,7 @@ public class DependencyContextServiceTest {
     }
 
     @Test
-    public void createDependencyFromResource_classHasBothFieldAndConstructorInjections_shouldCreateDependency() throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchFieldException {
+    public void createDependencyFromResource_classHasBothFieldAndConstructorInjections_shouldCreateDependency() throws IllegalAccessException, InvocationTargetException, InstantiationException, NoSuchFieldException, CyclicDependencyException {
         final Dependency dependenciesFromResource = dependencyContextService.createDependenciesFromResource(ClassWithFieldAndConstructor.class);
         assertEquals(dependenciesFromResource.getFieldDependentInstances().length, 2);
         verifyFieldAndConstructorInjectionsMatch(dependenciesFromResource);
@@ -47,14 +47,14 @@ public class DependencyContextServiceTest {
     }
 
     @Test
-    public void createDependency_validClass_shouldCreateDependencyObject() throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    public void createDependency_validClass_shouldCreateDependencyObject() throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
         final Dependency dependenciesFromResource = dependencyContextService.createDependenciesFromResource(DummyTestClass.class);
         assertTrue(dependenciesFromResource.getDependencyInstance() instanceof DummyTestClass);
     }
 
 
     @Test(expected = NullPointerException.class)
-    public void createDependency_invalidNullClass_shouldThrowClassNotFoundException() throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException {
+    public void createDependency_invalidNullClass_shouldThrowClassNotFoundException() throws ClassNotFoundException, IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
         final Dependency dependency = dependencyContextService.createDependenciesFromResource(null);
     }
 }

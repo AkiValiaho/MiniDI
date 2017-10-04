@@ -27,14 +27,14 @@ public abstract class DependencyContextComponent {
         this.dependencyContext = dependencyContext;
     }
 
-    public Dependency createDependenciesFromResource(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    public Dependency createDependenciesFromResource(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
         checkNotNull(dependencyClass);
         Dependency dependency = createDependencyObject(dependencyClass);
         dependencyContext.addDependencyToMap(dependency);
         return dependency;
     }
 
-    private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
         DependencyReflectionRepresentation dependencyReflectionRepresentation = reflectioninitializer.getReflectionRepresentation(dependencyClass);
         return dependencyFactory.createDependency(dependencyClass, this, dependencyReflectionRepresentation);
     }
@@ -49,13 +49,13 @@ public abstract class DependencyContextComponent {
     private Dependency createDependencyWithExceptionSafety(Class<?> param) {
         try {
             return createDependenciesFromResource(param);
-        } catch (IllegalAccessException | InstantiationException | InvocationTargetException e) {
+        } catch (IllegalAccessException | InstantiationException | InvocationTargetException | CyclicDependencyException e) {
             injectionError(e);
         }
         return null;
     }
 
-    private void injectionError(ReflectiveOperationException e) {
+    private void injectionError(Exception e) {
         System.out.println(e);
         System.exit(1);
     }

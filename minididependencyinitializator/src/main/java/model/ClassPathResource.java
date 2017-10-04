@@ -1,5 +1,6 @@
 package model;
 
+import tooling.CyclicDependencyException;
 import tooling.DependencyContextComponent;
 import tooling.ReflectionTool;
 
@@ -21,13 +22,13 @@ public class ClassPathResource {
         classPathResources.forEach(resource -> {
             try {
                 convertResourceToDependency(dependencyContextService, resource);
-            } catch (IllegalAccessException | InvocationTargetException | InstantiationException e) {
+            } catch (IllegalAccessException | InvocationTargetException | InstantiationException | CyclicDependencyException e) {
                 System.exit(1);
             }
         });
     }
 
-    private void convertResourceToDependency(DependencyContextComponent dependencyContextService, ClassPathResource classPathResource) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+    private void convertResourceToDependency(DependencyContextComponent dependencyContextService, ClassPathResource classPathResource) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
         dependencyContextService.createDependenciesFromResource(classPathResource.getDependencyClass());
     }
 
