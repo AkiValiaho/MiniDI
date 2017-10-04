@@ -10,12 +10,10 @@ import static org.junit.Assert.assertTrue;
 
 public class DependencyReflectionRepresentationTest {
     private DependencyReflectionRepresentation dependencyReflectionRepresentation;
-    private ReflectionTool reflectionTool;
 
     @Before
     public void setUp() throws Exception {
-        reflectionTool = new ReflectionTool();
-        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithDependency.class, reflectionTool);
+        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithDependency.class);
     }
 
     @Test
@@ -25,7 +23,7 @@ public class DependencyReflectionRepresentationTest {
 
     @Test
     public void hasInjectedFields() throws Exception {
-        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithFieldDependency.class, reflectionTool);
+        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithFieldDependency.class);
         assertTrue(dependencyReflectionRepresentation.hasInjectedFields());
     }
 

@@ -11,11 +11,9 @@ import java.util.stream.Collectors;
 
 class DependencyReflectionRepresentation extends ReflectionComponent {
     private final Class<?> dependencyClass;
-    private final ReflectionTool reflectionInitializer;
 
-    DependencyReflectionRepresentation(Class<?> dependencyClass, ReflectionTool reflectionInitializer) {
+    DependencyReflectionRepresentation(Class<?> dependencyClass) {
         this.dependencyClass = dependencyClass;
-        this.reflectionInitializer = reflectionInitializer;
     }
 
 

@@ -71,6 +71,6 @@ public class ReflectionTool extends ReflectionComponent {
     }
 
     DependencyReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
-        return new DependencyReflectionRepresentation(dependencyClass, this).represent();
+        return new DependencyReflectionRepresentation(dependencyClass).represent();
     }
 }

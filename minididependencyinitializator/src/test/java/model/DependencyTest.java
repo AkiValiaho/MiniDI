@@ -26,13 +26,13 @@ public class DependencyTest {
 
     @Test
     public void isLeafParameter_onlyAutowiredConstructor_shouldReturnTrue() throws Exception {
-        this.dependency = new Dependency(DummyTestClass.class, dependencyContextService, new DependencyReflectionRepresentation(DummyTestClass.class, reflectionTool));
+        this.dependency = new Dependency(DummyTestClass.class, dependencyContextService, new DependencyReflectionRepresentation(DummyTestClass.class));
         assertTrue(dependency.isLeafParameter());
     }
 
     @Test
     public void isLeafParameter_onlyFieldInjections_shouldReturnFalse() throws Exception {
-        this.dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService,new DependencyReflectionRepresentation(ClassWithInjectionField.class, reflectionTool));
+        this.dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService,new DependencyReflectionRepresentation(ClassWithInjectionField.class));
         assertNotALeafParameter();
     }
 
@@ -42,7 +42,7 @@ public class DependencyTest {
 
     @Test
     public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchFieldException {
-        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, new DependencyReflectionRepresentation(ClassWithInjectionField.class, reflectionTool));
+        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, new DependencyReflectionRepresentation(ClassWithInjectionField.class));
         assertTrue(dependency.instantiateDependentParameters());
         final Object dependentParameters = new ReflectionTestHelper().getField(dependency, "dependentParameters");
         assertTrue(((DependentParams) dependentParameters).getFieldInjectedInstances().length == 1);
