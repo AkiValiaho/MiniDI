@@ -11,9 +11,9 @@ class DependentParams {
     private List<Dependency> constructorInstances;
     private List<Dependency> fieldInstances;
 
-    DependentParams getDependentParamsForClass(ReflectionRepresentation reflectionRepresentation, DependencyContextService dependencyContextService) {
-        this.fromFields = dependentParamsFromFields(reflectionRepresentation);
-        this.fromArgsConstructor = getDependentParamsFromArgsConstructor(reflectionRepresentation);
+    DependentParams getDependentParamsForClass(DependencyReflectionRepresentation dependencyReflectionRepresentation, DependencyContextService dependencyContextService) {
+        this.fromFields = dependentParamsFromFields(dependencyReflectionRepresentation);
+        this.fromArgsConstructor = getDependentParamsFromArgsConstructor(dependencyReflectionRepresentation);
         if (fromArgsConstructor != null) {
             this.constructorInstances = dependencyContextService.instantiateListOfDependencies(fromArgsConstructor);
         }
@@ -23,12 +23,12 @@ class DependentParams {
         return this;
     }
 
-    private Class<?>[] dependentParamsFromFields(ReflectionRepresentation reflectionRepresentation) {
-        return reflectionRepresentation.getDependentParamsFromFields();
+    private Class<?>[] dependentParamsFromFields(DependencyReflectionRepresentation dependencyReflectionRepresentation) {
+        return dependencyReflectionRepresentation.getDependentParamsFromFields();
     }
 
-    private Class<?>[] getDependentParamsFromArgsConstructor(ReflectionRepresentation reflectionRepresentation) {
-        return reflectionRepresentation.getParamTypesFromArgsConstructor();
+    private Class<?>[] getDependentParamsFromArgsConstructor(DependencyReflectionRepresentation dependencyReflectionRepresentation) {
+        return dependencyReflectionRepresentation.getParamTypesFromArgsConstructor();
     }
 
     Object[] getFieldInjectedInstances() {

@@ -8,35 +8,35 @@ import tooling.DummyTestClassWithFieldDependency;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-public class ReflectionRepresentationTest {
-    private ReflectionRepresentation reflectionRepresentation;
+public class DependencyReflectionRepresentationTest {
+    private DependencyReflectionRepresentation dependencyReflectionRepresentation;
     private ReflectionTool reflectionTool;
 
     @Before
     public void setUp() throws Exception {
         reflectionTool = new ReflectionTool();
-        this.reflectionRepresentation = new ReflectionRepresentation(DummyTestClassWithDependency.class, reflectionTool);
+        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithDependency.class, reflectionTool);
     }
 
     @Test
     public void hasNoInjectedFields() throws Exception {
-        assertTrue(!reflectionRepresentation.hasInjectedFields());
+        assertTrue(!dependencyReflectionRepresentation.hasInjectedFields());
     }
 
     @Test
     public void hasInjectedFields() throws Exception {
-        this.reflectionRepresentation = new ReflectionRepresentation(DummyTestClassWithFieldDependency.class, reflectionTool);
-        assertTrue(reflectionRepresentation.hasInjectedFields());
+        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithFieldDependency.class, reflectionTool);
+        assertTrue(dependencyReflectionRepresentation.hasInjectedFields());
     }
 
     @Test
     public void getNoArgsConstructor() throws Exception {
-        assertNotNull(reflectionRepresentation.getNoArgsConstructor());
+        assertNotNull(dependencyReflectionRepresentation.getNoArgsConstructor());
     }
 
     @Test
     public void getDependentParamsFromFields() throws Exception {
-        //reflectionRepresentation.getDependentParamsFromFields();
+        //dependencyReflectionRepresentation.getDependentParamsFromFields();
     }
 
     @Test

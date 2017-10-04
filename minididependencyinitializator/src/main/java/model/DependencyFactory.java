@@ -6,8 +6,8 @@ import java.lang.reflect.InvocationTargetException;
  * Created by Aki on 26.9.2017.
  */
 public class DependencyFactory {
-    Dependency createDependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, ReflectionRepresentation reflectionRepresentation) throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        final Dependency dependency = new Dependency(dependencyClass, dependencyContextService, reflectionRepresentation);
+    Dependency createDependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation) throws IllegalAccessException, InvocationTargetException, InstantiationException {
+        final Dependency dependency = new Dependency(dependencyClass, dependencyContextService, dependencyReflectionRepresentation);
         dependency.instantiate();
         return dependency;
     }

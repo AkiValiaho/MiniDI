@@ -45,8 +45,8 @@ public class DependencyContextService {
     }
 
     private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
-        ReflectionRepresentation reflectionRepresentation = reflectioninitializer.getReflectionRepresentation(dependencyClass);
-        return dependencyFactory.createDependency(dependencyClass, this, reflectionRepresentation);
+        DependencyReflectionRepresentation dependencyReflectionRepresentation = reflectioninitializer.getReflectionRepresentation(dependencyClass);
+        return dependencyFactory.createDependency(dependencyClass, this, dependencyReflectionRepresentation);
     }
 
     private void injectionError(ReflectiveOperationException e) {

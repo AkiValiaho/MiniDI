@@ -9,11 +9,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-class ReflectionRepresentation {
+class DependencyReflectionRepresentation extends ReflectionComponent {
     private final Class<?> dependencyClass;
     private final ReflectionTool reflectionInitializer;
 
-    ReflectionRepresentation(Class<?> dependencyClass, ReflectionTool reflectionInitializer) {
+    DependencyReflectionRepresentation(Class<?> dependencyClass, ReflectionTool reflectionInitializer) {
         this.dependencyClass = dependencyClass;
         this.reflectionInitializer = reflectionInitializer;
     }
@@ -21,7 +21,7 @@ class ReflectionRepresentation {
 
     boolean hasInjectedFields() {
         return Arrays.stream(dependencyClass.getDeclaredFields())
-                .anyMatch(reflectionInitializer::hasAutowiredAnnotation);
+                .anyMatch(this::hasAutowiredAnnotation);
     }
 
     private boolean isArgsConstructor(Constructor<?> constructor) {
@@ -60,7 +60,7 @@ class ReflectionRepresentation {
 
     private Field[] filterAutowiredFields(Field[] fields) {
         return Arrays.stream(fields)
-                .filter(reflectionInitializer::hasAutowiredAnnotation)
+                .filter(this::hasAutowiredAnnotation)
                 .toArray(Field[]::new);
     }
 
@@ -72,7 +72,7 @@ class ReflectionRepresentation {
         return field.getType();
     }
 
-    ReflectionRepresentation represent() {
+    DependencyReflectionRepresentation represent() {
         return this;
     }
 
@@ -102,7 +102,7 @@ class ReflectionRepresentation {
 
     private Constructor[] filterAnnotatedArgsConstructors(Constructor<?>[] argsConstructors) {
         List<Constructor<?>> collect = Arrays.stream(argsConstructors)
-                .filter(reflectionInitializer::hasAutowiredAnnotation)
+                .filter(this::hasAutowiredAnnotation)
                 .collect(Collectors.toList());
         return toConstructorArray(collect);
 

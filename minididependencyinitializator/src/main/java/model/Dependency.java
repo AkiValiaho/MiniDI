@@ -10,19 +10,19 @@ import java.util.Optional;
 /**
  * Created by akivv on 5.9.2017.
  */
-public class Dependency {
+public class Dependency implements Reflectionable {
     private DependencyContextService dependencyContextService;
     private Class<?> dependencyClass;
     private DependentParams dependentParameters;
     @Getter
     @Setter
     private Object dependencyInstance;
-    private ReflectionRepresentation reflectionRepresentation;
+    private DependencyReflectionRepresentation dependencyReflectionRepresentation;
 
-    Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, ReflectionRepresentation reflectionRepresentation) {
+    Dependency(Class<?> dependencyClass, DependencyContextService dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation) {
         this.dependencyClass = dependencyClass;
         this.dependencyContextService = dependencyContextService;
-        this.reflectionRepresentation = reflectionRepresentation;
+        this.dependencyReflectionRepresentation = dependencyReflectionRepresentation;
     }
 
 
@@ -53,8 +53,8 @@ public class Dependency {
     }
 
     private Object instantiateWithNoArgsIfOnlyFieldDependencies() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        if (reflectionRepresentation.getNoArgsConstructor().isPresent()) {
-            return reflectionRepresentation.getNoArgsConstructor().get().newInstance(null);
+        if (dependencyReflectionRepresentation.getNoArgsConstructor().isPresent()) {
+            return dependencyReflectionRepresentation.getNoArgsConstructor().get().newInstance(null);
         }
         return null;
     }
@@ -64,7 +64,7 @@ public class Dependency {
     }
 
     private Object instantiateWithArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        Optional<Constructor> argsConstructor = reflectionRepresentation.getArgsConstructor();
+        Optional<Constructor> argsConstructor = dependencyReflectionRepresentation.getArgsConstructor();
         final Object[] objects = dependentParameters.getConstructorInjectedInstances();
         if (argsConstructor.isPresent()) {
             final Object o = argsConstructor.get().newInstance(objects);
@@ -75,7 +75,7 @@ public class Dependency {
 
     private void injectFields(Object o) throws IllegalAccessException {
         if (dependentParameters.getFieldInjectedInstances().length != 0) {
-            reflectionRepresentation.injectFields(o, dependentParameters.getFieldInjectedInstances());
+            dependencyReflectionRepresentation.injectFields(o, dependentParameters.getFieldInjectedInstances());
         }
     }
 
@@ -99,18 +99,20 @@ public class Dependency {
         return !hasFieldInjection();
     }
 
-    private boolean hasFieldInjection() {
-        return reflectionRepresentation.hasInjectedFields();
+    @Override
+    public boolean hasFieldInjection() {
+        return dependencyReflectionRepresentation.hasInjectedFields();
 
     }
 
-    private boolean hasNoArgsConstructor(Constructor<?>[] declaredConstructors) {
-        return reflectionRepresentation.getNoArgsConstructor().isPresent();
+    @Override
+    public boolean hasNoArgsConstructor(Constructor<?>[] declaredConstructors) {
+        return dependencyReflectionRepresentation.getNoArgsConstructor().isPresent();
 
     }
 
     private Object instantiateWithNoArgsConstructor() throws IllegalAccessException, InvocationTargetException, InstantiationException {
-        Optional<Constructor> noArgsConstructor = reflectionRepresentation.getNoArgsConstructor();
+        Optional<Constructor> noArgsConstructor = dependencyReflectionRepresentation.getNoArgsConstructor();
         if (noArgsConstructor.isPresent()) {
             this.dependencyInstance = noArgsConstructor.get().newInstance(null);
         }
@@ -131,7 +133,7 @@ public class Dependency {
 
     private DependentParams getDependentParamsFromFieldsAndConstructor() {
         return new DependentParams()
-                .getDependentParamsForClass(reflectionRepresentation, dependencyContextService);
+                .getDependentParamsForClass(dependencyReflectionRepresentation, dependencyContextService);
     }
 
     public Object[] getFieldDependentInstances() {

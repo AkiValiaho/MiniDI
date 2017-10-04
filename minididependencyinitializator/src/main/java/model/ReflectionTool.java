@@ -1,6 +1,5 @@
 package model;
 
-import annotations.Autowired;
 import annotations.Component;
 import org.reflections.Configuration;
 import org.reflections.Reflections;
@@ -11,7 +10,6 @@ import org.reflections.scanners.TypeAnnotationsScanner;
 import org.reflections.util.ClasspathHelper;
 import org.reflections.util.ConfigurationBuilder;
 
-import java.lang.reflect.AnnotatedElement;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -23,7 +21,7 @@ import java.util.stream.Collectors;
 /**
  * Created by akivv on 5.9.2017.
  */
-public class ReflectionTool {
+public class ReflectionTool extends ReflectionComponent {
 
     List<ClassPathResource> findClassPathResources(Class<?> startClass) {
         return getClassesFromClassPathWithAnnotation(startClass).stream()
@@ -72,11 +70,7 @@ public class ReflectionTool {
         return new URL(urlAsString + changedPackageName);
     }
 
-    boolean hasAutowiredAnnotation(AnnotatedElement reflectionMember) {
-        return reflectionMember.isAnnotationPresent(Autowired.class);
-    }
-
-    ReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
-        return new ReflectionRepresentation(dependencyClass, this).represent();
+    DependencyReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
+        return new DependencyReflectionRepresentation(dependencyClass, this).represent();
     }
 }
