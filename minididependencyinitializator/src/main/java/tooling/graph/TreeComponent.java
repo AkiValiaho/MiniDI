@@ -3,7 +3,6 @@ package tooling.graph;
 
 import tooling.CyclicDependencyException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,37 +31,11 @@ public abstract class TreeComponent {
         return false;
     }
 
-    void addComponent(TreeComponent treeComponent, TreeComponent relative) throws CyclicDependencyException {
-        if (oldEntryPresent(treeComponent, relative)) {
-            return;
-        }
-        createNewEntry(treeComponent, relative);
-    }
-
-    private boolean oldEntryPresent(TreeComponent treeComponent, TreeComponent relative) throws CyclicDependencyException {
-        if (relativeComponents.containsKey(treeComponent)) {
-            final List<TreeComponent> treeComponents = relativeComponents.get(treeComponent);
-            if (treeComponents.stream().anyMatch(relative::equals)) {
-                throw new CyclicDependencyException(treeComponent, relative);
-            } else {
-                treeComponents.add(relative);
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private void createNewEntry(TreeComponent treeComponent, TreeComponent relative) {
-        final ArrayList<TreeComponent> value = new ArrayList<>();
-        value.add(relative);
-        relativeComponents.put(treeComponent, value);
-    }
+    abstract void addComponent(TreeComponent treeComponent, TreeComponent relative) throws CyclicDependencyException;
 
     public Class<?> getComponentClass() {
         return dependencyClass;
     }
-
-    ;
 
     abstract List<TreeComponent> initComponent() throws CyclicDependencyException;
 }

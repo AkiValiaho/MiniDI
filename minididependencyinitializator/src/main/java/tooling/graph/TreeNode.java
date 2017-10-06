@@ -13,12 +13,24 @@ import java.util.List;
  */
 class TreeNode extends TreeComponent {
     private final DependencyReflectionRepresentation dependencyReflectionRepresentation;
-    private final NonCyclicTree rootTree;
+    private final TreeComponent rootTree;
 
-    TreeNode(Class<?> dependencyClass, DependencyReflectionRepresentation dependencyReflectionRepresentation, NonCyclicTree nonCyclicTree) {
+    TreeNode(Class<?> dependencyClass, DependencyReflectionRepresentation dependencyReflectionRepresentation, TreeComponent rootTree) {
         super(new HashMap<>(), dependencyClass);
         this.dependencyReflectionRepresentation = dependencyReflectionRepresentation;
-        this.rootTree = nonCyclicTree;
+        this.rootTree = rootTree;
+    }
+
+    /**
+     * Double-dispatches the addComponent call to the given root tree (validation implementation might vary)
+     *
+     * @param treeComponent
+     * @param relative
+     * @throws CyclicDependencyException
+     */
+    @Override
+    void addComponent(TreeComponent treeComponent, TreeComponent relative) throws CyclicDependencyException {
+        rootTree.addComponent(treeComponent, relative);
     }
 
     @Override
@@ -57,7 +69,7 @@ class TreeNode extends TreeComponent {
 
     private TreeComponent constructTreeNode(Class<?> aClass) throws CyclicDependencyException {
         final TreeComponent treeNode = new TreeNode(aClass, new DependencyReflectionRepresentation(aClass), rootTree);
-        rootTree.addComponent(rootTree, treeNode);
+        addComponent(rootTree, treeNode);
         treeNode.initComponent();
         return treeNode;
     }
