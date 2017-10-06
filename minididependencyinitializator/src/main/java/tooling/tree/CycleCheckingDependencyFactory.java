@@ -1,4 +1,4 @@
-package tooling.graph;
+package tooling.tree;
 
 import model.Dependency;
 import model.DependencyReflectionRepresentation;

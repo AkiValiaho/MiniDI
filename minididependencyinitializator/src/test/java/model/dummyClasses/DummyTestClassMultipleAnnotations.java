@@ -1,4 +1,4 @@
-package model;
+package model.dummyClasses;
 
 import annotations.Autowired;
 import annotations.Component;

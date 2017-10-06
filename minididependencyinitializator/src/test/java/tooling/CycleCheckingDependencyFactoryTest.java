@@ -1,10 +1,12 @@
 package tooling;
 
 import model.*;
+import model.dummyClasses.CyclicClassA;
+import model.dummyClasses.CyclicClassTransitiveA;
 import org.junit.Before;
 import org.junit.Test;
-import tooling.graph.CycleChecker;
-import tooling.graph.CycleCheckingDependencyFactory;
+import tooling.tree.CycleChecker;
+import tooling.tree.CycleCheckingDependencyFactory;
 
 /**
  * Created by Aki on 4.10.2017.
@@ -17,7 +19,6 @@ public class CycleCheckingDependencyFactoryTest {
 
     @Before
     public void setUp() throws Exception {
-        //TODO looks horrific, the Api's got too much stuff here
         dependencyFactoryComponent = new DependencyFactory();
         reflectionTool = new ReflectionTool();
         DependencyContext context = new DependencyContext();
