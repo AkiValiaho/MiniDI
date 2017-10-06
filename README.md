@@ -5,7 +5,9 @@
 Small scale dependency injection framework
 
 Uses annotation-based dependency resolving. Detects cycles in your
-dependency declarations.
+dependency declarations (this is done with a fairly naive strategy: just construct
+a tree recursively from each dependency and check if it contains any cycles back to the root node, working on a 
+more performant version at the momentt)
 
 Maven dependency:
 
