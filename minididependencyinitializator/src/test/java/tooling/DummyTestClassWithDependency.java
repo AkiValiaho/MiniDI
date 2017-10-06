@@ -3,6 +3,7 @@ package tooling;
 import annotations.Autowired;
 import annotations.Component;
 import lombok.Getter;
+import model.dummyClasses.DummyTestClassB;
 
 /**
  * Created by Aki on 8.9.2017.
@@ -10,14 +11,14 @@ import lombok.Getter;
 @Component
 public class DummyTestClassWithDependency {
     @Getter
-    private final DummyTestClass dummyTestClass;
+    private final DummyTestClassB dummyTestClass;
 
     @Autowired
-    public DummyTestClassWithDependency(DummyTestClass dummyTestClass) {
+    public DummyTestClassWithDependency(DummyTestClassB dummyTestClass) {
         this.dummyTestClass = dummyTestClass;
     }
 
-    public DummyTestClass getDependency() {
+    public DummyTestClassB getDependency() {
         return dummyTestClass;
     }
 }

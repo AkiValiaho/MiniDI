@@ -1,6 +1,6 @@
 package tooling;
 
-import model.*;
+import model.DependencyContext;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +25,7 @@ public class ClassPathResourceServiceTest {
     public void createDependenciesFromClassPath() throws Exception {
         this.classPathResourceservice.createDependenciesFromClassPath(DummyTestClassWithDependency.class);
         //Dependency Context should contain five dependencies now
-        assertTrue(dependencyContext.numberOfDependencies() == 6);
+        assertTrue(dependencyContext.numberOfDependencies() == 7);
         System.out.println("Hello");
     }
 }

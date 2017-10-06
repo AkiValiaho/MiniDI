@@ -1,8 +1,13 @@
 package tooling;
 
-import model.*;
+import model.dummyClasses.CyclicClassA;
+import model.dummyClasses.CyclicClassTransitiveA;
+import model.Dependency;
+import model.DependencyContext;
 import org.junit.Before;
 import org.junit.Test;
+import tooling.tree.CycleChecker;
+import tooling.tree.CycleCheckingDependencyFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -21,8 +26,18 @@ public class DependencyContextServiceTest {
     public void before() {
         final ReflectionTool reflectionTool = new ReflectionTool();
         final DependencyContext dependencyContext = new DependencyContext();
-        final DependencyFactory dependencyFactory = new DependencyFactory();
+        final DependencyFactoryComponent dependencyFactory = new CycleCheckingDependencyFactory(new DependencyFactory(), new CycleChecker());
         this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyFactory);
+    }
+
+    @Test(expected = CyclicDependencyException.class)
+    public void createDependencyFromResource_cyclicalDependency_shouldThrowException() throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {
+        dependencyContextService.createDependenciesFromResource(CyclicClassA.class);
+    }
+
+    @Test(expected = CyclicDependencyException.class)
+    public void createDependencyFromResource_transitiveCyclicaldependency_shouldThrowException() throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {
+        dependencyContextService.createDependenciesFromResource(CyclicClassTransitiveA.class);
     }
 
     @Test

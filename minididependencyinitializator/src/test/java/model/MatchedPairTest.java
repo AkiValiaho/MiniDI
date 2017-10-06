@@ -1,5 +1,6 @@
 package model;
 
+import model.dummyClasses.DummyTestClassB;
 import org.junit.Test;
 import tooling.*;
 
@@ -12,7 +13,7 @@ public class MatchedPairTest {
 
     @Test
     public void setFieldsToInstance() throws Exception {
-        ClassWithFieldAndConstructor classWithFieldAndConstructor = new ClassWithFieldAndConstructor(new DummyTestClassWithDependency(new DummyTestClass()));
+        ClassWithFieldAndConstructor classWithFieldAndConstructor = new ClassWithFieldAndConstructor(new DummyTestClassWithDependency(new DummyTestClassB()));
         MatchedPair matchedPairs = new MatchedPair(classWithFieldAndConstructor.getClass().getDeclaredFields(), new Object[]{new DummyTestClass(), new ClassWithInjectionField()});
         matchedPairs.setFieldsToInstance(classWithFieldAndConstructor);
         assertFieldsAreSet(classWithFieldAndConstructor);

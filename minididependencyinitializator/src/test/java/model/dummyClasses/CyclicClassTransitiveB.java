@@ -1,4 +1,4 @@
-package model;
+package model.dummyClasses;
 
 import annotations.Autowired;
 import annotations.Component;
@@ -7,7 +7,7 @@ import annotations.Component;
  * Created by Aki on 6.10.2017.
  */
 @Component
-class CyclicClassTransitiveC {
+class CyclicClassTransitiveB {
     @Autowired
-    private CyclicClassTransitiveA cyclicClassTransitiveA;
+    private CyclicClassTransitiveC cyclicClassTransitiveC;
 }
