@@ -4,7 +4,8 @@
 
 Small scale dependency injection framework
 
-Uses annotation-based injection dependency resolving.
+Uses annotation-based dependency resolving. Detects cycles in your
+dependency declarations.
 
 Maven dependency:
 
