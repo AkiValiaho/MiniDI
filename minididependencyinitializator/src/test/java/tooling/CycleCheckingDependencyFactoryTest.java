@@ -1,11 +1,7 @@
 package tooling;
 
-import model.CyclicClassA;
-import model.Dependency;
-import model.DependencyContext;
-import model.DependencyReflectionRepresentation;
+import model.*;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import tooling.graph.CycleChecker;
 import tooling.graph.CycleCheckingDependencyFactory;
@@ -30,9 +26,12 @@ public class CycleCheckingDependencyFactoryTest {
     }
 
     @Test(expected = CyclicDependencyException.class)
-    @Ignore
+    public void createDependency_cyclicTransitiveDependency_shouldThrowException() throws Exception {
+        final Dependency dependency = this.cycleCheckingDependencyFactory.createDependency(CyclicClassTransitiveA.class, dependencyContextComponent, new DependencyReflectionRepresentation(CyclicClassTransitiveA.class));
+    }
+
+    @Test(expected = CyclicDependencyException.class)
     public void createDependency_cyclicClass_shouldThrowException() throws Exception {
-        //TODO
         final Dependency dependency = this.cycleCheckingDependencyFactory.createDependency(CyclicClassA.class, dependencyContextComponent, new DependencyReflectionRepresentation(CyclicClassA.class));
     }
 

@@ -45,7 +45,7 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
         return constructor.getParameterCount() == 0;
     }
 
-    Class<?>[] getDependentParamsFromFields() {
+    public Class<?>[] getDependentParamsFromFields() {
         Field[] fields = filterAutowiredFields(getFields());
         return mapFieldsToClasses(fields);
     }
@@ -75,7 +75,7 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
         return this;
     }
 
-    Class<?>[] getParamTypesFromArgsConstructor() {
+    public Class<?>[] getParamTypesFromArgsConstructor() {
         Optional<Constructor> argsConstructor = getArgsConstructor();
         return argsConstructor.isPresent() ? argsConstructor.get().getParameterTypes() : null;
     }

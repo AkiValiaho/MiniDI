@@ -8,8 +8,7 @@ import tooling.CyclicDependencyException;
  */
 public class CycleChecker {
     void checkForCycle(Class<?> dependencyClass, DependencyReflectionRepresentation dependencyReflectionRepresentation) throws CyclicDependencyException {
-        new CustomGraph(dependencyClass, dependencyReflectionRepresentation)
-                .initGraph()
-                .checkForCycles();
+        new NonCyclicTree(dependencyClass, dependencyReflectionRepresentation)
+                .initComponent();
     }
 }
