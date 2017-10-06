@@ -8,6 +8,7 @@ import tooling.CyclicDependencyException;
  */
 public class CycleChecker {
     void checkForCycle(Class<?> dependencyClass, DependencyReflectionRepresentation dependencyReflectionRepresentation) throws CyclicDependencyException {
+        //TODO Find if it's possible to reuse the tree calculated in a particular dependency again to make calculations faster
         new NonCyclicTree(dependencyClass, dependencyReflectionRepresentation)
                 .initComponent();
     }
