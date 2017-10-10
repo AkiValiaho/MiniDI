@@ -26,6 +26,5 @@ public class ClassPathResourceServiceTest {
         this.classPathResourceservice.createDependenciesFromClassPath(DummyTestClassWithDependency.class);
         //Dependency Context should contain five dependencies now
         assertTrue(dependencyContext.numberOfDependencies() == 7);
-        System.out.println("Hello");
     }
 }

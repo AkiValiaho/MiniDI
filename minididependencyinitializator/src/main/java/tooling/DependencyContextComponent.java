@@ -27,18 +27,6 @@ public abstract class DependencyContextComponent {
         this.dependencyContext = dependencyContext;
     }
 
-    public Dependency createDependenciesFromResource(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
-        checkNotNull(dependencyClass);
-        Dependency dependency = createDependencyObject(dependencyClass);
-        dependencyContext.addDependencyToMap(dependency);
-        return dependency;
-    }
-
-    private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
-        DependencyReflectionRepresentation dependencyReflectionRepresentation = reflectioninitializer.getReflectionRepresentation(dependencyClass);
-        return dependencyFactory.createDependency(dependencyClass, this, dependencyReflectionRepresentation);
-    }
-
     public List<Dependency> instantiateListOfDependencies(Class<?>[] dependentParams) {
         return Arrays.stream(dependentParams)
                 .map(this::createDependencyWithExceptionSafety
@@ -53,6 +41,18 @@ public abstract class DependencyContextComponent {
             injectionError(e);
         }
         return null;
+    }
+
+    public Dependency createDependenciesFromResource(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
+        checkNotNull(dependencyClass);
+        Dependency dependency = createDependencyObject(dependencyClass);
+        dependencyContext.addDependencyToMap(dependency);
+        return dependency;
+    }
+
+    private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
+        DependencyReflectionRepresentation dependencyReflectionRepresentation = reflectioninitializer.getReflectionRepresentation(dependencyClass);
+        return dependencyFactory.createDependency(dependencyClass, this, dependencyReflectionRepresentation);
     }
 
     private void injectionError(Exception e) {
