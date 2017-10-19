@@ -4,7 +4,7 @@ import model.Dependency;
 import model.DependencyReflectionRepresentation;
 import tooling.CyclicDependencyException;
 import tooling.DependencyContextComponent;
-import tooling.DependencyFactoryComponent;
+import tooling.DependencyFactory;
 import tooling.DependencyFactoryDecorator;
 
 import java.lang.reflect.InvocationTargetException;
@@ -16,14 +16,14 @@ public class CycleCheckingDependencyFactory extends DependencyFactoryDecorator {
 
     private final CycleChecker cycleChecker;
 
-    public CycleCheckingDependencyFactory(DependencyFactoryComponent dependencyFactoryComponent, CycleChecker cycleChecker) {
+    public CycleCheckingDependencyFactory(DependencyFactory dependencyFactoryComponent, CycleChecker cycleChecker) {
         super(dependencyFactoryComponent);
         this.cycleChecker = cycleChecker;
     }
 
     @Override
-    public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
-        cycleChecker.checkForCycle(dependencyClass, dependencyReflectionRepresentation);
-        return super.createDependency(dependencyClass, dependencyContextService, dependencyReflectionRepresentation);
+    public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
+        cycleChecker.checkForCycle(dependencyClass, new DependencyReflectionRepresentation(dependencyClass));
+        return super.createDependency(dependencyClass, dependencyContextService);
     }
 }

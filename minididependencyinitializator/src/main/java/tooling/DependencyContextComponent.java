@@ -16,12 +16,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Aki on 4.10.2017.
  */
 public abstract class DependencyContextComponent {
-    DependencyFactoryComponent dependencyFactory;
+    DependencyFactory dependencyFactory;
     DependencyContext dependencyContext;
     @Getter
     private ReflectionTool reflectioninitializer;
 
-    DependencyContextComponent(DependencyFactoryComponent dependencyFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
+    DependencyContextComponent(DependencyFactory dependencyFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
         this.dependencyFactory = dependencyFactory;
         this.reflectioninitializer = reflectionTool;
         this.dependencyContext = dependencyContext;
@@ -52,7 +52,7 @@ public abstract class DependencyContextComponent {
 
     private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
         DependencyReflectionRepresentation dependencyReflectionRepresentation = reflectioninitializer.getReflectionRepresentation(dependencyClass);
-        return dependencyFactory.createDependency(dependencyClass, this, dependencyReflectionRepresentation);
+        return dependencyFactory.createDependency(dependencyClass, this);
     }
 
     private void injectionError(Exception e) {

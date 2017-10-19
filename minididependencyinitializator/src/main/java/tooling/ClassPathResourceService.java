@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 class ClassPathResourceService extends DependencyContextComponent {
 
-    ClassPathResourceService(DependencyFactoryComponent dependencyFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
+    ClassPathResourceService(DependencyFactory dependencyFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
         super(dependencyFactory, reflectionTool, dependencyContext);
     }
 

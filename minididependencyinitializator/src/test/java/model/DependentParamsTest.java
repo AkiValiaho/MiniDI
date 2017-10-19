@@ -19,7 +19,7 @@ public class DependentParamsTest {
         reflectionTool = new ReflectionTool();
         this.dependencyContextService = new DependencyContextService(reflectionTool,
                 new DependencyContext(),
-                new DependencyFactory());
+                new DependencyFactoryImpl());
     }
 
     @Test

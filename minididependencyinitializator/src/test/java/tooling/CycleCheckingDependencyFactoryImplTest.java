@@ -11,29 +11,29 @@ import tooling.tree.CycleCheckingDependencyFactory;
 /**
  * Created by Aki on 4.10.2017.
  */
-public class CycleCheckingDependencyFactoryTest {
+public class CycleCheckingDependencyFactoryImplTest {
     private CycleCheckingDependencyFactory cycleCheckingDependencyFactory;
-    private DependencyFactory dependencyFactoryComponent;
+    private DependencyFactoryImpl dependencyFactoryImplComponent;
     private DependencyContextService dependencyContextComponent;
     private ReflectionTool reflectionTool;
 
     @Before
     public void setUp() throws Exception {
-        dependencyFactoryComponent = new DependencyFactory();
+        dependencyFactoryImplComponent = new DependencyFactoryImpl();
         reflectionTool = new ReflectionTool();
         DependencyContext context = new DependencyContext();
-        dependencyContextComponent = new DependencyContextService(reflectionTool, context, dependencyFactoryComponent);
-        this.cycleCheckingDependencyFactory = new CycleCheckingDependencyFactory(dependencyFactoryComponent, new CycleChecker());
+        dependencyContextComponent = new DependencyContextService(reflectionTool, context, dependencyFactoryImplComponent);
+        this.cycleCheckingDependencyFactory = new CycleCheckingDependencyFactory(dependencyFactoryImplComponent, new CycleChecker());
     }
 
     @Test(expected = CyclicDependencyException.class)
     public void createDependency_cyclicTransitiveDependency_shouldThrowException() throws Exception {
-        final Dependency dependency = this.cycleCheckingDependencyFactory.createDependency(CyclicClassTransitiveA.class, dependencyContextComponent, new DependencyReflectionRepresentation(CyclicClassTransitiveA.class));
+        final Dependency dependency = this.cycleCheckingDependencyFactory.createDependency(CyclicClassTransitiveA.class, dependencyContextComponent);
     }
 
     @Test(expected = CyclicDependencyException.class)
     public void createDependency_cyclicClass_shouldThrowException() throws Exception {
-        final Dependency dependency = this.cycleCheckingDependencyFactory.createDependency(CyclicClassA.class, dependencyContextComponent, new DependencyReflectionRepresentation(CyclicClassA.class));
+        final Dependency dependency = this.cycleCheckingDependencyFactory.createDependency(CyclicClassA.class, dependencyContextComponent);
     }
 
 }

@@ -36,7 +36,7 @@ public class Dependency implements Reflectionable {
         dependencyContext.registerDependencyAttributes(dependencyClass, dependencyInstance);
     }
 
-    public void instantiate() throws IllegalAccessException, InstantiationException, InvocationTargetException {
+    void instantiate() throws IllegalAccessException, InstantiationException, InvocationTargetException {
         if (isLeafParameter()) {
             dependencyInstance = instantiateWithNoArgsConstructor();
             return;

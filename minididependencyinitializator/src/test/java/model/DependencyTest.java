@@ -18,19 +18,23 @@ public class DependencyTest {
     public void before() {
         reflectionTool = new ReflectionTool();
         final DependencyContext dependencyContext = new DependencyContext();
-        final DependencyFactory dependencyFactory = new DependencyFactory();
-        this.dependencyContextService = new DependencyContextService(reflectionTool,dependencyContext,dependencyFactory);
+        final DependencyFactoryImpl dependencyFactoryImpl = new DependencyFactoryImpl();
+        this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyFactoryImpl);
     }
 
     @Test
     public void isLeafParameter_onlyAutowiredConstructor_shouldReturnTrue() throws Exception {
-        this.dependency = new Dependency(DummyTestClass.class, dependencyContextService, new DependencyReflectionRepresentation(DummyTestClass.class));
+        this.dependency = createDependency(DummyTestClass.class);
         assertTrue(dependency.isLeafParameter());
+    }
+
+    private Dependency createDependency(Class<?> argumentClass) throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {
+        return new DependencyFactoryImpl().createDependency(argumentClass, dependencyContextService);
     }
 
     @Test
     public void isLeafParameter_onlyFieldInjections_shouldReturnFalse() throws Exception {
-        this.dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService,new DependencyReflectionRepresentation(ClassWithInjectionField.class));
+        this.dependency = createDependency(ClassWithInjectionField.class);
         assertNotALeafParameter();
     }
 
@@ -39,8 +43,8 @@ public class DependencyTest {
     }
 
     @Test
-    public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchFieldException {
-        Dependency dependency = new Dependency(ClassWithInjectionField.class, dependencyContextService, new DependencyReflectionRepresentation(ClassWithInjectionField.class));
+    public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchFieldException, CyclicDependencyException {
+        Dependency dependency = new DependencyFactoryImpl().createDependency(ClassWithInjectionField.class, dependencyContextService);
         assertTrue(dependency.instantiateDependentParameters());
         final Object dependentParameters = new ReflectionTestHelper().getField(dependency, "dependentParameters");
         assertTrue(((DependentParams) dependentParameters).getFieldInjectedInstances().length == 1);
