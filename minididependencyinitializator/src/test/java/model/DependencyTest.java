@@ -18,7 +18,7 @@ public class DependencyTest {
     public void before() {
         reflectionTool = new ReflectionTool();
         final DependencyContext dependencyContext = new DependencyContext();
-        final DependencyFactoryImpl dependencyFactoryImpl = new DependencyFactoryImpl();
+        final DependencyFactory dependencyFactoryImpl = new DependencyFactory();
         this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyFactoryImpl);
     }
 
@@ -29,7 +29,7 @@ public class DependencyTest {
     }
 
     private Dependency createDependency(Class<?> argumentClass) throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {
-        return new DependencyFactoryImpl().createDependency(argumentClass, dependencyContextService);
+        return new DependencyFactory().createDependency(argumentClass, dependencyContextService);
     }
 
     @Test
@@ -44,7 +44,7 @@ public class DependencyTest {
 
     @Test
     public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchFieldException, CyclicDependencyException {
-        Dependency dependency = new DependencyFactoryImpl().createDependency(ClassWithInjectionField.class, dependencyContextService);
+        Dependency dependency = new DependencyFactory().createDependency(ClassWithInjectionField.class, dependencyContextService);
         final Object dependentParameters = new ReflectionTestHelper().getField(dependency, "dependentParameters");
         assertTrue(((DependentParams) dependentParameters).getFieldInjectedInstances().length == 1);
     }

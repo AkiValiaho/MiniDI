@@ -1,7 +1,7 @@
 package tooling;
 
 import model.DependencyContext;
-import model.DependencyFactoryImpl;
+import model.DependencyFactory;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -18,7 +18,7 @@ public class ClassPathResourceServiceTest {
     public void setUp() throws Exception {
         final ReflectionTool reflectionTool = new ReflectionTool();
         dependencyContext = new DependencyContext();
-        DependencyFactoryImpl dependencyFactoryImpl = new DependencyFactoryImpl();
+        DependencyFactory dependencyFactoryImpl = new DependencyFactory();
         this.classPathResourceservice = new ClassPathResourceService(dependencyFactoryImpl, reflectionTool, dependencyContext);
     }
 

@@ -24,7 +24,7 @@ class MatchedPair {
 
     void setFieldsToInstance(Object o) throws IllegalAccessException {
         List<MatchedPair> matchedPairs = matchPairs();
-        matchedPairs.stream()
+        matchedPairs
                 .forEach(pair -> {
                     try {
                         pair.setMatchedFieldToInstance(o);

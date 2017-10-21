@@ -9,7 +9,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by Aki on 26.9.2017.
  */
-public class DependencyFactoryImpl extends GenericDependencyComponentFactory {
+public class DependencyFactory extends GenericDependencyComponentFactory {
     @Override
     public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
         super.createDependency(dependencyClass, dependencyContextService);
