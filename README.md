@@ -76,3 +76,13 @@ Application startup:
     To bootstrap your application start it with the following template:
         MiniDi.startApplication(<-Your application class->);
     This template also returns a DependencyContext you can use to query for dependencies.
+    
+    
+Features currently under development:
+    
+    @DependsOn-annotation to control the flow of dependency resolution. 21.10.2017 -> stubs written for the decorator
+    @PostConstruct-annotation to call a certain method after dependency is instantiated
+        this  could be a lazy call after all the instances are instantiated or a call that is done
+        immediately after the annotated instance is done (enum to control behaviour)
+
+    
