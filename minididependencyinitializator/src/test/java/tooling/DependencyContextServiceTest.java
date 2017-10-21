@@ -1,6 +1,6 @@
 package tooling;
 
-import model.DependencyFactoryImpl;
+import model.DependencyFactory;
 import model.dummyClasses.CyclicClassA;
 import model.dummyClasses.CyclicClassTransitiveA;
 import model.Dependency;
@@ -27,8 +27,8 @@ public class DependencyContextServiceTest {
     public void before() {
         final ReflectionTool reflectionTool = new ReflectionTool();
         final DependencyContext dependencyContext = new DependencyContext();
-        final DependencyFactory dependencyFactory = new CycleCheckingDependencyFactory(new DependencyFactoryImpl(), new CycleChecker());
-        this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyFactory);
+        final DependencyComponentFactory dependencyComponentFactory = new CycleCheckingDependencyFactory(new DependencyFactory(), new CycleChecker());
+        this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyComponentFactory);
     }
 
     @Test(expected = CyclicDependencyException.class)

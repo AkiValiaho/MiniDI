@@ -8,7 +8,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by Aki on 19.10.2017.
  */
-public class GenericDependencyComponentFactory implements DependencyFactory<DependencyComponent> {
+public class GenericDependencyComponentFactory implements DependencyComponentFactory<DependencyComponent> {
     protected DependencyReflectionRepresentation dependencyReflectionRepresentation;
 
     @Override

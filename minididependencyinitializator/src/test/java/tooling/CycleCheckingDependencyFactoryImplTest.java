@@ -13,13 +13,13 @@ import tooling.tree.CycleCheckingDependencyFactory;
  */
 public class CycleCheckingDependencyFactoryImplTest {
     private CycleCheckingDependencyFactory cycleCheckingDependencyFactory;
-    private DependencyFactoryImpl dependencyFactoryImplComponent;
+    private DependencyFactory dependencyFactoryImplComponent;
     private DependencyContextService dependencyContextComponent;
     private ReflectionTool reflectionTool;
 
     @Before
     public void setUp() throws Exception {
-        dependencyFactoryImplComponent = new DependencyFactoryImpl();
+        dependencyFactoryImplComponent = new DependencyFactory();
         reflectionTool = new ReflectionTool();
         DependencyContext context = new DependencyContext();
         dependencyContextComponent = new DependencyContextService(reflectionTool, context, dependencyFactoryImplComponent);

@@ -7,8 +7,8 @@ import model.DependencyContext;
  */
 public class DependencyContextService extends DependencyContextComponent {
 
-    public DependencyContextService(ReflectionTool reflectionTool, DependencyContext dependencyContext, DependencyFactory dependencyFactory) {
-        super(dependencyFactory, reflectionTool, dependencyContext);
+    public DependencyContextService(ReflectionTool reflectionTool, DependencyContext dependencyContext, DependencyComponentFactory dependencyComponentFactory) {
+        super(dependencyComponentFactory, reflectionTool, dependencyContext);
     }
 
 

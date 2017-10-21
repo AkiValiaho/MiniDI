@@ -4,20 +4,20 @@ import model.Dependency;
 import model.DependencyReflectionRepresentation;
 import tooling.CyclicDependencyException;
 import tooling.DependencyContextComponent;
-import tooling.DependencyFactory;
-import tooling.DependencyFactoryDecorator;
+import tooling.DependencyComponentFactory;
+import tooling.DependencyComponentFactoryDecorator;
 
 import java.lang.reflect.InvocationTargetException;
 
 /**
  * Created by Aki on 4.10.2017.
  */
-public class CycleCheckingDependencyFactory extends DependencyFactoryDecorator {
+public class CycleCheckingDependencyFactory extends DependencyComponentFactoryDecorator {
 
     private final CycleChecker cycleChecker;
 
-    public CycleCheckingDependencyFactory(DependencyFactory dependencyFactoryComponent, CycleChecker cycleChecker) {
-        super(dependencyFactoryComponent);
+    public CycleCheckingDependencyFactory(DependencyComponentFactory dependencyComponentFactoryComponent, CycleChecker cycleChecker) {
+        super(dependencyComponentFactoryComponent);
         this.cycleChecker = cycleChecker;
     }
 

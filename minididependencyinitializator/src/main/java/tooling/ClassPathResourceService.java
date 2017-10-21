@@ -9,8 +9,8 @@ import java.lang.reflect.InvocationTargetException;
  */
 class ClassPathResourceService extends DependencyContextComponent {
 
-    ClassPathResourceService(DependencyFactory dependencyFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
-        super(dependencyFactory, reflectionTool, dependencyContext);
+    ClassPathResourceService(DependencyComponentFactory dependencyComponentFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
+        super(dependencyComponentFactory, reflectionTool, dependencyContext);
     }
 
     private void createDependencyContextClassPath(Class<?> startClass) throws IllegalAccessException, InstantiationException, InvocationTargetException {
