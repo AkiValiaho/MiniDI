@@ -7,10 +7,10 @@ import java.lang.reflect.InvocationTargetException;
 /**
  * Created by Aki on 4.10.2017.
  */
-public abstract class DependencyFactoryDecorator implements DependencyFactory {
-    private final DependencyFactory dependencyFactoryComponent;
+public abstract class DependencyFactoryDecorator implements DependencyFactory<Dependency> {
+    private final DependencyFactory<Dependency> dependencyFactoryComponent;
 
-    public DependencyFactoryDecorator(DependencyFactory dependencyFactoryComponent) {
+    public DependencyFactoryDecorator(DependencyFactory<Dependency> dependencyFactoryComponent) {
         this.dependencyFactoryComponent = dependencyFactoryComponent;
     }
 

@@ -45,7 +45,6 @@ public class DependencyTest {
     @Test
     public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchFieldException, CyclicDependencyException {
         Dependency dependency = new DependencyFactoryImpl().createDependency(ClassWithInjectionField.class, dependencyContextService);
-        assertTrue(dependency.instantiateDependentParameters());
         final Object dependentParameters = new ReflectionTestHelper().getField(dependency, "dependentParameters");
         assertTrue(((DependentParams) dependentParameters).getFieldInjectedInstances().length == 1);
     }

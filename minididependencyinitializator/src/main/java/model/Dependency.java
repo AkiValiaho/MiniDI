@@ -11,7 +11,7 @@ import java.util.Optional;
 /**
  * Created by akivv on 5.9.2017.
  */
-public class Dependency implements Reflectionable {
+public class Dependency implements Reflectionable, DependencyComponent {
     private DependencyContextComponent dependencyContextService;
     private Class<?> dependencyClass;
     private DependentParams dependentParameters;
@@ -20,10 +20,11 @@ public class Dependency implements Reflectionable {
     private Object dependencyInstance;
     private DependencyReflectionRepresentation dependencyReflectionRepresentation;
 
-    public Dependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation) {
+    public Dependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation, DependentParams dependentParams) {
         this.dependencyClass = dependencyClass;
         this.dependencyContextService = dependencyContextService;
         this.dependencyReflectionRepresentation = dependencyReflectionRepresentation;
+        this.dependentParameters = dependentParams;
     }
 
 
@@ -42,15 +43,13 @@ public class Dependency implements Reflectionable {
             return;
         }
         //It's not a leaf parameter
-        if (instantiateDependentParameters()) {
-            Object o = instantiateWithNoArgsIfOnlyFieldDependencies();
-            //We can now instantiateDependency from the constructor
-            if (o == null) {
-                o = instantiateFromArgsConstructor();
-            }
-            injectFields(o);
-            dependencyInstance = o;
+        Object o = instantiateWithNoArgsIfOnlyFieldDependencies();
+        //We can now instantiateDependency from the constructor
+        if (o == null) {
+            o = instantiateFromArgsConstructor();
         }
+        injectFields(o);
+        dependencyInstance = o;
     }
 
     private Object instantiateWithNoArgsIfOnlyFieldDependencies() throws IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -118,23 +117,6 @@ public class Dependency implements Reflectionable {
             this.dependencyInstance = noArgsConstructor.get().newInstance(null);
         }
         return dependencyInstance;
-    }
-
-    boolean instantiateDependentParameters() {
-        if (dependentParameters != null) {
-            return true;
-        }
-        instantiateParameters();
-        return true;
-    }
-
-    private void instantiateParameters() {
-        dependentParameters = getDependentParamsFromFieldsAndConstructor();
-    }
-
-    private DependentParams getDependentParamsFromFieldsAndConstructor() {
-        return new DependentParams()
-                .getDependentParamsForClass(dependencyReflectionRepresentation, dependencyContextService);
     }
 
     public Object[] getFieldDependentInstances() {

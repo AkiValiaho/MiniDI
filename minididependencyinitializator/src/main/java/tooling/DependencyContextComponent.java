@@ -3,7 +3,6 @@ package tooling;
 import lombok.Getter;
 import model.Dependency;
 import model.DependencyContext;
-import model.DependencyReflectionRepresentation;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -16,12 +15,12 @@ import static com.google.common.base.Preconditions.checkNotNull;
  * Created by Aki on 4.10.2017.
  */
 public abstract class DependencyContextComponent {
-    DependencyFactory dependencyFactory;
+    DependencyFactory<Dependency> dependencyFactory;
     DependencyContext dependencyContext;
     @Getter
     private ReflectionTool reflectioninitializer;
 
-    DependencyContextComponent(DependencyFactory dependencyFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
+    DependencyContextComponent(DependencyFactory<Dependency> dependencyFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
         this.dependencyFactory = dependencyFactory;
         this.reflectioninitializer = reflectionTool;
         this.dependencyContext = dependencyContext;
@@ -51,7 +50,6 @@ public abstract class DependencyContextComponent {
     }
 
     private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
-        DependencyReflectionRepresentation dependencyReflectionRepresentation = reflectioninitializer.getReflectionRepresentation(dependencyClass);
         return dependencyFactory.createDependency(dependencyClass, this);
     }
 
