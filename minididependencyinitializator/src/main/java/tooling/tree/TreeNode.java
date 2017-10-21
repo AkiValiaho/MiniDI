@@ -4,12 +4,14 @@ import model.DependencyReflectionRepresentation;
 import tooling.CyclicDependencyException;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * Created by Aki on 4.10.2017.
  */
-public class TreeNode {
+class TreeNode {
     List<TreeNode> dependents;
     private Class<?> rootNode;
     private Class<?> nodeClass;
@@ -24,30 +26,40 @@ public class TreeNode {
 
     private List<TreeNode> getDependentNodes(DependencyReflectionRepresentation dependencyReflectionRepresentation) throws CyclicDependencyException {
         List<TreeNode> dependents = new ArrayList<>();
-        getFieldDependentsAsNodes(dependencyReflectionRepresentation, dependents);
-        getArgsDependentsAsNodes(dependencyReflectionRepresentation, dependents);
+        getDependentsAsNodes(dependencyReflectionRepresentation, dependents);
         return dependents;
     }
 
-    private void getFieldDependentsAsNodes(DependencyReflectionRepresentation dependencyReflectionRepresentation, List<TreeNode> dependents) throws CyclicDependencyException {
-        if (dependencyReflectionRepresentation.getDependentParamsFromFields() != null) {
-            for (Class<?> aClass : dependencyReflectionRepresentation.getDependentParamsFromFields()) {
-                checkCycle(rootNode, aClass);
-                final TreeNode treeNode = new TreeNode(rootNode, aClass, new DependencyReflectionRepresentation(aClass));
-                dependents.add(treeNode);
+    private void getDependentsAsNodes(DependencyReflectionRepresentation dependencyReflectionRepresentation, List<TreeNode> dependents) throws CyclicDependencyException {
+        final Class<?>[] dependentParamsFromFields = dependencyReflectionRepresentation.getDependentParamsFromFields();
+        final Class<?>[] paramTypesFromArgsConstructor = dependencyReflectionRepresentation.getParamTypesFromArgsConstructor();
+        final Class<?>[] classes = Stream.concat(nullSafeStream(dependentParamsFromFields),
+                nullSafeStream(paramTypesFromArgsConstructor))
+                .toArray(Class<?>[]::new);
+        addNodes(classes, dependents);
+    }
+
+    private Stream<Class<?>> nullSafeStream(Class<?>[] array) {
+        if (array == null) {
+            Class<?>[] classes = new Class[0];
+            return Arrays.stream(classes);
+        }
+        return Arrays.stream(array);
+    }
+
+
+    private void addNodes(Class<?>[] nodes, List<TreeNode> dependents) throws CyclicDependencyException {
+        if (nodes != null) {
+            for (Class<?> node : nodes) {
+                addNode(dependents, node);
             }
         }
     }
 
-    private void getArgsDependentsAsNodes(DependencyReflectionRepresentation dependencyReflectionRepresentation, List<TreeNode> dependents) throws CyclicDependencyException {
-        if (dependencyReflectionRepresentation.getParamTypesFromArgsConstructor() != null) {
-            for (Class<?> aClass : dependencyReflectionRepresentation
-                    .getParamTypesFromArgsConstructor()) {
-                checkCycle(rootNode, aClass);
-                final TreeNode treeNode = new TreeNode(rootNode, aClass, new DependencyReflectionRepresentation(aClass));
-                dependents.add(treeNode);
-            }
-        }
+    private void addNode(List<TreeNode> dependents, Class<?> aClass) throws CyclicDependencyException {
+        checkCycle(rootNode, aClass);
+        final TreeNode treeNode = new TreeNode(rootNode, aClass, new DependencyReflectionRepresentation(aClass));
+        dependents.add(treeNode);
     }
 
     private void checkCycle(Class<?> rootNode, Class<?> aClass) throws CyclicDependencyException {
