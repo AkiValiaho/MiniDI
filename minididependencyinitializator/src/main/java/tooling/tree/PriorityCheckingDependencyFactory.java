@@ -14,8 +14,8 @@ import java.lang.reflect.InvocationTargetException;
 public class PriorityCheckingDependencyFactory extends DependencyComponentFactoryDecorator {
     private final PriorityChecker priorityChecker;
 
-    public PriorityCheckingDependencyFactory(DependencyComponentFactory<Dependency> dependencyComponentFactoryComponent, PriorityChecker priorityChecker) {
-        super(dependencyComponentFactoryComponent);
+    public PriorityCheckingDependencyFactory(DependencyComponentFactory<Dependency> dependencyFactory, PriorityChecker priorityChecker) {
+        super(dependencyFactory);
         this.priorityChecker = priorityChecker;
     }
 
