@@ -1,14 +1,17 @@
 package tooling;
 
-import model.DependencyFactory;
-import model.dummyClasses.CyclicClassA;
-import model.dummyClasses.CyclicClassTransitiveA;
 import model.Dependency;
 import model.DependencyContext;
+import model.DependencyFactory;
+import model.dummyClasses.ClassWithPriorityDependency;
+import model.dummyClasses.CyclicClassA;
+import model.dummyClasses.CyclicClassTransitiveA;
 import org.junit.Before;
 import org.junit.Test;
 import tooling.tree.CycleChecker;
 import tooling.tree.CycleCheckingDependencyFactory;
+import tooling.tree.PriorityChecker;
+import tooling.tree.PriorityCheckingDependencyFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -27,8 +30,13 @@ public class DependencyContextServiceTest {
     public void before() {
         final ReflectionTool reflectionTool = new ReflectionTool();
         final DependencyContext dependencyContext = new DependencyContext();
-        final DependencyComponentFactory dependencyComponentFactory = new CycleCheckingDependencyFactory(new DependencyFactory(), new CycleChecker());
+        final DependencyComponentFactory dependencyComponentFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(), new CycleChecker()), new PriorityChecker());
         this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyComponentFactory);
+    }
+
+    @Test
+    public void createDependencyFromResource_hasADependsOnAnnotation_priorityDependencyInstantiatedFirst() throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {
+        dependencyContextService.createDependenciesFromResource(ClassWithPriorityDependency.class);
     }
 
     @Test(expected = CyclicDependencyException.class)

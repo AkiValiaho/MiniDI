@@ -32,8 +32,7 @@ public class Dependency implements Reflectionable, DependencyComponent {
      * Adds properties of this Dependency to the dependency context map
      *
      * @param dependencyContext
-     */
-    void addDependencyToMap(DependencyContext dependencyContext) {
+     */ void addDependencyToMap(DependencyContext dependencyContext) {
         dependencyContext.registerDependencyAttributes(dependencyClass, dependencyInstance);
     }
 

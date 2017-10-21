@@ -1,7 +1,6 @@
 package tooling.tree;
 
 import model.Dependency;
-import model.DependencyReflectionRepresentation;
 import tooling.CyclicDependencyException;
 import tooling.DependencyComponentFactory;
 import tooling.DependencyComponentFactoryDecorator;
@@ -10,20 +9,24 @@ import tooling.DependencyContextComponent;
 import java.lang.reflect.InvocationTargetException;
 
 /**
- * Created by Aki on 4.10.2017.
+ * Created by Aki on 21.10.2017.
  */
-public class CycleCheckingDependencyFactory extends DependencyComponentFactoryDecorator {
+public class PriorityCheckingDependencyFactory extends DependencyComponentFactoryDecorator {
+    private final PriorityChecker priorityChecker;
 
-    private final CycleChecker cycleChecker;
-
-    public CycleCheckingDependencyFactory(DependencyComponentFactory dependencyComponentFactoryComponent, CycleChecker cycleChecker) {
+    public PriorityCheckingDependencyFactory(DependencyComponentFactory<Dependency> dependencyComponentFactoryComponent, PriorityChecker priorityChecker) {
         super(dependencyComponentFactoryComponent);
-        this.cycleChecker = cycleChecker;
+        this.priorityChecker = priorityChecker;
     }
 
     @Override
     public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
-        cycleChecker.checkForCycle(dependencyClass, new DependencyReflectionRepresentation(dependencyClass));
+        //Instantiation order
+        Class<?> priorityDependency = priorityChecker.getPriorityDependency(dependencyClass);
+        if (priorityDependency != null) {
+            dependencyContextService.createDependenciesFromResource(priorityDependency);
+        }
         return super.createDependency(dependencyClass, dependencyContextService);
     }
+
 }
