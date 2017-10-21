@@ -13,8 +13,8 @@ public class MiniDi {
     public static DependencyContext startApplication(Class<?> startClass) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         ReflectionTool reflectionTool = new ReflectionTool();
         DependencyContext context = new DependencyContext();
-        DependencyFactory dependencyFactory = new CycleCheckingDependencyFactory(new DependencyFactoryImpl(), new CycleChecker());
-        ClassPathResourceService classPathResourceService = new ClassPathResourceService(dependencyFactory, reflectionTool, context);
+        DependencyComponentFactory dependencyComponentFactory = new CycleCheckingDependencyFactory(new DependencyFactory(), new CycleChecker());
+        ClassPathResourceService classPathResourceService = new ClassPathResourceService(dependencyComponentFactory, reflectionTool, context);
         classPathResourceService.createDependenciesFromClassPath(startClass);
         return context;
     }
