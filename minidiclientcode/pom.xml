@@ -5,7 +5,7 @@
     <parent>
         <artifactId>minidi</artifactId>
         <groupId>com.akivaliaho</groupId>
-        <version>1.0</version>
+        <version>1.1</version>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
@@ -16,7 +16,7 @@
             <artifactId>minididependencyinitializator</artifactId>
             <version>1.1</version>
         </dependency>
-                <dependency>
+        <dependency>
             <groupId>junit</groupId>
             <artifactId>junit</artifactId>
             <version>4.12</version>
