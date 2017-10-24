@@ -1,10 +1,12 @@
 package model;
 
+import annotations.PostConstruct;
 import tooling.MultipleAnnotatedConstructorsException;
 import tooling.ReflectionComponent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
@@ -125,5 +127,11 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
 
     private void setFields(Object o, Field[] declaredFields, Object[] fieldInjectedInstances) throws IllegalAccessException {
         new MatchedPair(declaredFields, fieldInjectedInstances).setFieldsToInstance(o);
+    }
+
+    Optional<Method> getPostConstructMethod() {
+        return Arrays.stream(dependencyClass.getDeclaredMethods())
+                .filter(method -> hasAnnotation(method, PostConstruct.class))
+                .findFirst();
     }
 }

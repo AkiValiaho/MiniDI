@@ -6,6 +6,7 @@ import tooling.DependencyContextComponent;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.Optional;
 
 /**
@@ -32,7 +33,8 @@ public class Dependency implements Reflectionable, DependencyComponent {
      * Adds properties of this Dependency to the dependency context map
      *
      * @param dependencyContext
-     */ void addDependencyToMap(DependencyContext dependencyContext) {
+     */
+    void addDependencyToMap(DependencyContext dependencyContext) {
         dependencyContext.registerDependencyAttributes(dependencyClass, dependencyInstance);
     }
 
@@ -49,6 +51,17 @@ public class Dependency implements Reflectionable, DependencyComponent {
         }
         injectFields(o);
         dependencyInstance = o;
+    }
+
+    void callPostConstructIfPresent() throws InvocationTargetException, IllegalAccessException {
+        final Optional<Method> postConstructMethod = dependencyReflectionRepresentation.getPostConstructMethod();
+        if (postConstructMethod.isPresent()) {
+            final Method method = postConstructMethod.get();
+            if (method.getParameterCount() != 0) {
+                throw new IllegalArgumentException("Method marked as @PostConstruct takes parameters: " + method.getName());
+            }
+            method.invoke(dependencyInstance, null);
+        }
     }
 
     private Object instantiateWithNoArgsIfOnlyFieldDependencies() throws IllegalAccessException, InvocationTargetException, InstantiationException {

@@ -9,6 +9,28 @@ dependency declarations (this is done with a fairly naive strategy: just constru
 a tree recursively from each dependency and check if it contains any cycles back to the root node, working on a 
 more performant version at the momentt)
 
+Latest news:
+    
+    @PostConstruct functionality added
+    
+    A method taking no parameters of a class instantiated can now be forced to be called
+    after class instantiation. Use the @PostConstruct-annotation
+    
+    eg.
+    @Component
+    public class Dependency {
+        private String exampleString;
+        @PostConstruct
+        public void  callThis() {
+            this.exampleString = "hello";
+        }
+        
+        @Autowired
+        public Dependency(MagicDependency magicDependency) {
+        }
+    }   
+    
+
 Maven dependency:
 
     **To use MiniDI-framework add the following dependency to your pom.xml**
@@ -79,10 +101,6 @@ Application startup:
     
     
 Features currently under development:
-    
     @DependsOn-annotation to control the flow of dependency resolution. 21.10.2017 -> stubs written for the decorator
-    @PostConstruct-annotation to call a certain method after dependency is instantiated
-        this  could be a lazy call after all the instances are instantiated or a call that is done
-        immediately after the annotated instance is done (enum to control behaviour)
 
     

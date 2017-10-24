@@ -18,6 +18,7 @@ public class DependencyFactory extends GenericDependencyComponentFactory {
                 dependencyReflectionRepresentation,
                 new DependentParamsFactory().createDependentParams(dependencyClass, dependencyContextService));
         dependency.instantiate();
+        dependency.callPostConstructIfPresent();
         return dependency;
     }
 }

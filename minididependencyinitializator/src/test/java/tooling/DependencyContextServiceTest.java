@@ -3,9 +3,7 @@ package tooling;
 import model.Dependency;
 import model.DependencyContext;
 import model.DependencyFactory;
-import model.dummyClasses.ClassWithPriorityDependency;
-import model.dummyClasses.CyclicClassA;
-import model.dummyClasses.CyclicClassTransitiveA;
+import model.dummyClasses.*;
 import org.junit.Before;
 import org.junit.Test;
 import tooling.tree.CycleChecker;
@@ -17,6 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.List;
 
+import static com.google.common.base.Preconditions.checkNotNull;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
@@ -33,6 +32,25 @@ public class DependencyContextServiceTest {
         final DependencyComponentFactory dependencyComponentFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(), new CycleChecker()), new PriorityChecker());
         this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyComponentFactory);
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void createDependencyFromResource_hasPostConstructInNonVoidMethod_shouldThrowException() throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {
+                final ReflectionTestHelper reflectionTestHelper = new ReflectionTestHelper();
+        final Dependency dependenciesFromResource = dependencyContextService.createDependenciesFromResource(ClassWithPostConstructWrongParameters.class);
+    }
+    @Test
+    public void createDependencyFromResource_hasPostConstructAnnotation_shouldCreateDependencyAndCallPostConstruct() throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException, NoSuchFieldException {
+        final ReflectionTestHelper reflectionTestHelper = new ReflectionTestHelper();
+        final Dependency dependenciesFromResource = dependencyContextService.createDependenciesFromResource(ClassWithPostConstruct.class);
+        final ClassWithPostConstruct dependencyInstance = (ClassWithPostConstruct) dependenciesFromResource.getDependencyInstance();
+        try {
+            final String something = (String) reflectionTestHelper.getField(dependencyInstance, "something");
+            checkNotNull(something);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            e.printStackTrace();
+        }
+    }
+    
 
     @Test
     public void createDependencyFromResource_hasADependsOnAnnotation_priorityDependencyInstantiatedFirst() throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {

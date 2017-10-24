@@ -2,6 +2,7 @@ package tooling;
 
 import annotations.Autowired;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
 
 /**
@@ -10,5 +11,9 @@ import java.lang.reflect.AnnotatedElement;
 public abstract class ReflectionComponent {
     protected boolean hasAutowiredAnnotation(AnnotatedElement reflectionMember) {
         return reflectionMember.isAnnotationPresent(Autowired.class);
+    }
+
+    protected boolean hasAnnotation(AnnotatedElement reflectionMember, Class<? extends Annotation> annotation) {
+        return reflectionMember.isAnnotationPresent(annotation);
     }
 }
