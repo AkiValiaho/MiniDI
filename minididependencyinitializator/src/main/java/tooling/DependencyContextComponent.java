@@ -57,4 +57,8 @@ public abstract class DependencyContextComponent {
         System.out.println(e);
         System.exit(1);
     }
+
+    public void logDependencyInstantiation(Class<?> dependencyClass) {
+        dependencyContext.logDependency(dependencyClass);
+    }
 }

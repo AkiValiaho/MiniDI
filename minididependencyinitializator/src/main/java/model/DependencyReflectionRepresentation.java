@@ -1,5 +1,6 @@
 package model;
 
+import annotations.DependsOn;
 import annotations.PostConstruct;
 import tooling.MultipleAnnotatedConstructorsException;
 import tooling.ReflectionComponent;
@@ -12,11 +13,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+//TODO Cleanup this class, move functionality to reflectionComponent, some of it is quite reusable
 public class DependencyReflectionRepresentation extends ReflectionComponent {
-    private final Class<?> dependencyClass;
 
     public DependencyReflectionRepresentation(Class<?> dependencyClass) {
-        this.dependencyClass = dependencyClass;
+        super(dependencyClass);
     }
 
 
@@ -134,4 +135,11 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
                 .filter(method -> hasAnnotation(method, PostConstruct.class))
                 .findFirst();
     }
+
+    public Optional<Class<?>> getPriorityDependencyClass() {
+        final Optional<DependsOn> first = findDependsOnAnnotation(DependsOn.class);
+        return first.map(DependsOn::value);
+    }
+
+
 }

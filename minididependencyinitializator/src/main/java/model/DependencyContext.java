@@ -1,8 +1,6 @@
 package model;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 /**
  * Holds a map that contains all the resolved dependencies
@@ -11,13 +9,27 @@ import java.util.Optional;
 public class DependencyContext {
 
     private Map<Class<?>, Object> dependencyHashMap;
+    private List<Class<?>> instanceOrderList;
 
     public DependencyContext() {
         this.dependencyHashMap = new HashMap<>();
+        this.instanceOrderList = new ArrayList<>();
     }
 
     public void addDependencyToMap(Dependency dependency) {
         dependency.addDependencyToMap(this);
+    }
+
+    public Boolean comesFirst(Class<?> first, Class<?> second) {
+        for (Class<?> aClass : instanceOrderList) {
+            if (aClass.equals(first)) {
+                return true;
+            }
+            if (aClass.equals(second)) {
+                return false;
+            }
+        }
+        return false;
     }
 
     void registerDependencyAttributes(Class<?> classToRegister, Object instance) {
@@ -30,5 +42,9 @@ public class DependencyContext {
 
     public Integer numberOfDependencies() {
         return dependencyHashMap.size();
+    }
+
+    public void logDependency(Class<?> priotyDependencyClass) {
+        instanceOrderList.add(priotyDependencyClass);
     }
 }

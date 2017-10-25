@@ -1,30 +1,31 @@
 package tooling.tree;
 
 import model.Dependency;
+import model.DependencyReflectionRepresentation;
 import tooling.CyclicDependencyException;
 import tooling.DependencyComponentFactory;
 import tooling.DependencyComponentFactoryDecorator;
 import tooling.DependencyContextComponent;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.Optional;
 
 /**
  * Created by Aki on 21.10.2017.
  */
 public class PriorityCheckingDependencyFactory extends DependencyComponentFactoryDecorator {
-    private final PriorityChecker priorityChecker;
 
-    public PriorityCheckingDependencyFactory(DependencyComponentFactory<Dependency> dependencyFactory, PriorityChecker priorityChecker) {
+    public PriorityCheckingDependencyFactory(DependencyComponentFactory<Dependency> dependencyFactory) {
         super(dependencyFactory);
-        this.priorityChecker = priorityChecker;
     }
 
     @Override
     public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
         //Instantiation order
-        Class<?> priorityDependency = priorityChecker.getPriorityDependency(dependencyClass);
-        if (priorityDependency != null) {
-            dependencyContextService.createDependenciesFromResource(priorityDependency);
+        Optional<Class<?>> priorityDependency = new DependencyReflectionRepresentation(dependencyClass).getPriorityDependencyClass();
+        if (priorityDependency.isPresent()) {
+            final Class<?> priotyDependencyClass = priorityDependency.get();
+            dependencyContextService.createDependenciesFromResource(priotyDependencyClass);
         }
         return super.createDependency(dependencyClass, dependencyContextService);
     }

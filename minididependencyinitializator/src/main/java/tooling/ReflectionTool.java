@@ -25,6 +25,14 @@ import java.util.stream.Collectors;
  */
 public class ReflectionTool extends ReflectionComponent {
 
+    protected ReflectionTool(Class<?> dependencyClass) {
+        super(dependencyClass);
+    }
+
+    public ReflectionTool() {
+        super(null);
+    }
+
     public List<ClassPathResource> findClassPathResources(Class<?> startClass) {
         return getClassesFromClassPathWithAnnotation(startClass).stream()
                 .map(ClassPathResource::new)

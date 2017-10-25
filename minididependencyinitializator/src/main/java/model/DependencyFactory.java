@@ -17,8 +17,13 @@ public class DependencyFactory extends GenericDependencyComponentFactory {
                 dependencyContextService,
                 dependencyReflectionRepresentation,
                 new DependentParamsFactory().createDependentParams(dependencyClass, dependencyContextService));
-        dependency.instantiate();
-        dependency.callPostConstructIfPresent();
+        callInstantiationLogic(dependencyClass, dependencyContextService, dependency);
         return dependency;
+    }
+
+    private void callInstantiationLogic(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, Dependency dependency) throws IllegalAccessException, InstantiationException, InvocationTargetException {
+        dependency.instantiate();
+        dependencyContextService.logDependencyInstantiation(dependencyClass);
+        dependency.callPostConstructIfPresent();
     }
 }

@@ -6,7 +6,7 @@
     <groupId>com.akivaliaho</groupId>
     <artifactId>minidi</artifactId>
     <packaging>pom</packaging>
-    <version>1.1</version>
+    <version>1.1.1</version>
     <modules>
         <module>minididependencyinitializator</module>
         <module>minidiclientcode</module>

@@ -11,26 +11,19 @@ more performant version at the momentt)
 
 Latest news:
     
-    @PostConstruct functionality added
-    
-    A method taking no parameters of a class instantiated can now be forced to be called
-    after class instantiation. Use the @PostConstruct-annotation
-    
-    eg.
-    @Component
-    public class Dependency {
-        private String exampleString;
-        @PostConstruct
-        public void  callThis() {
-            this.exampleString = "hello";
-        }
+    DependsOn functionality added
+      
+     @DependsOn-annotation can be used to influence dependency instantiation
+     order.
         
-        @Autowired
-        public Dependency(MagicDependency magicDependency) {
-        }
-    }   
+        eg.
+        @Component
+        @DependsOn(MagicDependency.class)
+        public class Dependency {
+            private String exampleString;
+        }   
     
-
+    
 Maven dependency:
 
     **To use MiniDI-framework add the following dependency to your pom.xml**
@@ -92,6 +85,25 @@ Hybrid-approach
             this.constructorDependency = constructorDependency;
         }
     }
+ 
+ PostConstruct functionality
+        
+        A method taking no parameters of a class instantiated can be forced to be called
+        after class instantiation. Use the @PostConstruct-annotation
+        
+        eg.
+        @Component
+        public class Dependency {
+            private String exampleString;
+            @PostConstruct
+            public void  callThis() {
+                this.exampleString = "hello";
+            }
+            
+            @Autowired
+            public Dependency(MagicDependency magicDependency) {
+            }
+        }    
  
 Application startup:
 
