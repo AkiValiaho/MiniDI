@@ -28,13 +28,13 @@ public class ClassNameMatcherTest {
     }
 
     private boolean doesNotMatch(List<Object> dummyTestClasses, List<Class> classes) {
-        return !this.classNameMatcher.classNamesMatch(dummyTestClasses, classes);
+        return !this.classNameMatcher.allClassNamesMatch(dummyTestClasses, classes);
     }
 
     @Test
     public void classNamesMatch_namesMatch_shouldReturnTrue() throws Exception {
         final List<Object> dummyTestClasses = Collections.singletonList(new DummyTestClass());
-        assertTrue(this.classNameMatcher.classNamesMatch(dummyTestClasses, Collections.singletonList(DummyTestClass.class)));
+        assertTrue(this.classNameMatcher.allClassNamesMatch(dummyTestClasses, Collections.singletonList(DummyTestClass.class)));
     }
 
 }

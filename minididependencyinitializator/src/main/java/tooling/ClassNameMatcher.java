@@ -7,7 +7,7 @@ import java.util.List;
  * Created by Aki on 29.9.2017.
  */
 class ClassNameMatcher {
-    boolean classNamesMatch(List<Object> objects, List<Class> classes) {
+    boolean allClassNamesMatch(List<Object> objects, List<Class> classes) {
         if (objects.size() != classes.size()) {
             return false;
         }

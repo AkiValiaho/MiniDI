@@ -80,8 +80,8 @@ public class DependencyContextServiceTest {
     private void verifyFieldAndConstructorInjectionsMatch(Dependency dependenciesFromResource) {
         final List<Object> objects = Arrays.asList(dependenciesFromResource.getFieldDependentInstances());
         final List<Class> classes = Arrays.asList(new Class[]{DummyTestClass.class, ClassWithInjectionField.class});
-        assertTrue(new ClassNameMatcher().classNamesMatch(objects, classes));
-        assertTrue(new ClassNameMatcher().classNamesMatch(Arrays.asList(dependenciesFromResource.getConstructorDependentInstances()),
+        assertTrue(new ClassNameMatcher().allClassNamesMatch(objects, classes));
+        assertTrue(new ClassNameMatcher().allClassNamesMatch(Arrays.asList(dependenciesFromResource.getConstructorDependentInstances()),
                 Arrays.asList(new Class[]{DummyTestClassWithDependency.class})));
     }
 

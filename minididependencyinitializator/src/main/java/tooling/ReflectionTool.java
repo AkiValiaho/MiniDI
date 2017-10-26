@@ -2,7 +2,6 @@ package tooling;
 
 import annotations.Component;
 import model.ClassPathResource;
-import model.DependencyReflectionRepresentation;
 import org.reflections.Configuration;
 import org.reflections.Reflections;
 import org.reflections.scanners.FieldAnnotationsScanner;
@@ -78,9 +77,5 @@ public class ReflectionTool extends ReflectionComponent {
         String changedPackageName = string.replaceAll("\\.", "/");
         String urlAsString = msg.toString();
         return new URL(urlAsString + changedPackageName);
-    }
-
-    DependencyReflectionRepresentation getReflectionRepresentation(Class<?> dependencyClass) {
-        return new DependencyReflectionRepresentation(dependencyClass).represent();
     }
 }
