@@ -13,7 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-//TODO Cleanup this class, move functionality to reflectionComponent, some of it is quite reusable
 public class DependencyReflectionRepresentation extends ReflectionComponent {
 
     public DependencyReflectionRepresentation(Class<?> dependencyClass) {
@@ -24,10 +23,6 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
     boolean hasInjectedFields() {
         return Arrays.stream(dependencyClass.getDeclaredFields())
                 .anyMatch(this::hasAutowiredAnnotation);
-    }
-
-    private boolean isArgsConstructor(Constructor<?> constructor) {
-        return constructor.getParameterCount() != 0;
     }
 
     Optional<Constructor> getNoArgsConstructor() {

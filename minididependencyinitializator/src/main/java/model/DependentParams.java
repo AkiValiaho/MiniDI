@@ -16,13 +16,17 @@ class DependentParams {
     DependentParams getDependentParamsForClass(DependencyReflectionRepresentation dependencyReflectionRepresentation, DependencyContextComponent dependencyContextService) {
         this.fromFields = dependentParamsFromFields(dependencyReflectionRepresentation);
         this.fromArgsConstructor = getDependentParamsFromArgsConstructor(dependencyReflectionRepresentation);
+        setInstances(dependencyContextService);
+        return this;
+    }
+
+    private void setInstances(DependencyContextComponent dependencyContextService) {
         if (fromArgsConstructor != null) {
             this.constructorInstances = dependencyContextService.instantiateListOfDependencies(fromArgsConstructor);
         }
         if (fromFields != null) {
             this.fieldInstances = dependencyContextService.instantiateListOfDependencies(fromFields);
         }
-        return this;
     }
 
     private Class<?>[] dependentParamsFromFields(DependencyReflectionRepresentation dependencyReflectionRepresentation) {

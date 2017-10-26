@@ -4,6 +4,7 @@ import annotations.Autowired;
 
 import java.lang.annotation.Annotation;
 import java.lang.reflect.AnnotatedElement;
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
@@ -14,6 +15,9 @@ import java.util.Optional;
 public abstract class ReflectionComponent {
 
 
+    protected boolean isArgsConstructor(Constructor<?> constructor) {
+        return constructor.getParameterCount() != 0;
+    }
     protected final Class<?> dependencyClass;
 
     protected ReflectionComponent(Class<?> dependencyClass) {
