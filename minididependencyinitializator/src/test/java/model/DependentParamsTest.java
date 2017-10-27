@@ -3,7 +3,10 @@ package model;
 import model.dummyClasses.DummyTestClassB;
 import org.junit.Before;
 import org.junit.Test;
-import tooling.*;
+import tooling.ClassWithFieldAndConstructor;
+import tooling.DependencyContextService;
+import tooling.DummyTestClassWithDependency;
+import tooling.ReflectionTool;
 
 import static org.junit.Assert.assertTrue;
 

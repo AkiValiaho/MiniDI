@@ -15,13 +15,14 @@ import java.util.Optional;
 public abstract class ReflectionComponent {
 
 
-    protected boolean isArgsConstructor(Constructor<?> constructor) {
-        return constructor.getParameterCount() != 0;
-    }
     protected final Class<?> dependencyClass;
 
     protected ReflectionComponent(Class<?> dependencyClass) {
         this.dependencyClass = dependencyClass;
+    }
+
+    protected boolean isArgsConstructor(Constructor<?> constructor) {
+        return constructor.getParameterCount() != 0;
     }
 
     protected <T extends Annotation> Optional<T> findDependsOnAnnotation(Class<T> annotation) {
@@ -31,7 +32,7 @@ public abstract class ReflectionComponent {
         return (Optional<T>) first;
     }
 
-    protected Annotation[] getClassAnnotations() {
+    private Annotation[] getClassAnnotations() {
         return dependencyClass.getAnnotations();
     }
 
