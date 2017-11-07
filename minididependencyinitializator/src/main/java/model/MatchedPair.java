@@ -35,12 +35,14 @@ class MatchedPair {
     }
 
     private List<MatchedPair> matchPairs() {
-        List<Field> orderedFields = sortFields(Arrays.asList(declaredFields));
-        List<Object> orderedInstances = sortInstances(Arrays.asList(fieldInjectedInstances));
-        return createList(orderedFields, orderedInstances);
+        OrderedClassEntitites orderedClassEntitites = new OrderedClassEntitites()
+                .sortEntities();
+        List<Field> orderedFields = orderedClassEntitites.getOrderedFields();
+        List<Object> orderedInstances = orderedClassEntitites.getOrderedInstances();
+        return createListOfMatchedPairs(orderedFields, orderedInstances);
     }
 
-    private List<MatchedPair> createList(List<Field> orderedFields, List<Object> orderedInstances) {
+    private List<MatchedPair> createListOfMatchedPairs(List<Field> orderedFields, List<Object> orderedInstances) {
         List<MatchedPair> matchedPairs = new ArrayList<>();
         final Iterator<Field> fieldIterator = orderedFields.iterator();
         for (Object instance : orderedInstances) {
@@ -59,17 +61,36 @@ class MatchedPair {
         return field;
     }
 
-    private List<Object> sortInstances(List<Object> objects) {
-        objects.sort((Comparator.comparing(o -> o.getClass().getCanonicalName())));
-        return objects;
-    }
-
-    private List<Field> sortFields(List<Field> fields) {
-        fields.sort((Comparator.comparing(Field::getName)));
-        return fields;
-    }
-
     private void setMatchedFieldToInstance(Object o) throws IllegalAccessException {
         matchedField.set(o, matchedInstance);
+    }
+
+    private class OrderedClassEntitites {
+        private List<Field> orderedFields;
+        private List<Object> orderedInstances;
+
+        public List<Field> getOrderedFields() {
+            return orderedFields;
+        }
+
+        public List<Object> getOrderedInstances() {
+            return orderedInstances;
+        }
+
+        public OrderedClassEntitites sortEntities() {
+            orderedFields = sortFields(Arrays.asList(declaredFields));
+            orderedInstances = sortInstances(Arrays.asList(fieldInjectedInstances));
+            return this;
+        }
+
+        private List<Field> sortFields(List<Field> fields) {
+            fields.sort((Comparator.comparing(Field::getName)));
+            return fields;
+        }
+
+        private List<Object> sortInstances(List<Object> objects) {
+            objects.sort((Comparator.comparing(o -> o.getClass().getCanonicalName())));
+            return objects;
+        }
     }
 }
