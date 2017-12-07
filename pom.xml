@@ -18,6 +18,7 @@
         <lombok.version>1.16.18</lombok.version>
         <junit.version>4.12</junit.version>
         <mockito.version>2.0.2-beta</mockito.version>
+        <system-rules.version>1.17.0</system-rules.version>
     </properties>
     <dependencyManagement>
         <dependencies>
@@ -47,6 +48,13 @@
                 <groupId>com.google.guava</groupId>
                 <artifactId>guava</artifactId>
                 <version>${guava.version}</version>
+            </dependency>
+            <!-- https://mvnrepository.com/artifact/com.github.stefanbirkner/system-rules -->
+            <dependency>
+                <groupId>com.github.stefanbirkner</groupId>
+                <artifactId>system-rules</artifactId>
+                <version>${system-rules.version}</version>
+                <scope>test</scope>
             </dependency>
         </dependencies>
     </dependencyManagement>

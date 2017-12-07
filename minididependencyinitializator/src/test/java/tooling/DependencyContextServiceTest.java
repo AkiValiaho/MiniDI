@@ -5,7 +5,9 @@ import model.DependencyContext;
 import model.DependencyFactory;
 import model.dummyClasses.*;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.contrib.java.lang.system.ExpectedSystemExit;
 import tooling.tree.CycleChecker;
 import tooling.tree.CycleCheckingDependencyFactory;
 import tooling.tree.PriorityCheckingDependencyFactory;
@@ -22,6 +24,8 @@ import static org.junit.Assert.assertTrue;
  * Created by Aki on 7.9.2017.
  */
 public class DependencyContextServiceTest {
+    @Rule
+    public ExpectedSystemExit exit = ExpectedSystemExit.none();
     private DependencyContextService dependencyContextService;
     private DependencyContext dependencyContext;
 
@@ -52,6 +56,13 @@ public class DependencyContextServiceTest {
         }
     }
 
+
+    @Test
+    public void instantiateListOfDependencies_classThatCausesInjectionError_shouldCallSystemExit() {
+        exit.expectSystemExit();
+        final Class[] classes = {CyclicClassA.class};
+        dependencyContextService.instantiateListOfDependencies(classes);
+    }
 
     @Test
     public void createDependencyFromResource_hasADependsOnAnnotation_priorityDependencyInstantiatedFirst() throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {
