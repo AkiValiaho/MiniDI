@@ -11,7 +11,7 @@ import java.lang.reflect.InvocationTargetException;
  */
 class DependentParamsFactory extends GenericDependencyComponentFactory {
     DependentParams createDependentParams(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {
-        super.createDependency(dependencyClass, dependencyContextService);
+        super.createDependencyComponent(dependencyClass, dependencyContextService);
         return new DependentParams().getDependentParamsForClass(dependencyReflectionRepresentation, dependencyContextService);
     }
 }

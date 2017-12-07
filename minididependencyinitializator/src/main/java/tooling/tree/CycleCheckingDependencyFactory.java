@@ -22,8 +22,8 @@ public class CycleCheckingDependencyFactory extends DependencyComponentFactoryDe
     }
 
     @Override
-    public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
+    public Dependency createDependencyComponent(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
         cycleChecker.checkForCycle(dependencyClass, new DependencyReflectionRepresentation(dependencyClass));
-        return super.createDependency(dependencyClass, dependencyContextService);
+        return super.createDependencyComponent(dependencyClass, dependencyContextService);
     }
 }

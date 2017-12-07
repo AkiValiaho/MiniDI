@@ -11,8 +11,8 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class DependencyFactory extends GenericDependencyComponentFactory {
     @Override
-    public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
-        super.createDependency(dependencyClass, dependencyContextService);
+    public Dependency createDependencyComponent(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
+        super.createDependencyComponent(dependencyClass, dependencyContextService);
         final Dependency dependency = new Dependency(dependencyClass,
                 dependencyContextService,
                 dependencyReflectionRepresentation,

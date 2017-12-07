@@ -12,7 +12,7 @@ public class GenericDependencyComponentFactory implements DependencyComponentFac
     protected DependencyReflectionRepresentation dependencyReflectionRepresentation;
 
     @Override
-    public DependencyComponent createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
+    public DependencyComponent createDependencyComponent(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
         this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(dependencyClass);
         return null;
     }

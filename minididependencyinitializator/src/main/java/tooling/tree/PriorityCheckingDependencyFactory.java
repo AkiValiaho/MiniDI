@@ -20,14 +20,14 @@ public class PriorityCheckingDependencyFactory extends DependencyComponentFactor
     }
 
     @Override
-    public Dependency createDependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
+    public Dependency createDependencyComponent(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
         //Instantiation order
         Optional<Class<?>> priorityDependency = new DependencyReflectionRepresentation(dependencyClass).getPriorityDependencyClass();
         if (priorityDependency.isPresent()) {
             final Class<?> priotyDependencyClass = priorityDependency.get();
             dependencyContextService.createDependenciesFromResource(priotyDependencyClass);
         }
-        return super.createDependency(dependencyClass, dependencyContextService);
+        return super.createDependencyComponent(dependencyClass, dependencyContextService);
     }
 
 }

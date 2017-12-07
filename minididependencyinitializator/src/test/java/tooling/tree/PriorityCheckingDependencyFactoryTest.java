@@ -27,7 +27,7 @@ public class PriorityCheckingDependencyFactoryTest {
     public void createDependency() throws Exception {
         DependencyContext dependencyContext = new DependencyContext();
         final DependencyContextService dependencyContextService = new DependencyContextService(new ReflectionTool(), dependencyContext, this.priorityCheckingDependencyFactory);
-        final Dependency dependency = this.priorityCheckingDependencyFactory.createDependency(ClassWithPriorityDependency.class, dependencyContextService);
+        final Dependency dependency = this.priorityCheckingDependencyFactory.createDependencyComponent(ClassWithPriorityDependency.class, dependencyContextService);
         assertTrue(dependencyContext.comesFirst(PriorityDependency.class, ClassWithPriorityDependency.class));
 
     }

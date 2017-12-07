@@ -28,12 +28,12 @@ public class CycleCheckingDependencyFactoryImplTest {
 
     @Test(expected = CyclicDependencyException.class)
     public void createDependency_cyclicTransitiveDependency_shouldThrowException() throws Exception {
-        final Dependency dependency = this.cycleCheckingDependencyFactory.createDependency(CyclicClassTransitiveA.class, dependencyContextComponent);
+        final Dependency dependency = this.cycleCheckingDependencyFactory.createDependencyComponent(CyclicClassTransitiveA.class, dependencyContextComponent);
     }
 
     @Test(expected = CyclicDependencyException.class)
     public void createDependency_cyclicClass_shouldThrowException() throws Exception {
-        final Dependency dependency = this.cycleCheckingDependencyFactory.createDependency(CyclicClassA.class, dependencyContextComponent);
+        final Dependency dependency = this.cycleCheckingDependencyFactory.createDependencyComponent(CyclicClassA.class, dependencyContextComponent);
     }
 
 }

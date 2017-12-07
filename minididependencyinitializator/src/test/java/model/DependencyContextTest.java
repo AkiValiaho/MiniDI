@@ -45,7 +45,7 @@ public class DependencyContextTest {
     public void getDependency() throws Exception {
         final DependencyFactory dependencyFactory = new DependencyFactory();
         final DependencyContextService dependencyContextService = new DependencyContextService(new ReflectionTool(), dependencyContext, dependencyFactory);
-        dependencyContext.addDependencyToMap(dependencyFactory.createDependency(ClassWithPriorityDependency.class, dependencyContextService));
+        dependencyContext.addDependencyToMap(dependencyFactory.createDependencyComponent(ClassWithPriorityDependency.class, dependencyContextService));
         final Optional<Object> dependency = dependencyContext.getDependency(ClassWithPriorityDependency.class);
         assertTrue(dependency.isPresent());
     }

@@ -50,7 +50,7 @@ public abstract class DependencyContextComponent {
     }
 
     private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
-        return dependencyComponentFactory.createDependency(dependencyClass, this);
+        return dependencyComponentFactory.createDependencyComponent(dependencyClass, this);
     }
 
     private void injectionError(Exception e) {
