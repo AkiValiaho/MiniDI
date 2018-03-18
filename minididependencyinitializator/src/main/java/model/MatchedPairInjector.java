@@ -6,26 +6,21 @@ import java.util.*;
 /**
  * Created by Aki on 29.9.2017.
  */
-class MatchedPair {
+class MatchedPairInjector {
     private Field matchedField;
     private Object matchedInstance;
     private Field[] declaredFields;
     private Object[] fieldInjectedInstances;
 
-    MatchedPair(Field[] declaredFields, Object[] fieldInjectedInstances, Object instanceToInjectTo) throws IllegalAccessException {
+    MatchedPairInjector(Field[] declaredFields, Object[] fieldInjectedInstances, Object instanceToInjectTo) throws IllegalAccessException {
         this.declaredFields = declaredFields;
         this.fieldInjectedInstances = fieldInjectedInstances;
         setFieldsToInstance(instanceToInjectTo);
     }
 
-    private MatchedPair(Field field, Object instance) {
-        this.matchedField = field;
-        this.matchedInstance = instance;
-    }
-
     private void setFieldsToInstance(Object o) throws IllegalAccessException {
-        List<MatchedPair> matchedPairs = matchPairs();
-        matchedPairs
+        List<MatchedPairInjector> matchedPairInjectors = matchPairs();
+        matchedPairInjectors
                 .forEach(pair -> {
                     try {
                         pair.setMatchedFieldToInstance(o);
@@ -35,7 +30,7 @@ class MatchedPair {
                 });
     }
 
-    private List<MatchedPair> matchPairs() {
+    private List<MatchedPairInjector> matchPairs() {
         OrderedClassEntitites orderedClassEntitites = new OrderedClassEntitites()
                 .sortEntities();
         List<Field> orderedFields = orderedClassEntitites.getOrderedFields();
@@ -43,14 +38,19 @@ class MatchedPair {
         return createListOfMatchedPairs(orderedFields, orderedInstances);
     }
 
-    private List<MatchedPair> createListOfMatchedPairs(List<Field> orderedFields, List<Object> orderedInstances) {
-        List<MatchedPair> matchedPairs = new ArrayList<>();
+    private List<MatchedPairInjector> createListOfMatchedPairs(List<Field> orderedFields, List<Object> orderedInstances) {
+        List<MatchedPairInjector> matchedPairInjectors = new ArrayList<>();
         final Iterator<Field> fieldIterator = orderedFields.iterator();
         for (Object instance : orderedInstances) {
             Field field = findMatchingField(fieldIterator, instance);
-            matchedPairs.add(new MatchedPair(field, instance));
+            matchedPairInjectors.add(new MatchedPairInjector(field, instance));
         }
-        return matchedPairs;
+        return matchedPairInjectors;
+    }
+
+    private MatchedPairInjector(Field field, Object instance) {
+        this.matchedField = field;
+        this.matchedInstance = instance;
     }
 
     private Field findMatchingField(Iterator<Field> fieldIterator, Object instance) {
