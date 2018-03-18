@@ -121,8 +121,8 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
         setFields(o, declaredFields, fieldInjectedInstances);
     }
 
-    private void setFields(Object o, Field[] declaredFields, Object[] fieldInjectedInstances) throws IllegalAccessException {
-        new MatchedPair(declaredFields, fieldInjectedInstances).setFieldsToInstance(o);
+    private void setFields(Object instanceToInjectTo, Field[] declaredFields, Object[] fieldInjectedInstances) throws IllegalAccessException {
+        new MatchedPair(declaredFields, fieldInjectedInstances, instanceToInjectTo);
     }
 
     Optional<Method> getPostConstructMethod() {

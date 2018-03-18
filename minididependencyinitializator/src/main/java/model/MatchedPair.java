@@ -12,9 +12,10 @@ class MatchedPair {
     private Field[] declaredFields;
     private Object[] fieldInjectedInstances;
 
-    MatchedPair(Field[] declaredFields, Object[] fieldInjectedInstances) {
+    MatchedPair(Field[] declaredFields, Object[] fieldInjectedInstances, Object instanceToInjectTo) throws IllegalAccessException {
         this.declaredFields = declaredFields;
         this.fieldInjectedInstances = fieldInjectedInstances;
+        setFieldsToInstance(instanceToInjectTo);
     }
 
     private MatchedPair(Field field, Object instance) {
@@ -22,7 +23,7 @@ class MatchedPair {
         this.matchedInstance = instance;
     }
 
-    void setFieldsToInstance(Object o) throws IllegalAccessException {
+    private void setFieldsToInstance(Object o) throws IllegalAccessException {
         List<MatchedPair> matchedPairs = matchPairs();
         matchedPairs
                 .forEach(pair -> {

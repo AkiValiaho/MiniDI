@@ -12,10 +12,15 @@ import static org.junit.Assert.assertTrue;
 public class MatchedPairTest {
 
     @Test
+    public void setFieldsToInstance_privateField_shouldThrowIllegalAccessException() throws IllegalAccessException {
+        ClassWithFieldAndConstructor classWithFieldAndConstructor = new ClassWithFieldAndConstructor(new DummyTestClassWithDependency(new DummyTestClassB()));
+        MatchedPair matchedPairs = new MatchedPair(classWithFieldAndConstructor.getClass().getDeclaredFields(), new Object[]{new DummyTestClass(), new ClassWithInjectionField()}, classWithFieldAndConstructor);
+    }
+
+    @Test
     public void setFieldsToInstance() throws Exception {
         ClassWithFieldAndConstructor classWithFieldAndConstructor = new ClassWithFieldAndConstructor(new DummyTestClassWithDependency(new DummyTestClassB()));
-        MatchedPair matchedPairs = new MatchedPair(classWithFieldAndConstructor.getClass().getDeclaredFields(), new Object[]{new DummyTestClass(), new ClassWithInjectionField()});
-        matchedPairs.setFieldsToInstance(classWithFieldAndConstructor);
+        MatchedPair matchedPairs = new MatchedPair(classWithFieldAndConstructor.getClass().getDeclaredFields(), new Object[]{new DummyTestClass(), new ClassWithInjectionField()}, classWithFieldAndConstructor);
         assertFieldsAreSet(classWithFieldAndConstructor);
     }
 
