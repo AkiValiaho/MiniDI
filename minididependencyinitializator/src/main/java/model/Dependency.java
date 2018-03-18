@@ -20,12 +20,14 @@ public class Dependency implements Reflectionable, DependencyComponent {
     @Setter
     private Object dependencyInstance;
     private DependencyReflectionRepresentation dependencyReflectionRepresentation;
+    private Constructor<?>[] declaredConstructors;
 
     public Dependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation, DependentParams dependentParams) {
         this.dependencyClass = dependencyClass;
         this.dependencyContextService = dependencyContextService;
         this.dependencyReflectionRepresentation = dependencyReflectionRepresentation;
         this.dependentParameters = dependentParams;
+        this.declaredConstructors = new ReflectionUtils().getDeclaredConstructors(dependencyClass);
     }
 
 
@@ -51,21 +53,6 @@ public class Dependency implements Reflectionable, DependencyComponent {
         }
         injectFields(o);
         dependencyInstance = o;
-    }
-
-    void callPostConstructIfPresent() throws InvocationTargetException, IllegalAccessException {
-        final Optional<Method> postConstructMethod = dependencyReflectionRepresentation.getPostConstructMethod();
-        if (postConstructMethod.isPresent()) {
-            callPostConstruct(postConstructMethod);
-        }
-    }
-
-    private void callPostConstruct(Optional<Method> postConstructMethod) throws IllegalAccessException, InvocationTargetException {
-        final Method method = postConstructMethod.get();
-        if (method.getParameterCount() != 0) {
-            throw new IllegalArgumentException("Method marked as @PostConstruct takes parameters: " + method.getName());
-        }
-        method.invoke(dependencyInstance, null);
     }
 
     private Object instantiateWithNoArgsIfOnlyFieldDependencies() throws IllegalAccessException, InvocationTargetException, InstantiationException {
@@ -102,7 +89,7 @@ public class Dependency implements Reflectionable, DependencyComponent {
     }
 
     private Constructor<?>[] getDeclaredConstructors() {
-        return dependencyClass.getDeclaredConstructors();
+        return declaredConstructors;
     }
 
     private boolean fullfillsLeafParameterCriteria(Constructor<?>[] declaredConstructors) {
@@ -133,6 +120,21 @@ public class Dependency implements Reflectionable, DependencyComponent {
             this.dependencyInstance = noArgsConstructor.get().newInstance(null);
         }
         return dependencyInstance;
+    }
+
+    void callPostConstructIfPresent() throws InvocationTargetException, IllegalAccessException {
+        final Optional<Method> postConstructMethod = dependencyReflectionRepresentation.getPostConstructMethod();
+        if (postConstructMethod.isPresent()) {
+            callPostConstruct(postConstructMethod);
+        }
+    }
+
+    private void callPostConstruct(Optional<Method> postConstructMethod) throws IllegalAccessException, InvocationTargetException {
+        final Method method = postConstructMethod.get();
+        if (method.getParameterCount() != 0) {
+            throw new IllegalArgumentException("Method marked as @PostConstruct takes parameters: " + method.getName());
+        }
+        method.invoke(dependencyInstance, null);
     }
 
     public Object[] getFieldDependentInstances() {

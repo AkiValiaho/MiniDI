@@ -15,8 +15,11 @@ import java.util.stream.Collectors;
 
 public class DependencyReflectionRepresentation extends ReflectionComponent {
 
+    private final ReflectionUtils reflectionUtils;
+
     public DependencyReflectionRepresentation(Class<?> dependencyClass) {
         super(dependencyClass);
+        this.reflectionUtils = new ReflectionUtils();
     }
 
 
@@ -26,11 +29,11 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
     }
 
     Optional<Constructor> getNoArgsConstructor() {
-        return filterNoArgsConstructor(getConstructors());
+        return filterNoArgsConstructor(getDeclaredConstructors());
     }
 
-    private Constructor[] getConstructors() {
-        return dependencyClass.getDeclaredConstructors();
+    private Constructor[] getDeclaredConstructors() {
+        return reflectionUtils.getDeclaredConstructors(dependencyClass);
     }
 
     private Optional<Constructor> filterNoArgsConstructor(Constructor[] noArgsConstructor) {
@@ -79,7 +82,7 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
     }
 
     Optional<Constructor> getArgsConstructor() {
-        Constructor[] argsConstructors = filterArgsConstructor(getConstructors());
+        Constructor[] argsConstructors = filterArgsConstructor(getDeclaredConstructors());
         Constructor[] annotatedArgsConstructors = filterAnnotatedArgsConstructors(argsConstructors);
         throwExceptionIfMoreThanOneAnnotatedConstructor(annotatedArgsConstructors);
         return optionalFromConstructorArray(annotatedArgsConstructors);
