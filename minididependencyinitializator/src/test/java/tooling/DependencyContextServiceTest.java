@@ -3,6 +3,7 @@ package tooling;
 import model.Dependency;
 import model.DependencyContext;
 import model.DependencyFactory;
+import model.ReflectionUtils;
 import model.dummyClasses.*;
 import org.junit.Before;
 import org.junit.Rule;
@@ -28,12 +29,14 @@ public class DependencyContextServiceTest {
     public ExpectedSystemExit exit = ExpectedSystemExit.none();
     private DependencyContextService dependencyContextService;
     private DependencyContext dependencyContext;
+    private ReflectionUtils reflectionUtils;
 
     @Before
     public void before() {
         final ReflectionTool reflectionTool = new ReflectionTool();
+        this.reflectionUtils = new ReflectionUtils();
         dependencyContext = new DependencyContext();
-        final DependencyComponentFactory dependencyComponentFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(), new CycleChecker()));
+        final DependencyComponentFactory dependencyComponentFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(reflectionUtils), new CycleChecker(reflectionUtils), reflectionUtils), reflectionUtils);
         this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyComponentFactory);
     }
 

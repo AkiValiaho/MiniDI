@@ -16,14 +16,16 @@ public class CycleCheckingDependencyFactoryImplTest {
     private DependencyFactory dependencyFactoryImplComponent;
     private DependencyContextService dependencyContextComponent;
     private ReflectionTool reflectionTool;
+    private ReflectionUtils reflectionUtils;
 
     @Before
     public void setUp() throws Exception {
-        dependencyFactoryImplComponent = new DependencyFactory();
+        dependencyFactoryImplComponent = new DependencyFactory(reflectionUtils);
         reflectionTool = new ReflectionTool();
+        reflectionUtils = new ReflectionUtils();
         DependencyContext context = new DependencyContext();
         dependencyContextComponent = new DependencyContextService(reflectionTool, context, dependencyFactoryImplComponent);
-        this.cycleCheckingDependencyFactory = new CycleCheckingDependencyFactory(dependencyFactoryImplComponent, new CycleChecker());
+        this.cycleCheckingDependencyFactory = new CycleCheckingDependencyFactory(dependencyFactoryImplComponent, new CycleChecker(reflectionUtils), reflectionUtils);
     }
 
     @Test(expected = CyclicDependencyException.class)

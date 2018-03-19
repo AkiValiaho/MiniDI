@@ -3,6 +3,7 @@ package tooling.tree;
 import model.Dependency;
 import model.DependencyContext;
 import model.DependencyFactory;
+import model.ReflectionUtils;
 import model.dummyClasses.ClassWithPriorityDependency;
 import model.dummyClasses.PriorityDependency;
 import org.junit.Before;
@@ -17,10 +18,12 @@ import static org.junit.Assert.assertTrue;
  */
 public class PriorityCheckingDependencyFactoryTest {
     private PriorityCheckingDependencyFactory priorityCheckingDependencyFactory;
+    private ReflectionUtils reflectionUtils;
 
     @Before
     public void setUp() throws Exception {
-        this.priorityCheckingDependencyFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(), new CycleChecker()));
+        this.reflectionUtils = new ReflectionUtils();
+        this.priorityCheckingDependencyFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(reflectionUtils), new CycleChecker(reflectionUtils), reflectionUtils), reflectionUtils);
     }
 
     @Test

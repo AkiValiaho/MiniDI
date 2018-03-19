@@ -1,6 +1,7 @@
 package tooling.tree;
 
 import model.DependencyReflectionRepresentation;
+import model.ReflectionUtils;
 import tooling.CyclicDependencyException;
 
 import java.util.ArrayList;
@@ -12,15 +13,17 @@ import java.util.stream.Stream;
  * Created by Aki on 4.10.2017.
  */
 class TreeNode {
+    private final ReflectionUtils reflectionUtils;
     List<TreeNode> dependents;
     private Class<?> rootNode;
     private Class<?> nodeClass;
 
 
-    TreeNode(Class<?> rootNode, Class<?> nodeClass, DependencyReflectionRepresentation dependencyReflectionRepresentation) throws CyclicDependencyException {
+    TreeNode(Class<?> rootNode, Class<?> nodeClass, DependencyReflectionRepresentation dependencyReflectionRepresentation, ReflectionUtils reflectionUtils) throws CyclicDependencyException {
         this.rootNode = rootNode;
         this.nodeClass = nodeClass;
         this.dependents = new ArrayList<>();
+        this.reflectionUtils = reflectionUtils;
         dependents.addAll(getDependentNodes(dependencyReflectionRepresentation));
     }
 
@@ -58,7 +61,7 @@ class TreeNode {
 
     private void addNode(List<TreeNode> dependents, Class<?> aClass) throws CyclicDependencyException {
         checkCycle(rootNode, aClass);
-        final TreeNode treeNode = new TreeNode(rootNode, aClass, new DependencyReflectionRepresentation(aClass));
+        final TreeNode treeNode = new TreeNode(rootNode, aClass, new DependencyReflectionRepresentation(aClass,reflectionUtils ),reflectionUtils );
         dependents.add(treeNode);
     }
 

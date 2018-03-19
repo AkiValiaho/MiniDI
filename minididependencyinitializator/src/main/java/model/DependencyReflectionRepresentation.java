@@ -17,9 +17,9 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
 
     private final ReflectionUtils reflectionUtils;
 
-    public DependencyReflectionRepresentation(Class<?> dependencyClass) {
+    public DependencyReflectionRepresentation(Class<?> dependencyClass, ReflectionUtils reflectionUtils) {
         super(dependencyClass);
-        this.reflectionUtils = new ReflectionUtils();
+        this.reflectionUtils = reflectionUtils;
     }
 
 

@@ -2,6 +2,7 @@ package tooling;
 
 import model.DependencyContext;
 import model.DependencyFactory;
+import model.ReflectionUtils;
 import tooling.tree.CycleChecker;
 import tooling.tree.CycleCheckingDependencyFactory;
 import tooling.tree.PriorityCheckingDependencyFactory;
@@ -15,8 +16,9 @@ public class MiniDi {
     public static DependencyContext startApplication(Class<?> startClass) throws IllegalAccessException, InvocationTargetException, InstantiationException {
         ReflectionTool reflectionTool = new ReflectionTool();
         DependencyContext context = new DependencyContext();
-        DependencyComponentFactory dependencyComponentFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(),
-                new CycleChecker()));
+        ReflectionUtils reflectionUtils = new ReflectionUtils();
+        DependencyComponentFactory dependencyComponentFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(reflectionUtils),
+                new CycleChecker(reflectionUtils), reflectionUtils), reflectionUtils);
         ClassPathResourceService classPathResourceService = new ClassPathResourceService(dependencyComponentFactory, reflectionTool, context);
         classPathResourceService.createDependenciesFromClassPath(startClass);
         return context;

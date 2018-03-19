@@ -12,10 +12,12 @@ import static org.junit.Assert.*;
 
 public class DependencyReflectionRepresentationTest {
     private DependencyReflectionRepresentation dependencyReflectionRepresentation;
+    private ReflectionUtils reflectionutils;
 
     @Before
     public void setUp() throws Exception {
-        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithDependency.class);
+        this.reflectionutils = new ReflectionUtils();
+        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithDependency.class, reflectionutils);
     }
 
     @Test
@@ -25,7 +27,7 @@ public class DependencyReflectionRepresentationTest {
 
     @Test
     public void hasInjectedFields() throws Exception {
-        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithFieldDependency.class);
+        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithFieldDependency.class, reflectionutils);
         assertTrue(dependencyReflectionRepresentation.hasInjectedFields());
     }
 
@@ -36,13 +38,13 @@ public class DependencyReflectionRepresentationTest {
 
     @Test
     public void getDependentParamsFromFields() throws Exception {
-        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithFieldDependency.class);
+        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithFieldDependency.class, reflectionutils);
         assertEquals(dependencyReflectionRepresentation.getDependentParamsFromFields().length, 1);
     }
 
     @Test
     public void represent() throws Exception {
-        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithFieldDependency.class);
+        this.dependencyReflectionRepresentation = new DependencyReflectionRepresentation(DummyTestClassWithFieldDependency.class, reflectionutils);
         DependencyReflectionRepresentation represent = dependencyReflectionRepresentation.represent();
         Class<?>[] dependentParamsFromFields = represent.getDependentParamsFromFields();
         assertEquals(dependentParamsFromFields.length, 1);

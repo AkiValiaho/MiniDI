@@ -2,6 +2,7 @@ package tooling;
 
 import model.DependencyContext;
 import model.DependencyFactory;
+import model.ReflectionUtils;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -13,12 +14,14 @@ import static org.junit.Assert.assertTrue;
 public class ClassPathResourceServiceTest {
     private ClassPathResourceService classPathResourceservice;
     private DependencyContext dependencyContext;
+    private ReflectionUtils reflectionutils;
 
     @Before
     public void setUp() throws Exception {
         final ReflectionTool reflectionTool = new ReflectionTool();
+        this.reflectionutils = new ReflectionUtils();
         dependencyContext = new DependencyContext();
-        DependencyFactory dependencyFactoryImpl = new DependencyFactory();
+        DependencyFactory dependencyFactoryImpl = new DependencyFactory(reflectionutils);
         this.classPathResourceservice = new ClassPathResourceService(dependencyFactoryImpl, reflectionTool, dependencyContext);
     }
 

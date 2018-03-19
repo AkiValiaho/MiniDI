@@ -19,9 +19,12 @@ import static org.junit.Assert.assertTrue;
 //TODO
 public class DependencyContextTest {
     private DependencyContext dependencyContext;
+    private ReflectionUtils reflectionUtils;
 
     @Before
     public void setUp() throws Exception {
+        this.reflectionUtils = new ReflectionUtils();
+
         this.dependencyContext = new DependencyContext();
     }
 
@@ -43,7 +46,7 @@ public class DependencyContextTest {
 
     @Test
     public void getDependency() throws Exception {
-        final DependencyFactory dependencyFactory = new DependencyFactory();
+        final DependencyFactory dependencyFactory = new DependencyFactory(reflectionUtils);
         final DependencyContextService dependencyContextService = new DependencyContextService(new ReflectionTool(), dependencyContext, dependencyFactory);
         dependencyContext.addDependencyToMap(dependencyFactory.createDependencyComponent(ClassWithPriorityDependency.class, dependencyContextService));
         final Optional<Object> dependency = dependencyContext.getDependency(ClassWithPriorityDependency.class);
