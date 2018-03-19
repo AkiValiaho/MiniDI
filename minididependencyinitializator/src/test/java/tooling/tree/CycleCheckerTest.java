@@ -1,6 +1,7 @@
 package tooling.tree;
 
 import model.DependencyReflectionRepresentation;
+import model.ReflectionToolSet;
 import model.ReflectionUtils;
 import model.dummyClasses.CyclicClassA;
 import org.junit.Before;
@@ -9,7 +10,7 @@ import tooling.CyclicDependencyException;
 
 public class CycleCheckerTest {
     private CycleChecker cycleChecker;
-    private ReflectionUtils reflectionutils;
+    private ReflectionToolSet reflectionutils;
 
     @Before
     public void setUp() throws Exception {

@@ -15,11 +15,11 @@ import java.util.stream.Collectors;
 
 public class DependencyReflectionRepresentation extends ReflectionComponent {
 
-    private final ReflectionUtils reflectionUtils;
+    private final ReflectionToolSet reflectionToolSet;
 
-    public DependencyReflectionRepresentation(Class<?> dependencyClass, ReflectionUtils reflectionUtils) {
+    public DependencyReflectionRepresentation(Class<?> dependencyClass, ReflectionToolSet reflectionToolSet) {
         super(dependencyClass);
-        this.reflectionUtils = reflectionUtils;
+        this.reflectionToolSet = reflectionToolSet;
     }
 
 
@@ -33,7 +33,7 @@ public class DependencyReflectionRepresentation extends ReflectionComponent {
     }
 
     private Constructor[] getDeclaredConstructors() {
-        return reflectionUtils.getDeclaredConstructors(dependencyClass);
+        return reflectionToolSet.getDeclaredConstructors(dependencyClass);
     }
 
     private Optional<Constructor> filterNoArgsConstructor(Constructor[] noArgsConstructor) {

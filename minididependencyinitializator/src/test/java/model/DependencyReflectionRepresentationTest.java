@@ -12,7 +12,7 @@ import static org.junit.Assert.*;
 
 public class DependencyReflectionRepresentationTest {
     private DependencyReflectionRepresentation dependencyReflectionRepresentation;
-    private ReflectionUtils reflectionutils;
+    private ReflectionToolSet reflectionutils;
 
     @Before
     public void setUp() throws Exception {

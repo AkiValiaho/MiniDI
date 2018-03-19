@@ -13,7 +13,7 @@ public class DependencyTest {
     private DependencyContextService dependencyContextService;
     private Dependency dependency;
     private ReflectionTool reflectionTool;
-    private ReflectionUtils reflectionutils;
+    private ReflectionToolSet reflectionutils;
 
     @Before
     public void before() {
@@ -21,7 +21,7 @@ public class DependencyTest {
         reflectionutils = new ReflectionUtils();
         final DependencyContext dependencyContext = new DependencyContext();
         final DependencyFactory dependencyFactoryImpl = new DependencyFactory(reflectionutils);
-        this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyFactoryImpl);
+        this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyFactoryImpl, reflectionutils);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class DependencyTest {
     }
 
     private Dependency createDependency(Class<?> argumentClass) throws InvocationTargetException, CyclicDependencyException, InstantiationException, IllegalAccessException {
-        return new DependencyFactory(reflectionutils).createDependencyComponent(argumentClass, dependencyContextService);
+        return new DependencyFactory(reflectionutils).createDependencyComponent(argumentClass, dependencyContextService, reflectionutils);
     }
 
     @Test
@@ -46,7 +46,7 @@ public class DependencyTest {
 
     @Test
     public void instantiateDependentParameters_onlyFieldInjections_shouldReturnTrue() throws IllegalAccessException, InstantiationException, InvocationTargetException, NoSuchFieldException, CyclicDependencyException {
-        Dependency dependency = new DependencyFactory(reflectionutils).createDependencyComponent(ClassWithInjectionField.class, dependencyContextService);
+        Dependency dependency = new DependencyFactory(reflectionutils).createDependencyComponent(ClassWithInjectionField.class, dependencyContextService, reflectionutils);
         final Object dependentParameters = new ReflectionTestHelper().getField(dependency, "dependentParameters");
         assertTrue(((DependentParams) dependentParameters).getFieldInjectedInstances().length == 1);
     }

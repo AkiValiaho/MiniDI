@@ -1,9 +1,6 @@
 package tooling;
 
-import model.Dependency;
-import model.DependencyContext;
-import model.DependencyFactory;
-import model.ReflectionUtils;
+import model.*;
 import model.dummyClasses.*;
 import org.junit.Before;
 import org.junit.Rule;
@@ -29,15 +26,15 @@ public class DependencyContextServiceTest {
     public ExpectedSystemExit exit = ExpectedSystemExit.none();
     private DependencyContextService dependencyContextService;
     private DependencyContext dependencyContext;
-    private ReflectionUtils reflectionUtils;
+    private ReflectionToolSet reflectionToolSet;
 
     @Before
     public void before() {
         final ReflectionTool reflectionTool = new ReflectionTool();
-        this.reflectionUtils = new ReflectionUtils();
+        this.reflectionToolSet = new ReflectionUtils();
         dependencyContext = new DependencyContext();
-        final DependencyComponentFactory dependencyComponentFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(reflectionUtils), new CycleChecker(reflectionUtils), reflectionUtils), reflectionUtils);
-        this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyComponentFactory);
+        final DependencyComponentFactory dependencyComponentFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(reflectionToolSet), new CycleChecker(reflectionToolSet), reflectionToolSet), reflectionToolSet);
+        this.dependencyContextService = new DependencyContextService(reflectionTool, dependencyContext, dependencyComponentFactory, reflectionToolSet);
     }
 
     @Test(expected = IllegalArgumentException.class)

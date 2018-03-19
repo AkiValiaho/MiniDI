@@ -15,7 +15,7 @@ public class DependentParamsTest {
     private DependentParams dependentParams;
     private DependencyContextService dependencyContextService;
     private ReflectionTool reflectionTool;
-    private ReflectionUtils reflectionutils;
+    private ReflectionToolSet reflectionutils;
 
     @Before
     public void setUp() throws Exception {
@@ -24,7 +24,7 @@ public class DependentParamsTest {
         this.reflectionutils = new ReflectionUtils();
         this.dependencyContextService = new DependencyContextService(reflectionTool,
                 new DependencyContext(),
-                new DependencyFactory(reflectionutils));
+                new DependencyFactory(reflectionutils), reflectionutils);
     }
 
     @Test

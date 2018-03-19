@@ -1,7 +1,7 @@
 package tooling.tree;
 
 import model.DependencyReflectionRepresentation;
-import model.ReflectionUtils;
+import model.ReflectionToolSet;
 import tooling.CyclicDependencyException;
 
 /**
@@ -9,15 +9,15 @@ import tooling.CyclicDependencyException;
  */
 class NonCyclicTree {
     private final Class<?> rootClass;
-    private final ReflectionUtils reflectionUtils;
+    private final ReflectionToolSet reflectionToolSet;
     private TreeNode rootNode;
 
-    NonCyclicTree(Class<?> rootClass, ReflectionUtils reflectionUtils) {
+    NonCyclicTree(Class<?> rootClass, ReflectionToolSet reflectionToolSet) {
         this.rootClass = rootClass;
-        this.reflectionUtils = reflectionUtils;
+        this.reflectionToolSet = reflectionToolSet;
     }
 
     void attemptToBuildTree() throws CyclicDependencyException {
-        this.rootNode = new TreeNode(rootClass, rootClass, new DependencyReflectionRepresentation(rootClass, reflectionUtils), reflectionUtils);
+        this.rootNode = new TreeNode(rootClass, rootClass, new DependencyReflectionRepresentation(rootClass, reflectionToolSet), reflectionToolSet);
     }
 }

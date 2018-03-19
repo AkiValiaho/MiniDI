@@ -1,5 +1,6 @@
 package tooling.tree;
 
+import model.ReflectionToolSet;
 import model.ReflectionUtils;
 import model.dummyClasses.CyclicClassA;
 import org.junit.Before;
@@ -9,7 +10,7 @@ import tooling.DummyTestClassWithDependency;
 
 public class NonCyclicTreeTest {
     private NonCyclicTree nonCyclicTree;
-    private ReflectionUtils reflectionutils;
+    private ReflectionToolSet reflectionutils;
 
     @Before
     public void setUp() throws Exception {

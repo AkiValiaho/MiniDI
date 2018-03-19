@@ -1,9 +1,6 @@
 package tooling.tree;
 
-import model.Dependency;
-import model.DependencyContext;
-import model.DependencyFactory;
-import model.ReflectionUtils;
+import model.*;
 import model.dummyClasses.ClassWithPriorityDependency;
 import model.dummyClasses.PriorityDependency;
 import org.junit.Before;
@@ -18,19 +15,19 @@ import static org.junit.Assert.assertTrue;
  */
 public class PriorityCheckingDependencyFactoryTest {
     private PriorityCheckingDependencyFactory priorityCheckingDependencyFactory;
-    private ReflectionUtils reflectionUtils;
+    private ReflectionToolSet reflectionToolSet;
 
     @Before
     public void setUp() throws Exception {
-        this.reflectionUtils = new ReflectionUtils();
-        this.priorityCheckingDependencyFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(reflectionUtils), new CycleChecker(reflectionUtils), reflectionUtils), reflectionUtils);
+        this.reflectionToolSet = new ReflectionUtils();
+        this.priorityCheckingDependencyFactory = new PriorityCheckingDependencyFactory(new CycleCheckingDependencyFactory(new DependencyFactory(reflectionToolSet), new CycleChecker(reflectionToolSet), reflectionToolSet), reflectionToolSet);
     }
 
     @Test
     public void createDependency() throws Exception {
         DependencyContext dependencyContext = new DependencyContext();
-        final DependencyContextService dependencyContextService = new DependencyContextService(new ReflectionTool(), dependencyContext, this.priorityCheckingDependencyFactory);
-        final Dependency dependency = this.priorityCheckingDependencyFactory.createDependencyComponent(ClassWithPriorityDependency.class, dependencyContextService);
+        final DependencyContextService dependencyContextService = new DependencyContextService(new ReflectionTool(), dependencyContext, this.priorityCheckingDependencyFactory, reflectionToolSet);
+        final Dependency dependency = this.priorityCheckingDependencyFactory.createDependencyComponent(ClassWithPriorityDependency.class, dependencyContextService, reflectionToolSet);
         assertTrue(dependencyContext.comesFirst(PriorityDependency.class, ClassWithPriorityDependency.class));
 
     }

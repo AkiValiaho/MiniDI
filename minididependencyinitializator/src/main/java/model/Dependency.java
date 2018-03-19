@@ -22,12 +22,12 @@ public class Dependency implements Reflectionable, DependencyComponent {
     private DependencyReflectionRepresentation dependencyReflectionRepresentation;
     private Constructor<?>[] declaredConstructors;
 
-    public Dependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation, DependentParams dependentParams) {
+    public Dependency(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, DependencyReflectionRepresentation dependencyReflectionRepresentation, DependentParams dependentParams, ReflectionToolSet reflectionToolSet) {
         this.dependencyClass = dependencyClass;
         this.dependencyContextService = dependencyContextService;
         this.dependencyReflectionRepresentation = dependencyReflectionRepresentation;
         this.dependentParameters = dependentParams;
-        this.declaredConstructors = new ReflectionUtils().getDeclaredConstructors(dependencyClass);
+        this.declaredConstructors = reflectionToolSet.getDeclaredConstructors(dependencyClass);
     }
 
 

@@ -1,6 +1,7 @@
 package tooling;
 
 import model.Dependency;
+import model.ReflectionToolSet;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -15,7 +16,7 @@ public abstract class DependencyComponentFactoryDecorator implements DependencyC
     }
 
     @Override
-    public Dependency createDependencyComponent(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
-        return dependencyComponentFactoryComponent.createDependencyComponent(dependencyClass, dependencyContextService);
+    public Dependency createDependencyComponent(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, ReflectionToolSet reflectionToolSet) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
+        return dependencyComponentFactoryComponent.createDependencyComponent(dependencyClass, dependencyContextService, reflectionToolSet);
     }
 }

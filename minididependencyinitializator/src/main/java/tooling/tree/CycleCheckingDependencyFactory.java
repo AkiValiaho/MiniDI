@@ -2,7 +2,7 @@ package tooling.tree;
 
 import model.Dependency;
 import model.DependencyReflectionRepresentation;
-import model.ReflectionUtils;
+import model.ReflectionToolSet;
 import tooling.CyclicDependencyException;
 import tooling.DependencyComponentFactory;
 import tooling.DependencyComponentFactoryDecorator;
@@ -16,17 +16,17 @@ import java.lang.reflect.InvocationTargetException;
 public class CycleCheckingDependencyFactory extends DependencyComponentFactoryDecorator {
 
     private final CycleChecker cycleChecker;
-    private final ReflectionUtils reflectionUtils;
+    private final ReflectionToolSet reflectionToolSet;
 
-    public CycleCheckingDependencyFactory(DependencyComponentFactory dependencyComponentFactoryComponent, CycleChecker cycleChecker, ReflectionUtils reflectionUtils) {
+    public CycleCheckingDependencyFactory(DependencyComponentFactory dependencyComponentFactoryComponent, CycleChecker cycleChecker, ReflectionToolSet reflectionToolSet) {
         super(dependencyComponentFactoryComponent);
         this.cycleChecker = cycleChecker;
-        this.reflectionUtils = reflectionUtils;
+        this.reflectionToolSet = reflectionToolSet;
     }
 
     @Override
-    public Dependency createDependencyComponent(Class<?> dependencyClass, DependencyContextComponent dependencyContextService) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
-        cycleChecker.checkForCycle(dependencyClass, new DependencyReflectionRepresentation(dependencyClass, reflectionUtils));
-        return super.createDependencyComponent(dependencyClass, dependencyContextService);
+    public Dependency createDependencyComponent(Class<?> dependencyClass, DependencyContextComponent dependencyContextService, ReflectionToolSet reflectionToolSet) throws IllegalAccessException, InvocationTargetException, InstantiationException, CyclicDependencyException {
+        cycleChecker.checkForCycle(dependencyClass, new DependencyReflectionRepresentation(dependencyClass, this.reflectionToolSet));
+        return super.createDependencyComponent(dependencyClass, dependencyContextService, reflectionToolSet);
     }
 }

@@ -3,6 +3,7 @@ package tooling;
 import lombok.Getter;
 import model.Dependency;
 import model.DependencyContext;
+import model.ReflectionToolSet;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -19,11 +20,13 @@ public abstract class DependencyContextComponent {
     DependencyContext dependencyContext;
     @Getter
     private ReflectionTool reflectioninitializer;
+    private ReflectionToolSet reflectionToolSet;
 
-    DependencyContextComponent(DependencyComponentFactory<Dependency> dependencyComponentFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext) {
+    DependencyContextComponent(DependencyComponentFactory<Dependency> dependencyComponentFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext, ReflectionToolSet reflectionToolSet) {
         this.dependencyComponentFactory = dependencyComponentFactory;
         this.reflectioninitializer = reflectionTool;
         this.dependencyContext = dependencyContext;
+        this.reflectionToolSet = reflectionToolSet;
     }
 
     public List<Dependency> instantiateListOfDependencies(Class<?>[] dependentParams) {
@@ -50,7 +53,7 @@ public abstract class DependencyContextComponent {
     }
 
     private Dependency createDependencyObject(Class<?> dependencyClass) throws IllegalAccessException, InstantiationException, InvocationTargetException, CyclicDependencyException {
-        return dependencyComponentFactory.createDependencyComponent(dependencyClass, this);
+        return dependencyComponentFactory.createDependencyComponent(dependencyClass, this, reflectionToolSet);
     }
 
     private void injectionError(Exception e) {
