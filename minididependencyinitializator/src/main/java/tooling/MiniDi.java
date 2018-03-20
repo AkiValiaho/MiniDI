@@ -2,8 +2,6 @@ package tooling;
 
 import model.DependencyContext;
 import model.DependencyFactory;
-import model.ReflectionToolSet;
-import model.ReflectionUtils;
 import tooling.tree.CycleChecker;
 import tooling.tree.CycleCheckingDependencyFactory;
 import tooling.tree.PriorityCheckingDependencyFactory;

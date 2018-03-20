@@ -7,6 +7,8 @@ import org.junit.Before;
 import org.junit.Test;
 import tooling.DependencyContextService;
 import tooling.ReflectionTool;
+import tooling.ReflectionToolSet;
+import tooling.ReflectionUtils;
 
 import static org.junit.Assert.assertTrue;
 

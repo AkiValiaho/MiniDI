@@ -2,7 +2,7 @@ package tooling.tree;
 
 import model.Dependency;
 import model.DependencyReflectionRepresentation;
-import model.ReflectionToolSet;
+import tooling.ReflectionToolSet;
 import tooling.CyclicDependencyException;
 import tooling.DependencyComponentFactory;
 import tooling.DependencyComponentFactoryDecorator;

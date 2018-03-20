@@ -1,7 +1,7 @@
 package tooling.tree;
 
-import model.ReflectionToolSet;
-import model.ReflectionUtils;
+import tooling.ReflectionToolSet;
+import tooling.ReflectionUtils;
 import model.dummyClasses.CyclicClassA;
 import org.junit.Before;
 import org.junit.Test;

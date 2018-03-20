@@ -4,6 +4,8 @@ import org.junit.Before;
 import org.junit.Test;
 import tooling.DummyTestClassWithDependency;
 import tooling.DummyTestClassWithFieldDependency;
+import tooling.ReflectionToolSet;
+import tooling.ReflectionUtils;
 
 import java.lang.reflect.Constructor;
 import java.util.Optional;

@@ -4,9 +4,7 @@ import model.dummyClasses.ClassWithPriorityDependency;
 import model.dummyClasses.PriorityDependency;
 import org.junit.Before;
 import org.junit.Test;
-import tooling.DependencyContextService;
-import tooling.ReflectionTestHelper;
-import tooling.ReflectionTool;
+import tooling.*;
 
 import java.util.List;
 import java.util.Optional;

@@ -4,6 +4,7 @@ import annotations.DependsOn;
 import annotations.PostConstruct;
 import tooling.MultipleAnnotatedConstructorsException;
 import tooling.ReflectionComponent;
+import tooling.ReflectionToolSet;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
