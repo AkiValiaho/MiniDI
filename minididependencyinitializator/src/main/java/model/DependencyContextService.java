@@ -1,5 +1,7 @@
 package model;
 
+import model.components.DependencyComponentFactory;
+import model.components.DependencyContextComponent;
 import tooling.ReflectionTool;
 import tooling.ReflectionToolSet;
 

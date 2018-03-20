@@ -1,5 +1,8 @@
-package model;
+package model.components;
 
+import model.Dependency;
+import model.components.DependencyComponentFactory;
+import model.components.DependencyContextComponent;
 import tooling.CyclicDependencyException;
 import tooling.ReflectionToolSet;
 

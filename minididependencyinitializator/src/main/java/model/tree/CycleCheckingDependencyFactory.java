@@ -4,9 +4,9 @@ import model.Dependency;
 import model.DependencyReflectionRepresentation;
 import tooling.ReflectionToolSet;
 import tooling.CyclicDependencyException;
-import model.DependencyComponentFactory;
-import model.DependencyComponentFactoryDecorator;
-import model.DependencyContextComponent;
+import model.components.DependencyComponentFactory;
+import model.components.DependencyComponentFactoryDecorator;
+import model.components.DependencyContextComponent;
 
 import java.lang.reflect.InvocationTargetException;
 

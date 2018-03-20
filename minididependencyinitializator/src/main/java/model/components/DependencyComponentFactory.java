@@ -1,4 +1,4 @@
-package model;
+package model.components;
 
 import tooling.CyclicDependencyException;
 import tooling.ReflectionToolSet;

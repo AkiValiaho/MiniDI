@@ -2,6 +2,8 @@ package model;
 
 import lombok.Getter;
 import lombok.Setter;
+import model.components.DependencyComponent;
+import model.components.DependencyContextComponent;
 import tooling.ReflectionToolSet;
 
 import java.lang.reflect.Constructor;

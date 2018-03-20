@@ -1,5 +1,6 @@
 package model;
 
+import model.components.DependencyContextComponent;
 import tooling.CyclicDependencyException;
 import tooling.ReflectionTool;
 

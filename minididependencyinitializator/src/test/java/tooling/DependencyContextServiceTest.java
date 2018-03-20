@@ -1,6 +1,7 @@
 package tooling;
 
 import model.*;
+import model.components.DependencyComponentFactory;
 import model.dummyClasses.*;
 import org.junit.Before;
 import org.junit.Rule;

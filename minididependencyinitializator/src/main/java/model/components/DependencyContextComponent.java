@@ -1,6 +1,8 @@
-package model;
+package model.components;
 
 import lombok.Getter;
+import model.Dependency;
+import model.DependencyContext;
 import tooling.CyclicDependencyException;
 import tooling.ReflectionTool;
 import tooling.ReflectionToolSet;

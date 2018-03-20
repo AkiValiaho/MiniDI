@@ -1,5 +1,7 @@
 package model;
 
+import model.components.DependencyContextComponent;
+
 import java.util.List;
 
 /**

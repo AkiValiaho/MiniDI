@@ -1,7 +1,7 @@
 package tooling;
 
 import model.ClassPathResourceService;
-import model.DependencyComponentFactory;
+import model.components.DependencyComponentFactory;
 import model.DependencyContext;
 import model.DependencyFactory;
 import model.tree.CycleChecker;
