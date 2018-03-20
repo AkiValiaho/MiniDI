@@ -1,5 +1,6 @@
 package tooling;
 
+import model.ClassPathResourceService;
 import model.DependencyContext;
 import model.DependencyFactory;
 import org.junit.Before;

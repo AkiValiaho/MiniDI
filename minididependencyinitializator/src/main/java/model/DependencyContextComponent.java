@@ -1,8 +1,9 @@
-package tooling;
+package model;
 
 import lombok.Getter;
-import model.Dependency;
-import model.DependencyContext;
+import tooling.CyclicDependencyException;
+import tooling.ReflectionTool;
+import tooling.ReflectionToolSet;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
@@ -21,7 +22,7 @@ public abstract class DependencyContextComponent {
     private ReflectionTool reflectioninitializer;
     private ReflectionToolSet reflectionToolSet;
 
-    DependencyContextComponent(DependencyComponentFactory<Dependency> dependencyComponentFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext, ReflectionToolSet reflectionToolSet) {
+    public DependencyContextComponent(DependencyComponentFactory<Dependency> dependencyComponentFactory, ReflectionTool reflectionTool, DependencyContext dependencyContext, ReflectionToolSet reflectionToolSet) {
         this.dependencyComponentFactory = dependencyComponentFactory;
         this.reflectioninitializer = reflectionTool;
         this.dependencyContext = dependencyContext;

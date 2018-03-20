@@ -1,11 +1,11 @@
-package tooling.tree;
+package model.tree;
 
 import model.*;
 import model.dummyClasses.ClassWithPriorityDependency;
 import model.dummyClasses.PriorityDependency;
 import org.junit.Before;
 import org.junit.Test;
-import tooling.DependencyContextService;
+import model.DependencyContextService;
 import tooling.ReflectionTool;
 import tooling.ReflectionToolSet;
 import tooling.ReflectionUtils;

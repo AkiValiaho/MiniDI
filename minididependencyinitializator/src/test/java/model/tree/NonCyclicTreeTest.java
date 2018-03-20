@@ -1,4 +1,4 @@
-package tooling.tree;
+package model.tree;
 
 import tooling.ReflectionToolSet;
 import tooling.ReflectionUtils;

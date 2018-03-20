@@ -1,7 +1,7 @@
-package tooling;
+package model;
 
-import model.DependencyComponent;
-import model.DependencyReflectionRepresentation;
+import tooling.CyclicDependencyException;
+import tooling.ReflectionToolSet;
 
 import java.lang.reflect.InvocationTargetException;
 
@@ -10,9 +10,9 @@ import java.lang.reflect.InvocationTargetException;
  */
 public class GenericDependencyComponentFactory implements DependencyComponentFactory<DependencyComponent> {
     protected ReflectionToolSet reflectionToolSet;
-    protected DependencyReflectionRepresentation dependencyReflectionRepresentation;
+    DependencyReflectionRepresentation dependencyReflectionRepresentation;
 
-    public GenericDependencyComponentFactory(ReflectionToolSet reflectionToolSet) {
+    GenericDependencyComponentFactory(ReflectionToolSet reflectionToolSet) {
         this.reflectionToolSet = reflectionToolSet;
     }
 

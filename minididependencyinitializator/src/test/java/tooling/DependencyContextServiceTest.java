@@ -6,9 +6,9 @@ import org.junit.Before;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.contrib.java.lang.system.ExpectedSystemExit;
-import tooling.tree.CycleChecker;
-import tooling.tree.CycleCheckingDependencyFactory;
-import tooling.tree.PriorityCheckingDependencyFactory;
+import model.tree.CycleChecker;
+import model.tree.CycleCheckingDependencyFactory;
+import model.tree.PriorityCheckingDependencyFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;

@@ -1,10 +1,12 @@
 package tooling;
 
+import model.ClassPathResourceService;
+import model.DependencyComponentFactory;
 import model.DependencyContext;
 import model.DependencyFactory;
-import tooling.tree.CycleChecker;
-import tooling.tree.CycleCheckingDependencyFactory;
-import tooling.tree.PriorityCheckingDependencyFactory;
+import model.tree.CycleChecker;
+import model.tree.CycleCheckingDependencyFactory;
+import model.tree.PriorityCheckingDependencyFactory;
 
 import java.lang.reflect.InvocationTargetException;
 

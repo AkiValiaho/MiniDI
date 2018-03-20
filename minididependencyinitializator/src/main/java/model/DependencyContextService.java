@@ -1,6 +1,7 @@
-package tooling;
+package model;
 
-import model.DependencyContext;
+import tooling.ReflectionTool;
+import tooling.ReflectionToolSet;
 
 /**
  * Created by akivv on 5.9.2017.

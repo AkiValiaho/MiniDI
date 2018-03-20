@@ -1,4 +1,4 @@
-package tooling.tree;
+package model.tree;
 
 import model.DependencyReflectionRepresentation;
 import tooling.ReflectionToolSet;

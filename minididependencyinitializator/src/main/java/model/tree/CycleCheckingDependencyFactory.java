@@ -1,12 +1,12 @@
-package tooling.tree;
+package model.tree;
 
 import model.Dependency;
 import model.DependencyReflectionRepresentation;
 import tooling.ReflectionToolSet;
 import tooling.CyclicDependencyException;
-import tooling.DependencyComponentFactory;
-import tooling.DependencyComponentFactoryDecorator;
-import tooling.DependencyContextComponent;
+import model.DependencyComponentFactory;
+import model.DependencyComponentFactoryDecorator;
+import model.DependencyContextComponent;
 
 import java.lang.reflect.InvocationTargetException;
 

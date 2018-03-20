@@ -5,8 +5,8 @@ import model.dummyClasses.CyclicClassA;
 import model.dummyClasses.CyclicClassTransitiveA;
 import org.junit.Before;
 import org.junit.Test;
-import tooling.tree.CycleChecker;
-import tooling.tree.CycleCheckingDependencyFactory;
+import model.tree.CycleChecker;
+import model.tree.CycleCheckingDependencyFactory;
 
 /**
  * Created by Aki on 4.10.2017.
