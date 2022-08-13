@@ -15,7 +15,7 @@
         <reflection.version>0.9.10</reflection.version>
         <guava.version>23.0</guava.version>
         <slf4j.version>1.7.25</slf4j.version>
-        <lombok.version>1.16.18</lombok.version>
+        <lombok.version>1.18.24</lombok.version>
         <junit.version>4.12</junit.version>
         <mockito.version>2.0.2-beta</mockito.version>
         <system-rules.version>1.17.0</system-rules.version>
